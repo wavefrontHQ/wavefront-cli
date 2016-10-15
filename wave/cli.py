@@ -4,7 +4,8 @@ wave
 Usage:
   wave proxy --wavefront-url=<wavefront_url> --api-token=<api_token>
   wave agent [--proxy-address=<address>] [--proxy-port=<port>]
-  wave aws [--create-tags] --access-key-id=<access-key> --secret-key=<secret-key> --default-region=<default-region>
+  wave aws --access-key-id=<access-key> --secret-key=<secret-key> --default-region=<default-region> [--ec2-tags]
+  wave integration (install|remove) --app-name=<app-name> [<plugin-params>...]
   wave -h | --help
   wave --version
 
@@ -17,7 +18,6 @@ Options:
   -P --proxy-port <proxy_port>                   The port of your Wavefront proxy.
 
 Examples:
-  wave hello
 
 Help:
   For help using this tool, please visit:
