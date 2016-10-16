@@ -44,8 +44,34 @@ class Proxy(Base):
             print "Error installing proxy. Please check the installation output above this line."
 
     def validate_token(self,url,token):
+        url = self.clean_url(url)
+
         # /daemon/test?token=$TOKEN
-        
+        validate_url = "%s/api/daemon/test?token=%s" % (url,token)
+        print validate_url
+        r = requests.post(validate_url)
+        status_code = r.status_code
+        if status_code == 401:
+            print "Error validating token: Unauthorized. Make sure your Wavefront account has Agent Management permissions."
+            return False
+        elif status_code == 200:
+            print "Successfully validated token."
+            return True
+        elif status_code == 400:
+            print "Url not found. Please check that your Wavefront URL is valid and that this machine has http access."
+            return False
+
+
+    def clean_url(self,url):
+        url = url
+        if url.endswith("/api/"):
+            url = url[:-5]
+        elif url.endswith("/api"):
+            url = url[:-4]
+        elif url.endswith("/"):
+            url = url[:-1]
+        return url
+
 
     def configure_proxy(self,url,token):
         print url
@@ -57,7 +83,7 @@ class Proxy(Base):
         subprocess.call(cmd, shell=True)
 
         # replace server url
-        url_str = "https://try.wavefront.com/api/"
+        url_str = "https://try.wavefront.com"
         cmd = "sudo sed -i -e 's,%s,%s,g' /opt/wavefront/wavefront-proxy/conf/wavefront.conf" % (url_str,url)
         subprocess.call(cmd, shell=True)
 
@@ -70,8 +96,16 @@ class Proxy(Base):
         print 'Running proxy installer with the following options:', dumps(self.options, indent=2, sort_keys=True)
         wf_url = self.options['--wavefront-url']
         api_token = self.options['--api-token']
-        # Run packagecloud installation
+
+        # 1) Validate token
+        valid_token = self.validate_token(wf_url,api_token)
+        if not valid_token:
+            sys.exit(0)
+
+        # 2) Run packagecloud installation
         print "Running proxy installation"
         self.install_proxy()
+
+        # 3) Configure proxy
         print "Configuring proxy"
         self.configure_proxy(wf_url,api_token)
