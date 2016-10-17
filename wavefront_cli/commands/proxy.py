@@ -74,22 +74,19 @@ class Proxy(Base):
 
 
     def configure_proxy(self,url,token):
+        url = self.clean_url(url) + "/api/"
         print url
         print token
         # replace token
-        token_str = "\#token\=XXX"
-
-        cmd = 'sudo sed -i -e "s/%s/token=%s/g" /opt/wavefront/wavefront-proxy/conf/wavefront.conf' % (token_str,token)
+        cmd = "sudo sed -i -e '/token=/c\ttoken=%s' /opt/wavefront/wavefront-proxy/conf/wavefront.conf" % (token)
         subprocess.call(cmd, shell=True)
 
         # replace server url
-        url_str = "https://try.wavefront.com"
-        cmd = "sudo sed -i -e 's,%s,%s,g' /opt/wavefront/wavefront-proxy/conf/wavefront.conf" % (url_str,url)
+        cmd = "sudo sed -i -e '/server=/c\tserver=%s' /opt/wavefront/wavefront-proxy/conf/wavefront.conf" % (url)
         subprocess.call(cmd, shell=True)
 
         # restart proxy
         ret_code = subprocess.call("sudo service wavefront-proxy restart", shell=True)
-
 
     def run(self):
 
