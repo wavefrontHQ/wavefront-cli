@@ -7,7 +7,7 @@ from subprocess import call
 
 from setuptools import Command, find_packages, setup
 
-from wave import __version__
+from wavefront_cli import __version__
 
 
 this_dir = abspath(dirname(__file__))
@@ -33,13 +33,13 @@ class RunTests(Command):
 
 
 setup(
-    name = 'wave',
+    name = 'wavefront-cli',
     version = __version__,
-    description = 'Wavefront agent CLI utility.',
+    description = 'Wavefront client CLI utility.',
     long_description = long_description,
-    url = 'https://github.com/rdegges/wave-cli',
-    author = 'Randall Degges',
-    author_email = 'r@rdegges.com',
+    url = 'https://github.com/ezeev/wave-cli',
+    author = 'Evan Pease',
+    author_email = 'evan@wavefront.com',
     license = 'UNLICENSE',
     classifiers = [
         'Intended Audience :: Developers',
@@ -55,15 +55,16 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
     ],
-    keywords = 'cli',
+    keywords = ['wavefront','cli'],
     packages = find_packages(exclude=['docs', 'tests*']),
+    #packages = ['wave'],
     install_requires = ['docopt'],
     extras_require = {
         'test': ['coverage', 'pytest', 'pytest-cov'],
     },
     entry_points = {
         'console_scripts': [
-            'wave=wave.cli:main',
+            'wave=wavefront_cli.cli:main',
         ],
     },
     cmdclass = {'test': RunTests},
