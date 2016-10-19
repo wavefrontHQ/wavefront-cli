@@ -1,6 +1,9 @@
 """The proxy command."""
 from json import dumps
 from .base import Base
+# wavefront API functions
+from wavefront.api import validate_token, clean_url
+
 import requests
 import subprocess
 import json
@@ -43,38 +46,8 @@ class Proxy(Base):
         if ret_code > 0:
             print "Error installing proxy. Please check the installation output above this line."
 
-    def validate_token(self,url,token):
-        url = self.clean_url(url)
-
-        # /daemon/test?token=$TOKEN
-        validate_url = "%s/api/daemon/test?token=%s" % (url,token)
-        print validate_url
-        r = requests.post(validate_url)
-        status_code = r.status_code
-        if status_code == 401:
-            print "Error validating token: Unauthorized. Make sure your Wavefront account has Agent Management permissions."
-            return False
-        elif status_code == 200:
-            print "Successfully validated token."
-            return True
-        elif status_code == 400:
-            print "Url not found. Please check that your Wavefront URL is valid and that this machine has http access."
-            return False
-
-
-    def clean_url(self,url):
-        url = url
-        if url.endswith("/api/"):
-            url = url[:-5]
-        elif url.endswith("/api"):
-            url = url[:-4]
-        elif url.endswith("/"):
-            url = url[:-1]
-        return url
-
-
     def configure_proxy(self,url,token):
-        url = self.clean_url(url) + "/api/"
+        url = clean_url(url) + "/api/"
         print url
         print token
         # replace token
@@ -95,9 +68,12 @@ class Proxy(Base):
         api_token = self.options['--api-token']
 
         # 1) Validate token
-        valid_token = self.validate_token(wf_url,api_token)
+        #valid_token = self.validate_token(wf_url,api_token)
+        valid_token = validate_token(wf_url, api_token)
         if not valid_token:
             sys.exit(0)
+
+        sys.exit(0)
 
         # 2) Run packagecloud installation
         print "Running proxy installation"
