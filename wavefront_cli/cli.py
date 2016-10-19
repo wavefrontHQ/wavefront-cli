@@ -3,7 +3,7 @@ wave
 
 Usage:
   wave configure [--wavefront-url=<wavefront_url>] [--api-token=<api_token>]
-  wave proxy --wavefront-url=<wavefront_url> --api-token=<api_token>
+  wave proxy
   wave agent [--proxy-address=<address>] [--proxy-port=<port>]
   wave aws --access-key-id=<access-key> --secret-key=<secret-key> --default-region=<default-region> [--ec2-tags]
   wave integration (install|remove) --app-name=<app-name> [<plugin-params>...]

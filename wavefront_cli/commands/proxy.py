@@ -3,6 +3,7 @@ from json import dumps
 from .base import Base
 # wavefront API functions
 from wavefront.api import validate_token, clean_url
+import wavefront.auth
 
 import requests
 import subprocess
@@ -64,16 +65,21 @@ class Proxy(Base):
     def run(self):
 
         print 'Running proxy installer with the following options:', dumps(self.options, indent=2, sort_keys=True)
-        wf_url = self.options['--wavefront-url']
-        api_token = self.options['--api-token']
+        # wf_url = self.options['--wavefront-url']
+        # api_token = self.options['--api-token']
+        creds = wavefront.auth.get_or_set_auth(self.options)
+        if creds == None:
+            print "Unable to obtain Wavefront API credentials."
+            sys.exit(0)
 
+        wf_url = creds['user_url']
+        api_token = creds['user_token']
         # 1) Validate token
         #valid_token = self.validate_token(wf_url,api_token)
         valid_token = validate_token(wf_url, api_token)
         if not valid_token:
             sys.exit(0)
 
-        sys.exit(0)
 
         # 2) Run packagecloud installation
         print "Running proxy installation"

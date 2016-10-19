@@ -12,5 +12,6 @@ class Configure(Base):
     """authenticate the user's session"""
 
     def run(self):
-        #wavefront.auth.do_auth(self.options)
-        print wavefront.auth.get_or_set_auth(self.options)
+
+        print "The configure command will overwrite the Wavefront URL and API Token stored in ~/.wavefront/credentials"
+        wavefront.auth.do_auth(self.options)
