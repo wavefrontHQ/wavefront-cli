@@ -2,6 +2,7 @@
 wave
 
 Usage:
+  wave oli [--proxy] [--wavefront-url=<wavefront_url>] [--api-token=<api_token>] [--agent] [--proxy-address=<address>] [--proxy-port=<port>]
   wave configure [--wavefront-url=<wavefront_url>] [--api-token=<api_token>]
   wave proxy (install|remove)
   wave agent (install|remove) [--proxy-address=<address>] [--proxy-port=<port>]
