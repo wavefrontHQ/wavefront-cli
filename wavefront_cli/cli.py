@@ -6,9 +6,6 @@ Usage:
   wave configure [--wavefront-url=<wavefront_url>] [--api-token=<api_token>]
   wave proxy (install|remove)
   wave agent (install|remove) [--proxy-address=<address>] [--proxy-port=<port>]
-  wave aws --access-key-id=<access-key> --secret-key=<secret-key> --default-region=<default-region> [--ec2-tags]
-  wave integration (install|remove) --app-name=<app-name> [<plugin-params>...]
-  wave sourcetags --wavefront-url=<wavefront_url> --api-token=<api_token> <tag>...
   wave -h | --help
   wave --version
 
@@ -23,7 +20,6 @@ Options:
 Examples:
   wave proxy --wavefront-url=https://try.wavefront.com --api-token=YOUR_API_TOKEN
   wave agent --proxy-address=localhost --proxy-port=4242
-  wave integration install --app-name=mysql --mysql-host=localhost --mysql-port=3306 --mysql-user=myuser --mysql-pw=mypw
 
 
 Help:

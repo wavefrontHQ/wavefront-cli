@@ -11,11 +11,11 @@ def get_proxy_install_cmd():
     dist = system.check_os()
     print "Detected ", dist
     if dist == "Amazon Linux AMI":
-        cmd = "curl -s %s | sudo bash" % (proxy_pkg_rpm)
+        cmd = "sudo curl -s %s | sudo bash" % (proxy_pkg_rpm)
         cmd += " && sudo yum -y -q install wavefront-proxy"
         return cmd
     elif dist == "Ubuntu":
-        cmd = "curl -s %s | sudo bash" % (proxy_pkg_deb)
+        cmd = "sudo curl -s %s | sudo bash" % (proxy_pkg_deb)
         cmd += " && sudo apt-get -y -q install wavefront-proxy"
         return cmd
     else:

@@ -66,9 +66,9 @@ def configure_agent(proxy_address,port):
     ret_code = subprocess.call(cmd, shell=True)
     if ret_code > 0:
         print "Error modifying telegraf config file."
-        sys.exit(0)
+        sys.exit(1)
 
     ret_code = system.restart_service('telegraf')
     if ret_code > 0:
         print "Error restarting Telegraf service."
-        sys.exit(0)
+        sys.exit(1)
