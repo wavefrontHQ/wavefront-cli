@@ -7,6 +7,7 @@ import wavefront.api
 import wavefront.system
 import wavefront.proxy
 import wavefront.agent
+import wavefront.message
 
 import subprocess
 import json
@@ -19,18 +20,7 @@ class Oli(Base):
 
     def run(self):
 
-        welcome_msg = """
-
-         __      __                     _____                      __
-        /  \    /  \_____ ___  __ _____/ ____\______  ____   _____/  |_
-        \   \/\/   /\__   \  \/ // __ \   __\ _  __ \/  _ \ /    \   __
-         \        /  / __  \   /\  ___/|  |   |  | \(  <_> )   |  \  |
-          \__/\  /  (____  /\_/  \___  >__|   |__|   \____/|___|  /__|
-               \/        \/          \/                         \/
-
-                """
-
-        print welcome_msg
+        print wavefront.message.welcome_msg()
 
 
         #print 'Running One Line Installation'
