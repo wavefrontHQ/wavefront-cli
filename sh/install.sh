@@ -12,8 +12,6 @@ function check_if_root_or_die() {
     fi
 }
 
-
-
 function detect_operating_system() {
 
     echo "Detecting operating system"
@@ -115,7 +113,7 @@ do
 done
 
 # Run Cli installation process
-$WAVE_PATH oli $cli_args
+$WAVE_PATH install $cli_args
 
 
 if [ $PYTHON_INSTALLED == false ]; then

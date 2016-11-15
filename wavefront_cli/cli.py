@@ -2,10 +2,8 @@
 wave
 
 Usage:
-  wave oli [--proxy] [--wavefront-url=<wavefront_url>] [--api-token=<api_token>] [--agent] [--proxy-address=<address>] [--proxy-port=<port>]
+  wave install [--proxy] [--wavefront-url=<wavefront_url>] [--api-token=<api_token>] [--agent] [--proxy-address=<address>] [--proxy-port=<port>]
   wave configure [--wavefront-url=<wavefront_url>] [--api-token=<api_token>]
-  wave proxy (install|remove)
-  wave agent (install|remove) [--proxy-address=<address>] [--proxy-port=<port>]
   wave -h | --help
   wave --version
 
@@ -18,8 +16,7 @@ Options:
   -P --proxy-port <proxy_port>                   The port of your Wavefront proxy.
 
 Examples:
-  wave proxy --wavefront-url=https://try.wavefront.com --api-token=YOUR_API_TOKEN
-  wave agent --proxy-address=localhost --proxy-port=4242
+  wave install --proxy --agent
 
 
 Help:

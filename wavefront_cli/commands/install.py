@@ -15,7 +15,7 @@ import os
 import sys
 import platform
 
-class Oli(Base):
+class Install(Base):
     """Install the Wavefront Proxy."""
 
     def run(self):
