@@ -21,14 +21,7 @@ class Install(Base):
     def run(self):
 
         print wavefront.message.welcome_msg()
-
-
-        #print 'Running One Line Installation'
-
-        #print 'You supplied the following options:', dumps(self.options, indent=2, sort_keys=True)
-
-
-        # wave oli [--proxy] [--wavefront-url=<wavefront_url>] [--api-token=<api_token>] [--agent] [--proxy-address=<address>] [--proxy-port=<port>]
+        # wave install [--proxy] [--wavefront-url=<wavefront_url>] [--api-token=<api_token>] [--agent] [--proxy-address=<address>] [--proxy-port=<port>]
         # proxy options
         proxy = self.options.get('--proxy')
         wavefront_url = self.options.get('--wavefront-url')
