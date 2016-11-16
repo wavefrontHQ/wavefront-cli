@@ -49,6 +49,13 @@ function install_python() {
 }
 
 function remove_python() {
+
+    # wavefront cli
+    pip uninstall wavefront-cli -y
+    # pip
+    pip uninstall pip -y
+
+    # python
     if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
         echo "Uninstalling Python using apt-get"
         apt-get remove python -y >> ${INSTALL_LOG}
@@ -57,6 +64,7 @@ function remove_python() {
         echo "Installing Python using yum"
         yum remove python -y >> ${INSTALL_LOG}
     fi
+
 }
 
 
@@ -69,19 +77,35 @@ function install_pip() {
 function install_wavecli() {
     PIP_PATH=$(which pip)
     $PIP_PATH install wavefront-cli --no-cache >> ${INSTALL_LOG}
+
+    # Find where it was installed
+    WAVE_PATH="/usr/local/bin/wave"
+    if [ -f "$WAVE_PATH" ]; then
+        echo "Wavefront CLI found at $file"
+    elif [ -f "/usr/bin/wave" ]; then
+        echo "Wavefront CLI found at /usr/bin/wave"
+        WAVE_PATH="/usr/bin/wave"
+    else
+        echo "Wavefront CLI not found. Cannot perform installation. Please check ${INSTALL_LOG} for details."
+    fi
+    export WAVE_PATH
+
 }
 
+
+# main()
 
 detect_operating_system
 check_if_root_or_die
 
 # Detect python
 PYTHON_PATH=$(which python)
+# If python was not installed before this script runs, uninstall it at the end.
 PYTHON_INSTALLED=false
 
 if [ -z "$PYTHON_PATH" ]; then
     echo "Python is not installed. Installing Python."
-    echo "Python will be uninstalled automatically after installtion finishes."
+    echo "Python will be uninstalled automatically after installation finishes."
     PYTHON_INSTALLED=false
     install_python
     PYTHON_PATH=$(which python)
@@ -97,15 +121,10 @@ if [ -z "$PIP_PATH" ]; then
     install_pip
 fi
 
-# Detect Wavefront CLI
-WAVE_PATH=$(which wave)
-if [ -z "$WAVE_PATH" ]; then
-    echo "Wavefront CLI is not installed. Installing."
-    install_wavecli
-    WAVE_PATH=$(which wave)
-fi
+# Make sure Wavefront CLI is installed. This function will export WAVE_PATH - holds the location of the wavefront cli binary
+install_wavecli
 
-
+# Capture command line args passed to shell script in a string
 cli_args=""
 for arg in "$@"
 do
@@ -115,10 +134,7 @@ done
 # Run Cli installation process
 $WAVE_PATH install $cli_args
 
-
+# Python was not installed before running this script, so remove it.
 if [ $PYTHON_INSTALLED == false ]; then
     remove_python
 fi
-
-                                                                                                                                                                                                  125,0-1       Bot
-

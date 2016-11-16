@@ -25,7 +25,7 @@ def restart_service(service_name):
 def remove_service(service_name):
     dist = check_os()
     print "Detected ", dist
-    if dist == "Amazon Linux AMI":
+    if dist == "Amazon Linux AMI" or dist == "Red Hat Enterprise Linux Server":
         cmd = "sudo yum -y remove " + service_name
     elif dist == "Ubuntu":
         cmd = "sudo apt-get -y remove " + service_name

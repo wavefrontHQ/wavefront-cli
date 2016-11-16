@@ -27,7 +27,7 @@ def input_proxy_info(options):
 def get_install_agent_cmd():
     dist = system.check_os()
     print "Detected ", dist
-    if dist == "Amazon Linux AMI":
+    if dist == "Amazon Linux AMI" or dist == "Red Hat Enterprise Linux Server":
         cmd = "curl -s %s | sudo bash" % (agent_pkg_rpm)
         cmd += " && sudo yum -y -q install telegraf"
         return cmd
