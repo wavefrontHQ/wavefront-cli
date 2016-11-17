@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INSTALL_LOG="/tmp/wavefront_install.log"
+INSTALL_LOG="/tmp/install_wavefront_$(< /dev/urandom tr -dc A-Z-a-z-0-9 | head -c${1:-10};echo;).log"
 
 function check_if_root_or_die() {
     echo "Checking installation privileges"
@@ -12,9 +12,40 @@ function check_if_root_or_die() {
     fi
 }
 
+function exit_with_message() {
+    echo
+    echo $1
+    echo -e "\n$1" >>  ${INSTALL_LOG}
+    if [[ $INSTALL_LOG && "$2" -eq 1 ]]; then
+        echo "For additional information, check the Wavefront install log: $INSTALL_LOG"
+    fi
+    echo
+    exit 1
+}
+
+function echo_right() {
+    TEXT=$1
+    echo
+    tput cuu1
+    tput cuf $(tput cols)
+    tput cub ${#TEXT}
+    echo $TEXT
+}
+
+function echo_failure() {
+    tput setaf 1  # 1 = red
+    echo_right "[ FAILED ]"
+    tput sgr0  # reset terminal
+}
+
+function exit_with_failure() {
+    echo_failure
+    exit_with_message "FAILURE: $1" 1
+}
+
 function detect_operating_system() {
 
-    echo "Detecting operating system"
+    echo "Detecting operating system:"
     if [ -f /etc/debian_version ]; then
         echo -e "\ntest -f /etc/debian_version" >> ${INSTALL_LOG}
         echo "Debian/Ubuntu"
@@ -40,10 +71,14 @@ function install_python() {
 
     if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
         echo "Installing Python using apt-get"
-        apt-get install python -y >> ${INSTALL_LOG}
+        apt-get install python -y >> ${INSTALL_LOG} 2>&1
     elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
         echo "Installing Python using yum"
-        yum install python -y >> ${INSTALL_LOG}
+        yum install python -y >> ${INSTALL_LOG} 2>&1
+    fi
+
+    if [ $? -ne 0 ]; then
+            exit_with_failure "Failed to install Python"
     fi
 
 }
@@ -58,35 +93,46 @@ function remove_python() {
     # python
     if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
         echo "Uninstalling Python using apt-get"
-        apt-get remove python -y >> ${INSTALL_LOG}
-        apt-get autoremove -y >> ${INSTALL_LOG}
+        apt-get remove python -y &> ${INSTALL_LOG}
+        apt-get autoremove -y &> ${INSTALL_LOG}
     elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
         echo "Installing Python using yum"
-        yum remove python -y >> ${INSTALL_LOG}
+        yum remove python -y &> ${INSTALL_LOG}
     fi
 
 }
 
 
 function install_pip() {
-    $PYTHON_PATH=$(which python)
-    curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py >> ${INSTALL_LOG}
-    $PYTHON_PATH /tmp/get-pip.py >> ${INSTALL_LOG}
+    $PYTHON_PATH=$(which python) 2> /dev/null
+    curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py >> ${INSTALL_LOG} 2>&1
+    if [ $? -ne 0 ]; then
+            exit_with_failure "Failed to download Pip"
+    fi
+    $PYTHON_PATH /tmp/get-pip.py >> ${INSTALL_LOG} 2>&1
+    if [ $? -ne 0 ]; then
+            exit_with_failure "Failed to install Pip"
+    fi
+
+    rm -f /tmp/get-pip.py 2> /dev/null
 }
 
 function install_wavecli() {
     PIP_PATH=$(which pip)
-    $PIP_PATH install wavefront-cli --no-cache >> ${INSTALL_LOG}
+    $PIP_PATH install wavefront-cli --no-cache >> ${INSTALL_LOG} 2>&1
+    if [ $? -ne 0 ]; then
+            exit_with_failure "Failed to install Wavefront CLI"
+    fi
 
     # Find where it was installed
     WAVE_PATH="/usr/local/bin/wave"
     if [ -f "$WAVE_PATH" ]; then
-        echo "Wavefront CLI found at $file"
+        echo "Wavefront CLI found at $WAVE_PATH"
     elif [ -f "/usr/bin/wave" ]; then
         echo "Wavefront CLI found at /usr/bin/wave"
         WAVE_PATH="/usr/bin/wave"
     else
-        echo "Wavefront CLI not found. Cannot perform installation. Please check ${INSTALL_LOG} for details."
+        exit_with_failure "Wavefront CLI not found."
     fi
     export WAVE_PATH
 

@@ -58,7 +58,7 @@ setup(
     keywords = ['wavefront','cli'],
     packages = find_packages(exclude=['docs', 'tests*']),
     #packages = ['wave'],
-    install_requires = ['docopt','requests'],
+    install_requires = ['docopt','requests', 'boto'],
     extras_require = {
         'test': ['coverage', 'pytest', 'pytest-cov'],
     },

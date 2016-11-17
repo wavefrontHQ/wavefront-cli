@@ -2,6 +2,8 @@
 import system
 import api
 import subprocess
+import message
+import sys
 
 proxy_pkg_deb = "https://packagecloud.io/install/repositories/wavefront/proxy/script.deb.sh"
 proxy_pkg_rpm = "https://packagecloud.io/install/repositories/wavefront/proxy/script.rpm.sh"
@@ -24,17 +26,20 @@ def get_proxy_install_cmd():
 
 
 def install_proxy():
+
+    message.print_bold("Starting Wavefront Proxy Installation!")
     cmd = get_proxy_install_cmd()
-    print "Running ", cmd
     ret_code = subprocess.call(cmd, shell=True)
     if ret_code > 0:
-        print "Error installing proxy. Please check the installation output above this message."
+        message.print_warn("Error installing proxy: " + sys.exc_info()[0])
         return False
     else:
+        message.print_success("Finished Wavefront Proxy Installation!")
         return True
 
 
 def configure_proxy(url, token):
+    message.print_bold("Starting Wavefront Proxy Configuration!")
     url = api.clean_url(url) + "/api/"
     print url
     print token
@@ -43,20 +48,22 @@ def configure_proxy(url, token):
     cmd = "sudo sed -i -e '/token=/c\ttoken=%s' /etc/wavefront/wavefront-proxy/wavefront.conf" % (token)
     ret_code = subprocess.call(cmd, shell=True)
     if ret_code > 0:
-        print "Error configuring proxy. Please check the installation output above this message."
+        message.print_warn("Error configuring proxy: " + sys.exc_info()[0])
         return False
 
     # replace server url
     cmd = "sudo sed -i -e '/server=/c\tserver=%s' /etc/wavefront/wavefront-proxy/wavefront.conf" % (url)
     ret_code = subprocess.call(cmd, shell=True)
     if ret_code > 0:
-        print "Error configuring proxy. Please check the installation output above this message."
+        message.print_warn("Error configuring proxy: " + sys.exc_info()[0])
         return False
 
     # restart proxy
     ret_code = system.restart_service("wavefront-proxy")
     if ret_code > 0:
-        print "Error restarting proxy service. Please check the installation output above this message."
+        message.print_warn("Error restarting proxy service: " + sys.exc_info()[0])
         return False
+
+    message.print_success("Finished Wavefront Proxy Installation!")
 
     return True
