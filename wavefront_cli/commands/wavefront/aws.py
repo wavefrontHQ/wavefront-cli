@@ -6,6 +6,7 @@ import system
 import agent
 import boto.ec2
 import message
+import string
 
 def get_instance_id():
     r = requests.get("http://instance-data/latest/meta-data/instance-id")
@@ -30,7 +31,7 @@ def tag_telegraf_config(aws_region, aws_key_id, aws_secret_key):
     tags_post = "- End EC2 Tags- "
     tagStr = "  # %s\n" % (tags_pre)
     for k,v in tags.iteritems():
-        tagStr += '\t%s = "%s"\n' % (k,v)
+        tagStr += '\t%s = "%s"\n' % (k.lower(),v)
     tagStr += "  # %s\n" % (tags_post)
     try:
         tagTxt = open("tags.txt","w")
@@ -65,5 +66,15 @@ def get_instance_tags(aws_access_key_id, aws_secret_access_key, aws_region):
     reservations = conn.get_all_instances(instance_ids=[get_instance_id()])
     # Find the Instance object inside the reservation
     instance = reservations[0].instances[0]
-    return instance.tags
+    region = str(instance.region).replace('RegionInfo:','')
+    vpc_id = instance.vpc_id
+    image_id = instance.image_id
+
+    tags = instance.tags
+    tags['aws-region'] = region
+    tags['vpc-id'] = vpc_id
+    tags['image-id'] = image_id
+    return tags
+
+
 

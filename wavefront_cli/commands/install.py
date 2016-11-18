@@ -9,12 +9,8 @@ import wavefront.proxy
 import wavefront.agent
 import wavefront.message
 import wavefront.aws
-
-import subprocess
-import json
-import os
 import sys
-import platform
+
 
 class Install(Base):
     """Install the Wavefront Proxy."""
@@ -32,7 +28,7 @@ class Install(Base):
             [--agent]
                 [--proxy-address=<address>]
                 [--proxy-port=<port>]
-            [--aws-ec2-tags]
+            [--aws]
                 [--aws-region=<aws_region>]
                 [--aws-secret-key-id=<aws_secret_key_id>]
                 [--aws-secret-key=<aws_secret_key]
@@ -49,7 +45,7 @@ class Install(Base):
         proxy_port = self.options.get('--proxy-port')
 
         # aws options
-        aws = self.options.get('--aws-ec2-tags')
+        aws = self.options.get('--aws')
         aws_region = self.options.get('--aws-region')
         aws_secret_key_id = self.options.get('--aws-secret-key-id')
         aws_secret_key = self.options.get('--aws-secret-key')

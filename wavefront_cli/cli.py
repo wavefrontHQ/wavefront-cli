@@ -2,7 +2,7 @@
 wave
 
 Usage:
-  wave install [--proxy] [--wavefront-url=<wavefront_url>] [--api-token=<api_token>] [--agent] [--proxy-address=<address>] [--proxy-port=<port>] [--aws-ec2-tags] [--aws-region=<aws_region>] [--aws-secret-key-id=<aws_secret_key_id>] [--aws-secret-key=<aws_secret_key]
+  wave install [--proxy] [--wavefront-url=<wavefront_url>] [--api-token=<api_token>] [--agent] [--proxy-address=<address>] [--proxy-port=<port>] [--aws] [--aws-region=<aws_region>] [--aws-secret-key-id=<aws_secret_key_id>] [--aws-secret-key=<aws_secret_key]
   wave configure [--wavefront-url=<wavefront_url>] [--api-token=<api_token>]
   wave -h | --help
   wave --version

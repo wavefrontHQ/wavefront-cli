@@ -119,6 +119,7 @@ function install_pip() {
 
 function install_wavecli() {
     PIP_PATH=$(which pip)
+    $PIP_PATH uninstall wavefront-cli -y >> ${INSTALL_LOG} 2>&1
     $PIP_PATH install wavefront-cli --no-cache >> ${INSTALL_LOG} 2>&1
     if [ $? -ne 0 ]; then
             exit_with_failure "Failed to install Wavefront CLI"
@@ -127,9 +128,9 @@ function install_wavecli() {
     # Find where it was installed
     WAVE_PATH="/usr/local/bin/wave"
     if [ -f "$WAVE_PATH" ]; then
-        echo "Wavefront CLI found at $WAVE_PATH"
+        echo "Wavefront CLI detected in $WAVE_PATH"
     elif [ -f "/usr/bin/wave" ]; then
-        echo "Wavefront CLI found at /usr/bin/wave"
+        echo "Wavefront CLI detected in /usr/bin/wave"
         WAVE_PATH="/usr/bin/wave"
     else
         exit_with_failure "Wavefront CLI not found."
