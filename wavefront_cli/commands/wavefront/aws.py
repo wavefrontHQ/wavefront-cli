@@ -55,8 +55,6 @@ def tag_telegraf_config(aws_region, aws_key_id, aws_secret_key):
         message.print_warn("Error overwriting telegraf.conf. Is the file located at " +  conf + "? " + sys.exc_info()[0])
         return False
 
-    system.restart_service("telegraf")
-
     message.print_success("Finished Telegraf Configuration for EC2 Tags")
     return True
 

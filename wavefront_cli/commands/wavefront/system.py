@@ -2,6 +2,7 @@
 import platform
 import subprocess
 import sys
+import message
 
 def check_os():
     try:
@@ -18,9 +19,19 @@ def check_os():
 def restart_service(service_name):
     print "Restarting %s" % (service_name)
     cmd = "sudo service %s restart" % (service_name)
-    ret_code = subprocess.call(cmd, shell=True)
-    return ret_code
+    subprocess.call(cmd, shell=True)
 
+
+
+def write_file(path, text):
+    try:
+        file = open(path,"w")
+        file.write(text)
+        file.close()
+        return True
+    except:
+        message.print_warn("Unable to write file at " + path + ": " + sys.exc_info()[0])
+        return False
 
 def remove_service(service_name):
     dist = check_os()

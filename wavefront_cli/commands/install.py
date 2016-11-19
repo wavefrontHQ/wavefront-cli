@@ -9,6 +9,8 @@ import wavefront.proxy
 import wavefront.agent
 import wavefront.message
 import wavefront.aws
+import wavefront.integrations.wavefront
+import wavefront.integrations.statsd
 import sys
 
 
@@ -17,7 +19,8 @@ class Install(Base):
 
     def run(self):
 
-        wavefront.aws.get_instance_id()
+
+        agent_name = "telegraf"
 
         wavefront.message.print_welcome()
         '''
@@ -32,6 +35,8 @@ class Install(Base):
                 [--aws-region=<aws_region>]
                 [--aws-secret-key-id=<aws_secret_key_id>]
                 [--aws-secret-key=<aws_secret_key]
+            [--statsd]
+                [--statsd-port=<statsd_port>]
         '''
 
         # proxy options
@@ -50,8 +55,14 @@ class Install(Base):
         aws_secret_key_id = self.options.get('--aws-secret-key-id')
         aws_secret_key = self.options.get('--aws-secret-key')
 
+        # statsd options
+        statsd = self.options.get('--statsd')
+        statsd_port = self.options.get('--statsd-port')
+
+
+        # Decide when we want to prompt or not.
         prompt = False
-        if not proxy and not agent and not aws:
+        if not proxy and not agent and not aws and not statsd:
             print "Beginning interactive installation..."
             prompt = True
 
@@ -61,9 +72,13 @@ class Install(Base):
             proxy_input = raw_input("Would you like to install the Wavefront Proxy on this host? (yes or no): \n").lower()
             if proxy_input == "y" or proxy_input == "yes":
                 proxy = True
-            agent_input = raw_input("Would you like to install the Telegraf agent on this host? (yes or no): \n").lower()
+            agent_input = raw_input("Would you like to install Telegraf (metric collection agent) on this host? (yes or no): \n").lower()
             if agent_input == "y" or agent_input == "yes":
                 agent = True
+            statsd_input = raw_input("Would you like to configure StatsD integration on this host? (yes or no): \n").lower()
+            if statsd_input:
+                statsd = True
+
             # if this is an ec2 instance, ask if they would like to add ec2 metadata
             if wavefront.aws.is_ec2_instance():
                 aws_input = raw_input("Would you like to add AWS EC2 Metadata to metrics from this host? (yes or no): \n").lower()
@@ -101,8 +116,11 @@ class Install(Base):
             if not wavefront.agent.install_agent():
                 sys.exit(1)
 
-            if not wavefront.agent.configure_agent(proxy_address,proxy_port):
+            # Configure Wavefront Integration
+            if not wavefront.integrations.wavefront.configure(proxy_address, proxy_port):
                 sys.exit(1)
+
+        # Integrations: agent must be restarted after installing an integration
 
         if aws:
             if not aws_region:
@@ -115,5 +133,16 @@ class Install(Base):
             if not wavefront.aws.tag_telegraf_config(aws_region, aws_secret_key_id, aws_secret_key):
                 sys.exit(1)
 
+            wavefront.system.restart_service(agent_name)
 
+
+        if statsd:
+            if not statsd_port:
+                statsd_port = raw_input("Please enter the port you would like StatsD to listen on (default = 8125): \n") or "8125"
+
+            # Install StatsD
+            if not wavefront.integrations.statsd.configure(statsd_port):
+                sys.exit(1)
+
+            wavefront.system.restart_service(agent_name)
 
