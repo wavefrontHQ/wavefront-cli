@@ -22,6 +22,9 @@ class Wavefront(Base):
 
     def install(self):
 
+        if not self.validate_options():
+            return False
+
         proxy_address = self.options["proxy_address"]
         proxy_port = self.options["proxy_port"]
 
@@ -44,3 +47,11 @@ class Wavefront(Base):
             return False
 
         return True
+
+    def validate_options(self):
+        if not self.options['proxy_address']:
+            message.print_warn("Missing required option: proxy_address")
+            return False
+        if not self.options['proxy_port']:
+            # default to 2878
+            self.options['proxy_port'] = 2878

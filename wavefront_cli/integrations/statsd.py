@@ -51,6 +51,8 @@ class StatsD(Base):
 
     def install(self):
 
+        self.validate_options()
+
         statsd_port = self.options["statsd_port"]
 
         out = self.conf % (statsd_port)
@@ -70,4 +72,10 @@ class StatsD(Base):
             message.print_warn("Was StatsD integration already removed?")
             return False
 
+        return True
+
+    def validate_options(self):
+        if not self.options['statsd_port']:
+            # default value
+            self.options['statsd_port'] = "8125"
         return True

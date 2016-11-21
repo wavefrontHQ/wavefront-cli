@@ -12,7 +12,6 @@ The Wavefront CLI is available on PyPI as a pip package.
 
 ```
 $ sudo pip install wavefront-cli
-$ wave --version
 ```
 
 ## Running Remotely
@@ -26,19 +25,19 @@ Any command line arguments added to the example below will be passed to the Wave
  
 ## Usage
 
-The Wavefront CLI currently three top level commands: `install`, `integration`, and `configure`. 
+The Wavefront CLI currently has three top level commands: `install`, `integration`, and `configure`. 
 To see a full list of all options run `wave -h`
 
 ### The Install Command
 
-The most common use for the Wavefront CLI, is the installation of the Wavefront Proxy and/or Collector Agent (Telegraf).
+The most common use for the Wavefront CLI, is the installation of the Wavefront Proxy and/or Collector Agent (Telegraf) on a host.
 The `install` command accepts multiple options. If a required option is not passed as an argument, the CLI will prompt the user for missing input. 
 If all required options are passed, the CLI will not prompt for input.
 
 The `install` command accepts 1-4 top level options: `--proxy`, `--agent`, `--statsd`, `--aws`.
 
-- `--proxy` - When passed, the Wavefront Proxy will be installed and configured.
-- `--agent` - When passed, Telegraf will be installed and configured.
+- `--proxy` - When passed, the Wavefront Proxy will be installed and configured on the current host.
+- `--agent` - When passed, Telegraf will be installed and configured on the current host.
 - `--aws` - *AWS only - When passed, the CLI will add AWS EC2 metadata to the Telegraf configuration as tags. This means metrics from the current host will be tagged with the EC2 tags, AWS region, the VPC ID, and Image ID of the EC2 instance.
 - `--statsd` - When passed, the Telegraf StatsD service plugin will be enabled. *Note: This requires installing Telegraf via the `--agent` option. 
 
@@ -66,10 +65,27 @@ $ sudo bash -c "$(curl -sL https://raw.githubusercontent.com/wavefronthq/wavefro
  
 ### The Integration Command
 
-The `integration` will install a Wavefront integration. In most cases, this means generating a Telegraf config file in `/etc/telegraf/telegraf.d`
+The `integration` command will install or remove a Wavefront integration. In most cases, this means generating a Telegraf config file in `/etc/telegraf/telegraf.d`
 and deploying a template Dashboard.
 
 ```
-wave integration <name> (install|remove) [<option>...]
+$ wave integration <name> (install|remove) [<option>...]
 ```
 
+#### Integration: Example Usage
+
+```
+$ wave integration StatsD install statsd_port=8125
+```
+
+```
+$ wave integration Wavefront install proxy_address=localhost proxy_port=2878
+```
+
+## Release Process
+
+`release.sh` will package and ship this module to PyPI. If you wish to cut your own version and upload to your own PyPI project, edit `setup.py`.
+
+```
+$ ./release.sh
+```
