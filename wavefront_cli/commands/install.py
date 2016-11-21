@@ -1,17 +1,20 @@
 """The proxy command."""
-from json import dumps
-from .base import Base
-# wavefront API functions
-import wavefront.auth
-import wavefront.api
-import wavefront.system
-import wavefront.proxy
-import wavefront.agent
-import wavefront.message
-import wavefront.aws
-import wavefront.integrations.wavefront
-import wavefront.integrations.statsd
 import sys
+
+from wavefront_cli.lib import message
+
+import wavefront_cli.lib.aws
+import wavefront_cli.lib.api
+import wavefront_cli.lib.proxy
+import wavefront_cli.lib.agent
+
+import wavefront_cli.integrations.wavefront
+from wavefront_cli.integrations.statsd import StatsD
+from wavefront_cli.integrations.wavefront import Wavefront
+
+from wavefront_cli.integrations.teststatsd import TestStatsD
+
+from .base import Base
 
 
 class Install(Base):
@@ -22,7 +25,7 @@ class Install(Base):
 
         agent_name = "telegraf"
 
-        wavefront.message.print_welcome()
+        message.print_welcome()
         '''
         wave install
             [--proxy]
@@ -80,7 +83,7 @@ class Install(Base):
                 statsd = True
 
             # if this is an ec2 instance, ask if they would like to add ec2 metadata
-            if wavefront.aws.is_ec2_instance():
+            if wavefront_cli.lib.aws.is_ec2_instance():
                 aws_input = raw_input("Would you like to add AWS EC2 Metadata to metrics from this host? (yes or no): \n").lower()
                 if aws_input == "y" or agent_input == "yes":
                     aws = True
@@ -93,16 +96,16 @@ class Install(Base):
 
             # Validate token first
             print "Validating API Token using Wavefront URL: ", wavefront_url
-            valid = wavefront.api.validate_token(wavefront_url,api_token)
-            if not wavefront.api.validate_token(wavefront_url,api_token):
+
+            if not wavefront_cli.lib.api.validate_token(wavefront_url, api_token):
                 sys.exit(1)
 
             # Install Proxy
-            if not wavefront.proxy.install_proxy():
+            if not wavefront_cli.lib.proxy.install_proxy():
                 sys.exit(1)
 
             # Configure Proxy
-            if not wavefront.proxy.configure_proxy(wavefront_url,api_token):
+            if not wavefront_cli.lib.proxy.configure_proxy(wavefront_url, api_token):
                 sys.exit(1)
 
 
@@ -113,13 +116,22 @@ class Install(Base):
                 proxy_port = raw_input("Please enter the port of your Wavefront proxy (default = 2878): \n") or "2878"
 
             # Install Agent
-            if not wavefront.agent.install_agent():
+            if not wavefront_cli.lib.agent.install_agent():
                 sys.exit(1)
 
             # Configure Wavefront Integration
-            if not wavefront.integrations.wavefront.configure(proxy_address, proxy_port):
+            wf_opts = {}
+            wf_opts["proxy_address"] = proxy_address
+            wf_opts["proxy_port"] = proxy_port
+            wf = Wavefront(wf_opts)
+
+            if wf.install_config():
+                message.print_success("Successfully Installed Wavefront Integration!")
+            else:
+                message.print_warn("Failed during Wavefront Integration installation!")
                 sys.exit(1)
 
+            wavefront_cli.lib.system.restart_service(agent_name)
         # Integrations: agent must be restarted after installing an integration
 
         if aws:
@@ -130,19 +142,25 @@ class Install(Base):
             if not aws_secret_key:
                 aws_secret_key = raw_input("Please enter your AWS IAM Secret Key: \n")
 
-            if not wavefront.aws.tag_telegraf_config(aws_region, aws_secret_key_id, aws_secret_key):
+            if not wavefront_cli.lib.aws.tag_telegraf_config(aws_region, aws_secret_key_id, aws_secret_key):
                 sys.exit(1)
 
-            wavefront.system.restart_service(agent_name)
+            wavefront_cli.lib.system.restart_service(agent_name)
 
 
         if statsd:
+
             if not statsd_port:
                 statsd_port = raw_input("Please enter the port you would like StatsD to listen on (default = 8125): \n") or "8125"
 
             # Install StatsD
-            if not wavefront.integrations.statsd.configure(statsd_port):
+            opts = {}
+            opts["statsd_port"] = statsd_port
+            int_statsd = StatsD(opts)
+            if int_statsd.install_config():
+                message.print_success("Successfully Installed StatsD Integration!")
+            else:
                 sys.exit(1)
 
-            wavefront.system.restart_service(agent_name)
+            wavefront_cli.lib.system.restart_service(agent_name)
 

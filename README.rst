@@ -30,3 +30,21 @@ build (*and this will, by default, run on all platforms*).
 The ``twine upload`` command (which requires you to install the `twine
 <https://pypi.python.org/pypi/twine>`_ tool) will then securely upload your
 new package to PyPI so everyone in the world can use it!
+
+# Examples
+
+```
+sudo bash -c "$(curl -sL https://raw.githubusercontent.com/ezeev/wave-cli/master/sh/install.sh)" -- \
+    --proxy \
+        --wavefront-url=https://try.wavefront.com \
+        --api-token=YOUR_API_TOKEN \
+    --agent \
+        --proxy-address=localhost \
+        --proxy-port=2878 \
+    --statsd \
+        --statsd-port=8125 \
+    --aws \
+        --aws-region=us-west-2 \
+        --aws-secret-key-id=YOUR_KEY_ID \
+        --aws-secret-key=YOUR_SECRET_KEY
+```

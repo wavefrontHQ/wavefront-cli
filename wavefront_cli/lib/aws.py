@@ -1,12 +1,12 @@
-import requests
 import subprocess
-import json
 import sys
-import system
-import agent
+
 import boto.ec2
+import requests
+
+import agent
 import message
-import string
+
 
 def get_instance_id():
     r = requests.get("http://instance-data/latest/meta-data/instance-id")
@@ -52,7 +52,7 @@ def tag_telegraf_config(aws_region, aws_key_id, aws_secret_key):
     try:
         output = subprocess.check_output(cmd,stderr=subprocess.STDOUT,shell=True)
     except:
-        message.print_warn("Error overwriting telegraf.conf. Is the file located at " +  conf + "? " + sys.exc_info()[0])
+        message.print_warn("Error overwriting telegraf.conf. Is the file located at " + conf + "? " + sys.exc_info()[0])
         return False
 
     message.print_success("Finished Telegraf Configuration for EC2 Tags")

@@ -1,9 +1,8 @@
-
-import system
 import subprocess
 import sys
+
 import message
-import integrations.wavefront
+import system
 
 agent_pkg_deb = "https://packagecloud.io/install/repositories/wavefront/telegraf/script.deb.sh"
 agent_pkg_rpm = "https://packagecloud.io/install/repositories/wavefront/telegraf/script.rpm.sh"

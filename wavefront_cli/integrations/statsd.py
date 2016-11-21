@@ -1,5 +1,7 @@
-from .. import system
-from .. import message
+from wavefront_cli.lib import message
+from wavefront_cli.lib import system
+
+from .base import Base
 
 conf_path = "/etc/telegraf/telegraf.d/10-statsd.conf"
 conf = """
@@ -42,14 +44,20 @@ conf = """
        """
 
 
-def configure(statsd_port="8125"):
 
-    message.print_bold("Configuring StatsD Integration!")
+class StatsD(Base):
+    """Say hello, world!"""
 
-    out = conf % (statsd_port)
-    if system.write_file(conf_path,out):
-        message.print_success("Finished Configuring StatsD Integration!")
-        return True
-    else:
-        message.print_warn("Failed Configuring StatsD Integration!")
-        return False
+    def install_config(self):
+
+        statsd_port = self.options["statsd_port"]
+
+        out = conf % (statsd_port)
+        if system.write_file(conf_path, out):
+            return True
+        else:
+            message.print_warn("Failed Configuring StatsD Integration!")
+            return False
+
+    def install_dashboard(self):
+        pass

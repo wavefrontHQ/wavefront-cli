@@ -39,7 +39,7 @@ setup(
     long_description = long_description,
     url = 'https://github.com/ezeev/wave-cli',
     author = 'Evan Pease',
-    author_email = 'evan@wavefront.com',
+    author_email = 'evan@lib.com',
     license = 'UNLICENSE',
     classifiers = [
         'Intended Audience :: Developers',
@@ -55,7 +55,7 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
     ],
-    keywords = ['wavefront','cli'],
+    keywords = ['lib','cli'],
     packages = find_packages(exclude=['docs', 'tests*']),
     #packages = ['wave'],
     install_requires = ['docopt','requests', 'boto'],

@@ -1,8 +1,9 @@
-
 import platform
 import subprocess
 import sys
+
 import message
+
 
 def check_os():
     try:
@@ -30,7 +31,7 @@ def write_file(path, text):
         file.close()
         return True
     except:
-        message.print_warn("Unable to write file at " + path + ": " + sys.exc_info()[0])
+        message.print_warn("Unable to write file at " + path + ": " + str(sys.exc_info()[0]))
         return False
 
 def remove_service(service_name):

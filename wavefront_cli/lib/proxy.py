@@ -1,9 +1,9 @@
-
-import system
-import api
 import subprocess
-import message
 import sys
+
+import api
+import message
+import system
 
 proxy_pkg_deb = "https://packagecloud.io/install/repositories/wavefront/proxy/script.deb.sh"
 proxy_pkg_rpm = "https://packagecloud.io/install/repositories/wavefront/proxy/script.rpm.sh"

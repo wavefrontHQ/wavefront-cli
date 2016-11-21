@@ -1,11 +1,9 @@
 """The hello command."""
 
-
-from json import dumps
-
 from .base import Base
 
-import wavefront.auth
+import wavefront_cli.lib.auth
+
 
 
 class Configure(Base):
@@ -14,4 +12,4 @@ class Configure(Base):
     def run(self):
 
         print "The configure command will overwrite the Wavefront URL and API Token stored in ~/.wavefront/credentials"
-        wavefront.auth.do_auth(self.options)
+        wavefront_cli.lib.auth.do_auth(self.options)
