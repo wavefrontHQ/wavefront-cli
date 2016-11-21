@@ -179,7 +179,7 @@ do
 done
 
 # Run Cli installation process
-$WAVE_PATH install $cli_args
+$WAVE_PATH $cli_args
 
 # Python was not installed before running this script, so remove it.
 if [ $PYTHON_INSTALLED == false ]; then

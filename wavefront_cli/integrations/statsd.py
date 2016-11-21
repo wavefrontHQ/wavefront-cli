@@ -1,10 +1,15 @@
+import os
 from wavefront_cli.lib import message
 from wavefront_cli.lib import system
 
 from .base import Base
 
-conf_path = "/etc/telegraf/telegraf.d/10-statsd.conf"
-conf = """
+
+
+class StatsD(Base):
+
+    conf_path = "/etc/telegraf/telegraf.d/10-statsd.conf"
+    conf = """
 [[inputs.statsd]]
   ## Address and port to host UDP listener on
   service_address = ":%s"
@@ -41,23 +46,28 @@ conf = """
   ## of percentiles but also increases the memory usage and cpu time.
   percentile_limit = 1000
 
-       """
+           """
 
 
-
-class StatsD(Base):
-    """Say hello, world!"""
-
-    def install_config(self):
+    def install(self):
 
         statsd_port = self.options["statsd_port"]
 
-        out = conf % (statsd_port)
-        if system.write_file(conf_path, out):
-            return True
+        out = self.conf % (statsd_port)
+        if system.write_file(self.conf_path, out):
+            message.print_success("Wrote StatsD configuration to " + self.conf_path)
         else:
             message.print_warn("Failed Configuring StatsD Integration!")
             return False
+        return True
 
-    def install_dashboard(self):
-        pass
+    def remove(self):
+        try:
+            os.remove(self.conf_path)
+            message.print_success("Removed StatsD configuration file " + self.conf_path)
+        except:
+            message.print_warn("Unable to remove conf file at: " + self.conf_path)
+            message.print_warn("Was StatsD integration already removed?")
+            return False
+
+        return True

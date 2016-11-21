@@ -6,9 +6,9 @@ class Base(object):
     def __init__(self, options):
         self.options = options
 
-    def install_config(self):
-        raise NotImplementedError('You must implement the install_config() method!')
+    def install(self):
+        raise NotImplementedError('You must implement the install() method!')
 
-    def install_dashboard(self):
-        raise NotImplementedError('You must implement the install_dashboard() method!')
+    def remove(self):
+        raise NotImplementedError("YOu must implement the remove() method!")
 

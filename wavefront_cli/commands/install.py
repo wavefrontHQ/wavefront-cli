@@ -12,8 +12,6 @@ import wavefront_cli.integrations.wavefront
 from wavefront_cli.integrations.statsd import StatsD
 from wavefront_cli.integrations.wavefront import Wavefront
 
-from wavefront_cli.integrations.teststatsd import TestStatsD
-
 from .base import Base
 
 
@@ -125,7 +123,7 @@ class Install(Base):
             wf_opts["proxy_port"] = proxy_port
             wf = Wavefront(wf_opts)
 
-            if wf.install_config():
+            if wf.install():
                 message.print_success("Successfully Installed Wavefront Integration!")
             else:
                 message.print_warn("Failed during Wavefront Integration installation!")
@@ -157,7 +155,7 @@ class Install(Base):
             opts = {}
             opts["statsd_port"] = statsd_port
             int_statsd = StatsD(opts)
-            if int_statsd.install_config():
+            if int_statsd.install():
                 message.print_success("Successfully Installed StatsD Integration!")
             else:
                 sys.exit(1)
