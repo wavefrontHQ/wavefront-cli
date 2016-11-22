@@ -51,7 +51,7 @@ without prompting the user for input.
 ```
 $ sudo bash -c "$(curl -sL https://raw.githubusercontent.com/wavefronthq/wavefront-cli/master/sh/install.sh)" -- \
     --proxy \
-        --wavefront-url=https://try.wavefront.com \
+        --wavefront-url=https://YOUR_INSTANCE.wavefront.com \
         --api-token=YOUR_API_TOKEN \
     --agent \
         --proxy-address=localhost \
