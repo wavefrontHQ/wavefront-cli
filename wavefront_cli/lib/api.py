@@ -1,5 +1,7 @@
 import requests
 import sys
+import auth
+import requests
 
 def clean_url(url):
     url = url
@@ -29,3 +31,8 @@ def validate_token(url, token):
             return False
     except:
         print "Error sending API Request. Are you sure your URL is correct? ", sys.exc_info()
+
+
+def deploy_dashboard(db_json_url, wf_url, api_token):
+    print "Deploying Dashboard with %s, %s, %s" % (db_json_url, wf_url, api_token)
+    return True

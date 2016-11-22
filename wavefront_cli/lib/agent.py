@@ -27,6 +27,22 @@ def get_install_agent_cmd():
 def install_agent():
 
     message.print_bold("Starting Telegraf Installation!")
+    print "Downloading configuration to ", conf_path
+
+    cmd = "sudo mkdir -p /etc/telegraf && sudo curl -o %s %s" % (conf_path,telegraf_conf)
+    ret_code = subprocess.call(cmd, shell=True)
+    if ret_code > 0:
+        message.print_warn("Error downloading Telegraf config file.")
+        return False
+
+    '''
+    print "Modifying Telegraf Wavefront output plugin settings"
+    cmd = "sudo sed -i -e \"s/PROXYHOST/%s/g\" /etc/telegraf/telegraf.conf && sudo sed -i -e \"s/PROXYPORT/%s/g\" /etc/telegraf/telegraf.conf" % (proxy_address, proxy_port)
+    ret_code = subprocess.call(cmd,shell=True)
+    if ret_code > 0:
+        message.print_warn("Error updating Telegraf config")
+        return False
+    '''
 
     cmd = get_install_agent_cmd()
     print "Running ", cmd
@@ -34,15 +50,6 @@ def install_agent():
     if ret_code > 0:
         message.print_warn("Error installing Telegraf: " + sys.exc_info()[0])
         return False
-
-    print "Downloading configuration to ", conf_path
-    cmd = "sudo curl -o %s %s" % (conf_path,telegraf_conf)
-    ret_code = subprocess.call(cmd, shell=True)
-    if ret_code > 0:
-        message.print_warn("Error downloading Telegraf config file.")
-        return False
-
-    system.restart_service("telegraf")
 
     message.print_success("Finished Installing Telegraf!")
     return True

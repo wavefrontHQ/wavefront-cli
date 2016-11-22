@@ -113,10 +113,7 @@ class Install(Base):
             if not proxy_port:
                 proxy_port = raw_input("Please enter the port of your Wavefront proxy (default = 2878): \n") or "2878"
 
-            # Install Agent
-            if not wavefront_cli.lib.agent.install_agent():
-                sys.exit(1)
-
+            # Install the Wf integration first (Telegraf won't start if an output plugin is not already created
             # Configure Wavefront Integration
             wf_opts = {}
             wf_opts["proxy_address"] = proxy_address
@@ -129,7 +126,10 @@ class Install(Base):
                 message.print_warn("Failed during Wavefront Integration installation!")
                 sys.exit(1)
 
-            wavefront_cli.lib.system.restart_service(agent_name)
+            # Now it is safe to install the agent
+            if not wavefront_cli.lib.agent.install_agent():
+                sys.exit(1)
+
         # Integrations: agent must be restarted after installing an integration
 
         if aws:

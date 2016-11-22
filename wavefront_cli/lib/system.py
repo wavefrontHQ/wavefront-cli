@@ -1,6 +1,7 @@
 import platform
 import subprocess
 import sys
+import time
 
 import message
 
@@ -19,6 +20,7 @@ def check_os():
 
 def restart_service(service_name):
     print "Restarting %s" % (service_name)
+    time.sleep(3)
     cmd = "sudo service %s restart" % (service_name)
     subprocess.call(cmd, shell=True)
 

@@ -1,3 +1,4 @@
+
 import os
 from wavefront_cli.lib import message
 from wavefront_cli.lib import system
@@ -29,6 +30,7 @@ class Wavefront(Base):
         proxy_port = self.options["proxy_port"]
 
         out = self.conf % (proxy_address, proxy_port)
+
         if system.write_file(self.conf_path, out):
             message.print_success("Wrote Wavefront configuration to " + self.conf_path)
         else:
@@ -55,3 +57,4 @@ class Wavefront(Base):
         if not self.options['proxy_port']:
             # default to 2878
             self.options['proxy_port'] = 2878
+        return True
