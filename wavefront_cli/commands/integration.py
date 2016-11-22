@@ -1,12 +1,13 @@
 
 from wavefront_cli.lib import message
 from wavefront_cli.lib import util
+from wavefront_cli.lib import system
 
 from json import dumps
 import importlib
 import sys
 from .base import Base
-from wavefront_cli.integrations import *
+
 
 
 class Integration(Base):
@@ -28,7 +29,7 @@ class Integration(Base):
         integration_class = None
         try:
             integration_class = getattr(importlib.import_module("wavefront_cli.integrations"), int_name)
-            instance = integration_class(int_options)
+            instance = integration_class(int_name, int_options)
         except:
             message.print_warn("Error: Unrecognized Integration: " + int_name)
             sys.exit(1)

@@ -75,7 +75,7 @@ class StatsD(Base):
         return True
 
     def validate_options(self):
-        if not self.options['statsd_port']:
+        if not self.options and not self.options['statsd_port']:
             # default value
             self.options['statsd_port'] = "8125"
         return True

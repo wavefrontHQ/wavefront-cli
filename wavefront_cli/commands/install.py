@@ -8,9 +8,15 @@ import wavefront_cli.lib.api
 import wavefront_cli.lib.proxy
 import wavefront_cli.lib.agent
 
+
+
 import wavefront_cli.integrations.wavefront
+
+from wavefront_cli.lib import auth
+
 from wavefront_cli.integrations.statsd import StatsD
 from wavefront_cli.integrations.wavefront import Wavefront
+
 
 from .base import Base
 
@@ -22,7 +28,6 @@ class Install(Base):
 
 
         agent_name = "telegraf"
-
         message.print_welcome()
         '''
         wave install
@@ -98,6 +103,7 @@ class Install(Base):
             if not wavefront_cli.lib.api.validate_token(wavefront_url, api_token):
                 sys.exit(1)
 
+            auth.do_auth(self.options)
             # Install Proxy
             if not wavefront_cli.lib.proxy.install_proxy():
                 sys.exit(1)

@@ -31,7 +31,7 @@ def install_proxy():
     cmd = get_proxy_install_cmd()
     ret_code = subprocess.call(cmd, shell=True)
     if ret_code > 0:
-        message.print_warn("Error installing proxy: " + sys.exc_info()[0])
+        message.print_warn("Error installing proxy.")
         return False
     else:
         message.print_success("Finished Wavefront Proxy Installation!")
