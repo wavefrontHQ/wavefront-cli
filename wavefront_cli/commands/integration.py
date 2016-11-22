@@ -37,12 +37,18 @@ class Integration(Base):
         if self.options['install']:
             print "Action: install"
             if not instance.install():
+                instance.print_failure()
                 sys.exit(1)
+            else:
+                instance.print_success()
 
         elif self.options['remove']:
             print "Action: remove"
             if not instance.remove():
+                instance.print_failure()
                 sys.exit(1)
+            else:
+                instance.print_success()
 
         system.restart_service("telegraf")
         sys.exit(0)

@@ -5,7 +5,9 @@ from wavefront_cli.lib import message
 class Base(object):
     """A base command."""
 
-    def __init__(self, options):
+    def __init__(self, name, options):
+
+        self.name = name
         creds = auth.get_or_set_auth({})
         '''
         "user_url": user_url,
@@ -20,6 +22,7 @@ class Base(object):
         if ret_code > 0:
             message.print_warn("Unable to create integrations config directory at /etc/telegraf/telegraf.d")
 
+
     def validate_options(self):
         raise NotImplementedError('You must implement the validate_options() method!')
 
@@ -27,5 +30,10 @@ class Base(object):
         raise NotImplementedError('You must implement the install() method!')
 
     def remove(self):
-        raise NotImplementedError("YOu must implement the remove() method!")
+        raise NotImplementedError("You must implement the remove() method!")
 
+    def print_success(self):
+        message.print_success("Successfully installed %s integration!" % (self.name))
+
+    def print_failure(self):
+        message.print_warn("Failed to install %s integration!" % (self.name))

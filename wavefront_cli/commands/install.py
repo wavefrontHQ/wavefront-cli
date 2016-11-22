@@ -118,7 +118,7 @@ class Install(Base):
             wf_opts = {}
             wf_opts["proxy_address"] = proxy_address
             wf_opts["proxy_port"] = proxy_port
-            wf = Wavefront(wf_opts)
+            wf = Wavefront("Wavefront",wf_opts)
 
             if wf.install():
                 message.print_success("Successfully Installed Wavefront Integration!")
@@ -154,7 +154,7 @@ class Install(Base):
             # Install StatsD
             opts = {}
             opts["statsd_port"] = statsd_port
-            int_statsd = StatsD(opts)
+            int_statsd = StatsD("StatsD", opts)
             if int_statsd.install():
                 message.print_success("Successfully Installed StatsD Integration!")
             else:

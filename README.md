@@ -2,9 +2,10 @@
 
 # Wavefront CLI
 
-The Wavefront Command Line Interface (CLI) is a utility for automating the installation and configuration of Wavefront Proxies, 
-Collector Agents (Telegraf), and Integrations. Future versions will provide an interface for common API tasks such as adding source tags to 
-a host, deploying dashboards, and sending events into Wavefront.
+The Wavefront Command Line Interface (CLI) is a utility for automating the installation and configuration of the Wavefront proxy, 
+Telegraf (metric collector agent), and integrations. Future versions will provide an interface for common API tasks such as adding source tags to 
+a host, deploying dashboards, and sending events into Wavefront. The CLI uses native package managers to install packages (i.e. yum, apt-get) and therefore
+should be run as sudo.
 
 ## Installation
 
@@ -30,7 +31,7 @@ To see a full list of all options run `wave -h`
 
 ### The Install Command
 
-The most common use for the Wavefront CLI, is the installation of the Wavefront Proxy and/or Collector Agent (Telegraf) on a host.
+The most common use for the Wavefront CLI, is the installation of the Wavefront Proxy and/or Telegraf on a host.
 The `install` command accepts multiple options. If a required option is not passed as an argument, the CLI will prompt the user for missing input. 
 If all required options are passed, the CLI will not prompt for input.
 
@@ -81,6 +82,29 @@ $ wave integration StatsD install statsd_port=8125
 ```
 $ wave integration Wavefront install proxy_address=localhost proxy_port=2878
 ```
+
+#### Contributing Integrations
+
+The `<name>` argument of the `integration` command will create an instance of a `wavefront_cli.integrations.Base` subclass matching the `<name>` argument. 
+When installing an integration, any arguments passed in the `[<option>...]` part of the command are passed to the subclass as a dictionary. This makes it possible
+to drop-in new integrations.
+
+At a minimum, an integration subclass must implement the following methods:
+```
+class Example(Base):
+
+    def install(self):
+        return True
+        
+    def remove(self):
+        return True
+
+    def validate_options(self):
+        return True
+```
+
+See `wavefront_cli/integrations/statsd.py` for a very simple example of an integration implementation.  
+
 
 ## Release Process
 
