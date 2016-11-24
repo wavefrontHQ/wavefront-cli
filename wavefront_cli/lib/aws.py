@@ -38,7 +38,7 @@ def tag_telegraf_config(aws_region, aws_key_id, aws_secret_key):
         tagTxt.write(tagStr)
         tagTxt.close()
     except:
-        message.print_warn("Error writing tags.txt: " + sys.exc_info()[0])
+        message.print_warn("Error writing tags.txt: " + sys.exc_info())
         return False
 
 
@@ -52,7 +52,7 @@ def tag_telegraf_config(aws_region, aws_key_id, aws_secret_key):
     try:
         output = subprocess.check_output(cmd,stderr=subprocess.STDOUT,shell=True)
     except:
-        message.print_warn("Error overwriting telegraf.conf. Is the file located at " + conf + "? " + sys.exc_info()[0])
+        message.print_warn("Error overwriting telegraf.conf. Is the file located at " + conf + "? " + sys.exc_info())
         return False
 
     message.print_success("Finished Telegraf Configuration for EC2 Tags")

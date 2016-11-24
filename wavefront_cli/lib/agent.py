@@ -48,7 +48,7 @@ def install_agent():
     print "Running ", cmd
     ret_code = subprocess.call(cmd, shell=True)
     if ret_code > 0:
-        message.print_warn("Error installing Telegraf: " + sys.exc_info()[0])
+        message.print_warn("Error installing Telegraf: " + sys.exc_info())
         return False
 
     message.print_success("Finished Installing Telegraf!")

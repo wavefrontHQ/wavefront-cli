@@ -8,13 +8,6 @@ class Base(object):
     def __init__(self, name, options):
 
         self.name = name
-        creds = auth.get_or_set_auth({})
-        '''
-        "user_url": user_url,
-        "user_token": user_token
-        '''
-        self.wavefront_url = creds['user_url']
-        self.api_token = creds['user_token']
         self.options = options
 
         cmd = "sudo mkdir -p /etc/telegraf/telegraf.d"

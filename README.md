@@ -45,11 +45,29 @@ The `install` command accepts 1-4 top level options: `--proxy`, `--agent`, `--st
 #### Install: Example Usage
 
 Each top-level option has 1 to several sub-options. If any required sub-option is not provided, the CLI will prompt for input. 
-Below is a complete example of the install command. This example would install the Wavefront Proxy, Telegraf, configure AWS tags, and StatsD 
+Below are examples of the install command. This example would install the Wavefront Proxy, Telegraf, configure AWS tags, and StatsD 
 without prompting the user for input.
 
+
+*Install Proxy and Telegraf (the CLI will prompt for required options):*
 ```
-$ sudo bash -c "$(curl -sL https://raw.githubusercontent.com/wavefronthq/wavefront-cli/master/sh/install.sh)" -- \
+$ sudo wave --proxy --agent 
+```
+
+*Install Proxy and Telegraf with no prompt:*
+```
+$ sudo wave \
+    --proxy \
+        --wavefront-url=https://YOUR_INSTANCE.wavefront.com \
+        --api-token=YOUR_API_TOKEN \
+    --agent \
+        --proxy-address=localhost \
+        --proxy-port=2878
+```
+ 
+*Install Proxy and Telegraf and configure AWS Metadata and StatsD in Telegraf:*
+```
+$ sudo wave \
     --proxy \
         --wavefront-url=https://YOUR_INSTANCE.wavefront.com \
         --api-token=YOUR_API_TOKEN \
@@ -64,6 +82,7 @@ $ sudo bash -c "$(curl -sL https://raw.githubusercontent.com/wavefronthq/wavefro
         --aws-secret-key=YOUR_SECRET_KEY
 ```
  
+ 
 ### The Integration Command
 
 The `integration` command will install or remove a Wavefront integration. In most cases, this means generating a Telegraf config file in `/etc/telegraf/telegraf.d`
@@ -75,9 +94,13 @@ $ wave integration <name> (install|remove) [<option>...]
 
 #### Integration: Example Usage
 
+Install StatsD service plugin on port 8215 (default) in Telegraf:
+
 ```
 $ wave integration StatsD install statsd_port=8125
 ```
+
+Install Wavefront output plugin in Telegraf to emit to a Proxy installed on localhost:2878:
 
 ```
 $ wave integration Wavefront install proxy_address=localhost proxy_port=2878

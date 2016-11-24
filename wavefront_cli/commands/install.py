@@ -103,7 +103,7 @@ class Install(Base):
             if not wavefront_cli.lib.api.validate_token(wavefront_url, api_token):
                 sys.exit(1)
 
-            auth.do_auth(self.options)
+            auth.save_auth(wavefront_url, api_token)
             # Install Proxy
             if not wavefront_cli.lib.proxy.install_proxy():
                 sys.exit(1)

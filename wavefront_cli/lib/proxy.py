@@ -48,20 +48,20 @@ def configure_proxy(url, token):
     cmd = "sudo sed -i -e '/token=/c\ttoken=%s' /etc/wavefront/wavefront-proxy/wavefront.conf" % (token)
     ret_code = subprocess.call(cmd, shell=True)
     if ret_code > 0:
-        message.print_warn("Error configuring proxy: " + sys.exc_info()[0])
+        message.print_warn("Error configuring proxy: " + sys.exc_info())
         return False
 
     # replace server url
     cmd = "sudo sed -i -e '/server=/c\tserver=%s' /etc/wavefront/wavefront-proxy/wavefront.conf" % (url)
     ret_code = subprocess.call(cmd, shell=True)
     if ret_code > 0:
-        message.print_warn("Error configuring proxy: " + sys.exc_info()[0])
+        message.print_warn("Error configuring proxy: " + sys.exc_info())
         return False
 
     # restart proxy
     ret_code = system.restart_service("wavefront-proxy")
     if ret_code > 0:
-        message.print_warn("Error restarting proxy service: " + sys.exc_info()[0])
+        message.print_warn("Error restarting proxy service: " + sys.exc_info())
         return False
 
     message.print_success("Finished Wavefront Proxy Installation!")
