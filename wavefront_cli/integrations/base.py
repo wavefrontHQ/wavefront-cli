@@ -3,7 +3,7 @@ from wavefront_cli.lib import auth
 from wavefront_cli.lib import message
 
 class Base(object):
-    """A base command."""
+    """base integration class."""
 
     def __init__(self, name, options):
 

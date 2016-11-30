@@ -7,7 +7,6 @@ from .base import Base
 
 
 class Wavefront(Base):
-    """Say hello, world!"""
 
     conf_path = "/etc/telegraf/telegraf.d/10-wavefront.conf"
     conf = """
