@@ -2,7 +2,7 @@
 wave
 
 Usage:
-  wave install [--proxy] [--wavefront-url=<wavefront_url>] [--api-token=<api_token>] [--agent] [--proxy-address=<address>] [--proxy-port=<port>] [--statsd] [--statsd-port=<statsd_port>] [--aws] [--aws-region=<aws_region>] [--aws-secret-key-id=<aws_secret_key_id>] [--aws-secret-key=<aws_secret_key]
+  wave install [--proxy] [--wavefront-url=<wavefront_url>] [--api-token=<api_token>] [--agent] [--proxy-address=<address>] [--proxy-port=<port>] [--agent-tags=<tags>] [--statsd] [--statsd-port=<statsd_port>] [--aws] [--aws-region=<aws_region>] [--aws-secret-key-id=<aws_secret_key_id>] [--aws-secret-key=<aws_secret_key]
   wave integration <name> (install|remove) [<option>...]
   wave configure [--wavefront-url=<wavefront_url>] [--api-token=<api_token>]
   wave -h | --help
@@ -11,11 +11,12 @@ Usage:
 Options:
   -h --help                         Show this screen.
   --version                         Show version.
-  -u --wavefront-url <wavefront_url>                The URL to your Wavefront instance.
-  -a --api-token <api_token>                    Your Wavefront API Token.
-  -p --proxy-address <address>                The Address of your Wavefront proxy.
+  -u --wavefront-url <wavefront_url>             The URL to your Wavefront instance.
+  -a --api-token <api_token>                     Your Wavefront API Token.
+  -p --proxy-address <address>                   The Address of your Wavefront proxy.
   -P --proxy-port <proxy_port>                   The port of your Wavefront proxy.
-  --statsd-port=PORT                            The port that StatsD should listen on [default: 8125]
+  --statsd-port=PORT                             The port that StatsD should listen on [default: 8125]
+  --agent-tags <tags>                            A comma separated list of key value pairs i.e. env=dev,app=myapp
 
 Examples:
   wave install --proxy --agent

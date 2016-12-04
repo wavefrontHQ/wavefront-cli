@@ -18,7 +18,7 @@ class Integration(Base):
 
         int_name = self.options['<name>']
         int_options = self.options['<option>']
-        int_options = util.options_to_dict(int_options)
+        int_options = util.option_to_dict(int_options)
 
 
         message.print_bold(int_name + " Integration with Options:")

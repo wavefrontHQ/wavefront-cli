@@ -7,6 +7,7 @@ import wavefront_cli.lib.aws
 import wavefront_cli.lib.api
 import wavefront_cli.lib.proxy
 import wavefront_cli.lib.agent
+from wavefront_cli.lib import util
 
 
 
@@ -37,6 +38,7 @@ class Install(Base):
             [--agent]
                 [--proxy-address=<address>]
                 [--proxy-port=<port>]
+                [--agent-tags=<tags>]
             [--aws]
                 [--aws-region=<aws_region>]
                 [--aws-secret-key-id=<aws_secret_key_id>]
@@ -54,6 +56,7 @@ class Install(Base):
         agent = self.options.get('--agent')
         proxy_address = self.options.get('--proxy-address')
         proxy_port = self.options.get('--proxy-port')
+        agent_tags = self.options.get('--agent-tags')
 
         # aws options
         aws = self.options.get('--aws')
@@ -81,6 +84,7 @@ class Install(Base):
             agent_input = raw_input("Would you like to install Telegraf (metric collection agent) on this host? (yes or no): \n").lower()
             if agent_input == "y" or agent_input == "yes":
                 agent = True
+                agent_tags = raw_input('Please enter a comma separated list of tags you would like added to metrics from this Telegraf host ("env=dev,app=myapp") or press Enter to continue without adding any tags: \n')
             statsd_input = raw_input("Would you like to configure StatsD integration on this host? (yes or no): \n").lower()
             if statsd_input:
                 statsd = True
@@ -96,6 +100,7 @@ class Install(Base):
                 wavefront_url = raw_input("Please enter the url to your Wavefront instance (default = https://try.wavefront.com): \n") or "https://try.wavefront.com"
             if not api_token:
                 api_token = raw_input("Please enter a valid Wavefront API Token: \n")
+
 
             # Validate token first
             print "Validating API Token using Wavefront URL: ", wavefront_url
@@ -114,6 +119,7 @@ class Install(Base):
 
 
         if agent:
+            # required agent options
             if not proxy_address:
                 proxy_address = raw_input("Please enter the address to your Wavefront proxy (default = localhost): \n") or "localhost"
             if not proxy_port:
@@ -135,6 +141,12 @@ class Install(Base):
             # Now it is safe to install the agent
             if not wavefront_cli.lib.agent.install_agent():
                 sys.exit(1)
+
+            if agent_tags:
+                tags = util.cskv_to_dict(agent_tags)
+                if not wavefront_cli.lib.agent.tag_telegraf_config('cli user tags', tags):
+                    sys.exit(1)
+
 
         # Integrations: agent must be restarted after installing an integration
 

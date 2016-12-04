@@ -1,6 +1,6 @@
 
 
-def options_to_dict(options):
+def option_to_dict(options):
 
     new_opts = {}
 
@@ -12,3 +12,19 @@ def options_to_dict(options):
             new_opts[opt] = True
 
     return new_opts
+
+def cskv_to_dict(option):
+
+    opts = {}
+
+    list = option.split(',')
+
+    for opt in list:
+        if len(opt.split('=')) != 2:
+            continue
+        else:
+            k = opt.split('=')[0]
+            v = opt.split('=')[1]
+            opts[k] = v
+
+    return opts
