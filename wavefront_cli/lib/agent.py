@@ -13,13 +13,17 @@ conf_path = "/etc/telegraf/telegraf.conf"
 
 def get_install_agent_cmd():
     dist = system.check_os()
-    if dist == "Amazon Linux AMI" or dist == "Red Hat Enterprise Linux Server":
+    if dist == "Amazon Linux AMI" or dist == "Red Hat Enterprise Linux Server" or dist == "CentOS" or dist == "CentOS Linux":
         cmd = "curl -s %s | sudo bash" % (agent_pkg_rpm)
         cmd += " && sudo yum -y -q install telegraf"
         return cmd
     elif dist == "Ubuntu":
         cmd = "curl -s %s | sudo bash" % (agent_pkg_deb)
         cmd += " && sudo apt-get -y -q install telegraf"
+        return cmd
+    elif dist == "debian":
+        cmd = "curl -s %s | sudo bash" % (agent_pkg_deb)
+        cmd += ' && sudo apt-get -o Dpkg::Options::="--force-confnew" -y install telegraf'
         return cmd
     else:
         message.print_warn("Error: Unsupported OS version: %s. Please contact support@wavefront.com." % (dist))
@@ -46,15 +50,19 @@ def tag_telegraf_config(comment, tags):
     # remove existing ec2 tags
     conf = conf_path
     cmd = "sudo sed -i '/%s/,/%s/d' %s" % (tags_pre, tags_post, conf)
-    #print cmd
-    output = subprocess.check_output(cmd,stderr=subprocess.STDOUT,shell=True)
+
+
+    ret_code = system.run_command(cmd)
+    if ret_code > 0:
+        message.print_warn("Error adding tags to Telegraf config")
+        return False
 
     cmd = "sudo sed -i '/\[global_tags\]/r tags.txt' %s" % (conf)
-    try:
-        output = subprocess.check_output(cmd,stderr=subprocess.STDOUT,shell=True)
-    except:
-        message.print_warn("Error overwriting telegraf.conf. Is the file located at " + conf + "? " + sys.exc_info())
-        return False
+
+    ret_code = system.run_command(cmd)
+    if ret_code > 0:
+        message.print_warn("Error overwriting telegraf.conf. Is the file located at " + conf + "? ")
+
 
     message.print_success("Finished adding tags.")
     return True
@@ -66,25 +74,16 @@ def install_agent():
     print "Downloading configuration to ", conf_path
 
     cmd = "sudo mkdir -p /etc/telegraf && sudo curl -o %s %s" % (conf_path,telegraf_conf)
-    ret_code = subprocess.call(cmd, shell=True)
+    ret_code = system.run_command(cmd)
     if ret_code > 0:
         message.print_warn("Error downloading Telegraf config file.")
         return False
 
-    '''
-    print "Modifying Telegraf Wavefront output plugin settings"
-    cmd = "sudo sed -i -e \"s/PROXYHOST/%s/g\" /etc/telegraf/telegraf.conf && sudo sed -i -e \"s/PROXYPORT/%s/g\" /etc/telegraf/telegraf.conf" % (proxy_address, proxy_port)
-    ret_code = subprocess.call(cmd,shell=True)
-    if ret_code > 0:
-        message.print_warn("Error updating Telegraf config")
-        return False
-    '''
-
     cmd = get_install_agent_cmd()
     print "Running ", cmd
-    ret_code = subprocess.call(cmd, shell=True)
+    ret_code = system.run_command(cmd)
     if ret_code > 0:
-        message.print_warn("Error installing Telegraf: " + sys.exc_info())
+        message.print_warn("Error installing Telegraf")
         return False
 
     message.print_success("Finished Installing Telegraf!")

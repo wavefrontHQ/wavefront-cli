@@ -37,9 +37,9 @@ setup(
     version = __version__,
     description = 'Wavefront client CLI utility.',
     long_description = long_description,
-    url = 'https://github.com/ezeev/wave-cli',
+    url = 'https://github.com/wavefontHQ/wavefront-cli',
     author = 'Evan Pease',
-    author_email = 'evan@lib.com',
+    author_email = 'evan@wavefront.com',
     license = 'UNLICENSE',
     classifiers = [
         'Intended Audience :: Developers',
@@ -58,7 +58,7 @@ setup(
     keywords = ['lib','cli'],
     packages = find_packages(exclude=['docs', 'tests*']),
     #packages = ['wave'],
-    install_requires = ['docopt','requests', 'boto'],
+    install_requires = ['docopt','requests', 'boto', 'importlib'],
     extras_require = {
         'test': ['coverage', 'pytest', 'pytest-cov'],
     },

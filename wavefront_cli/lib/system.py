@@ -18,11 +18,21 @@ def check_os():
         print "Unable to detect Linux distribution. ", sys.exc_info()
 
 
+def run_command(cmd):
+    try:
+        ret_code = subprocess.call(cmd, shell=True)
+        return ret_code
+    except:
+        message.print_warn('Error running command: "%s"' % (cmd))
+        return 1
+
+
 def restart_service(service_name):
     print "Restarting %s" % (service_name)
     time.sleep(3)
     cmd = "sudo service %s restart" % (service_name)
-    subprocess.call(cmd, shell=True)
+    return run_command(cmd)
+    # sys.exc_info()
 
 
 
