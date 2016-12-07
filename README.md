@@ -3,8 +3,7 @@
 # Wavefront CLI
 
 The Wavefront Command Line Interface (CLI) is a utility for automating the installation and configuration of the Wavefront proxy, 
-Telegraf (metric collector agent), and integrations. Future versions will provide an interface for common API tasks such as adding source tags to 
-a host, deploying dashboards, and sending events into Wavefront. The CLI uses native package managers to install packages (i.e. yum, apt-get) and therefore
+Telegraf (metric collector agent), and integrations. The CLI uses native package managers to install packages (i.e. yum, apt-get) and therefore
 should be run as sudo.
 
 ## Installation
@@ -74,6 +73,7 @@ $ sudo wave \
     --agent \
         --proxy-address=localhost \
         --proxy-port=2878 \
+        --agent-tags="env=dev,app=myapp"
     --statsd \
         --statsd-port=8125 \
     --aws \
