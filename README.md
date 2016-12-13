@@ -34,10 +34,10 @@ If all required options are passed, the CLI does not prompt for input.
 
 The `install` command accepts 1-4 top level options: `--proxy`, `--agent`, `--statsd`, `--aws`.
 
-- `--proxy` - When passed, the Wavefront Proxy is installed and configured on the current host.
-- `--agent` - When passed, Telegraf is installed and configured on the current host.
-- `--aws` - *AWS only - When passed, the CLI will add AWS EC2 metadata to the Telegraf configuration as tags. This means metrics from the current host will be tagged with the EC2 tags, AWS region, the VPC ID, and Image ID of the EC2 instance.
-- `--statsd` - When passed, the Telegraf StatsD service plugin will be enabled. *Note: This requires installing Telegraf via the `--agent` option.
+- `--proxy` - Install and configure the Wavefront Proxy on the current host.
+- `--agent` - Install and configure Telegraf on the current host.
+- `--aws` - *AWS only - Add AWS EC2 metadata to the Telegraf configuration as tags. This means metrics from the current host are tagged with the EC2 tags, AWS region, the VPC ID, and Image ID of the EC2 instance.
+- `--statsd` - Enable the Telegraf StatsD service plugin. *Note: This requires installing Telegraf via the `--agent` option.
 
 #### Install: Example Usage
 
