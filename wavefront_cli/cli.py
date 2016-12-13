@@ -34,7 +34,6 @@ from docopt import docopt
 
 from . import __version__ as VERSION
 
-
 def main():
     """Main CLI entrypoint."""
     import commands

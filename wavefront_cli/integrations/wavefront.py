@@ -16,6 +16,7 @@ class Wavefront(Base):
       host = "%s"
       port = %s
       metric_separator = "."
+      source_override = ["hostname", "snmp_host", "node_host"]
       convert_paths = true
       use_regex = false
         """
