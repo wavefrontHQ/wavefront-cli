@@ -12,6 +12,23 @@ The Wavefront CLI is available on PyPI as a pip package.
 $ sudo pip install wavefront-cli
 ```
 
+## Requirements
+
+The Wavefront CLI is currently supported on Linux environments only and has been tested on the following Linux versions:
+
+- Amazon Linux AMI 2016.09.0
+- CentOS 6.7
+- CentOS 7.2
+- Debian Jesse
+- Debian Wheezy
+- RedHat 6.6
+- RedHat 7.3
+- Ubuntu 14.04
+- Ubuntu 16.04
+
+**Note* - If you're using Docker or a Docker optimized operating system such as CentOS Atomic, 
+we highly recommend looking at Wavefront's options for [Docker Monitoring](https://community.wavefront.com/docs/DOC-1186).
+
 ## Running Remotely
 
 You can run the Wavefront CLI directly via `curl`. This is useful when you want to install the Proxy and/or agent in a single command.
