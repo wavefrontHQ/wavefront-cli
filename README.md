@@ -68,7 +68,7 @@ $ sudo wave --proxy --agent
 
 *Install Proxy and Telegraf with no prompt:*
 ```
-$ sudo wave \
+$ sudo wave install \
     --proxy \
         --wavefront-url=https://YOUR_INSTANCE.wavefront.com \
         --api-token=YOUR_API_TOKEN \
@@ -79,7 +79,7 @@ $ sudo wave \
 
 *Install Proxy and Telegraf and configure AWS Metadata and StatsD in Telegraf:*
 ```
-$ sudo wave \
+$ sudo wave install \
     --proxy \
         --wavefront-url=https://YOUR_INSTANCE.wavefront.com \
         --api-token=YOUR_API_TOKEN \
