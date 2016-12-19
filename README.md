@@ -22,7 +22,7 @@ The Wavefront CLI is currently supported on Linux environments only and has been
 - RedHat 6.6, 7.3
 - Ubuntu 14.04, 16.04
 
-The oldest version of Python it has been tested with is 2.6.6. If you do not see your family of operating system listed above or receive and error, please contact support@wavefront.com.
+The oldest version of Python it has been tested with is 2.6.6. If you do not see your family of operating system listed above or receive an error, please contact support@wavefront.com.
 
 **Note* - If you're using Docker or a Docker optimized operating system such as CentOS Atomic, 
 we highly recommend looking at Wavefront's options for [Docker Monitoring](https://community.wavefront.com/docs/DOC-1186).
