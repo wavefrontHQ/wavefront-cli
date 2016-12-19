@@ -57,16 +57,14 @@ The `install` command accepts 1-4 top level options: `--proxy`, `--agent`, `--st
 #### Install: Example Usage
 
 Each top-level option has 1 to several sub-options. If any required sub-option is not provided, the CLI prompts for input.
-Below are examples of the install command. This example installs the Wavefront Proxy, Telegraf, and configures AWS and StatsD
-without prompting for input.
+Below are examples of the install command.
 
-
-*Install Proxy and Telegraf (the CLI will prompt for required options):*
+Install Proxy and Telegraf (the CLI will prompt for required options):
 ```
 $ sudo wave install --proxy --agent
 ```
 
-*Install Proxy and Telegraf with no prompt:*
+Install Proxy and Telegraf with no prompt:
 ```
 $ sudo wave install \
     --proxy \
@@ -77,7 +75,8 @@ $ sudo wave install \
         --proxy-port=2878
 ```
 
-*Install Proxy and Telegraf and configure AWS Metadata and StatsD in Telegraf:*
+
+Install Proxy and Telegraf and configure AWS Metadata and StatsD in Telegraf with no prompt:
 ```
 $ sudo wave install \
     --proxy \
