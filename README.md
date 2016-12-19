@@ -63,7 +63,7 @@ without prompting for input.
 
 *Install Proxy and Telegraf (the CLI will prompt for required options):*
 ```
-$ sudo wave --proxy --agent
+$ sudo wave install --proxy --agent
 ```
 
 *Install Proxy and Telegraf with no prompt:*
