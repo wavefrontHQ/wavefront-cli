@@ -97,11 +97,10 @@ $ sudo wave install \
 
 ### The Integration Command
 
-The `integration` command installs or removes a Wavefront integration. In most cases, this means generating a Telegraf config file in `/etc/telegraf/telegraf.d`
-and deploying a template dashboard.
+The `integration` command installs or removes a Wavefront integration. In most cases, this means generating a Telegraf config file in `/etc/telegraf/telegraf.d`.
 
 ```
-$ wave integration <name> (install|remove) [<option>...]
+$ sudo wave integration <name> (install|remove) [<option>...]
 ```
 
 #### Integration: Example Usage
@@ -109,13 +108,13 @@ $ wave integration <name> (install|remove) [<option>...]
 Install StatsD service plugin on port 8215 (default) in Telegraf:
 
 ```
-$ wave integration StatsD install statsd_port=8125
+$ sudo wave integration StatsD install statsd_port=8125
 ```
 
 Install Wavefront output plugin in Telegraf to emit to a Proxy installed on localhost:2878:
 
 ```
-$ wave integration Wavefront install proxy_address=localhost proxy_port=2878
+$ sudo wave integration Wavefront install proxy_address=localhost proxy_port=2878
 ```
 
 #### Contributing Integrations

@@ -65,22 +65,24 @@ class Install(Base):
 
         # figure out what they want to install
         if prompt:
-            proxy_input = raw_input("Would you like to install the Wavefront Proxy on this host? (yes or no): \n").lower()
+            proxy_input = raw_input("Would you like to install the Wavefront Proxy on this host? (yes or no) [default: no]: \n").lower()
             if proxy_input == "y" or proxy_input == "yes":
                 proxy = True
-            agent_input = raw_input("Would you like to install Telegraf (metric collection agent) on this host? (yes or no): \n").lower()
+            agent_input = raw_input("Would you like to install Telegraf (metric collection agent) on this host? (yes or no) [default: no]: \n").lower()
             if agent_input == "y" or agent_input == "yes":
                 agent = True
                 agent_tags = raw_input('Please enter a comma separated list of tags you would like added to metrics from this Telegraf host ("env=dev,app=myapp") or press Enter to continue without adding any tags: \n')
             statsd_input = raw_input("Would you like to configure StatsD integration on this host? (yes or no): \n").lower()
-            if statsd_input:
+            if statsd_input == "y" or statsd_input == "yes":
                 statsd = True
 
             # if this is an ec2 instance, ask if they would like to add ec2 metadata
             if lib.aws.is_ec2_instance():
-                aws_input = raw_input("Would you like to add AWS EC2 Metadata to metrics from this host? (yes or no): \n").lower()
-                if aws_input == "y" or agent_input == "yes":
+                aws_input = raw_input("Would you like to add AWS EC2 Metadata to metrics from this host? (yes or no) [default: no]: \n").lower()
+                if aws_input == "y" or aws_input == "yes":
                     aws = True
+                else:
+                    aws = False
 
         if proxy:
             if not wavefront_url:
@@ -133,6 +135,8 @@ class Install(Base):
                 tags = lib.util.cskv_to_dict(agent_tags)
                 if not lib.agent.tag_telegraf_config('cli user tags', tags):
                     sys.exit(1)
+
+            lib.system.restart_service(agent_name)
 
 
         # Integrations: agent must be restarted after installing an integration

@@ -20,6 +20,7 @@ def cskv_to_dict(option):
     list = option.split(',')
 
     for opt in list:
+        #skip items that aren't kvs
         if len(opt.split('=')) != 2:
             continue
         else:

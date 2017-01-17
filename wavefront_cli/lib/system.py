@@ -30,7 +30,7 @@ def run_command(cmd):
 def restart_service(service_name):
     print "Restarting %s" % (service_name)
     time.sleep(3)
-    cmd = "sudo service %s restart" % (service_name)
+    cmd = "service %s restart" % (service_name)
     return run_command(cmd)
     # sys.exc_info()
 
@@ -50,9 +50,9 @@ def remove_service(service_name):
     dist = check_os()
     print "Detected ", dist
     if dist == "Amazon Linux AMI" or dist == "Red Hat Enterprise Linux Server":
-        cmd = "sudo yum -y remove " + service_name
+        cmd = "yum -y remove " + service_name
     elif dist == "Ubuntu":
-        cmd = "sudo apt-get -y remove " + service_name
+        cmd = "apt-get -y remove " + service_name
     else:
         print "Error: Unsupported OS version: %s. Please contact support@wavefront.com." % (dist)
 

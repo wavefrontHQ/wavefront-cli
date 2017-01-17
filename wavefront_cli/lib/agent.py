@@ -14,16 +14,16 @@ conf_path = "/etc/telegraf/telegraf.conf"
 def get_install_agent_cmd():
     dist = system.check_os()
     if dist == "Amazon Linux AMI" or dist == "Red Hat Enterprise Linux Server" or dist == "CentOS" or dist == "CentOS Linux":
-        cmd = "curl -s %s | sudo bash" % (agent_pkg_rpm)
-        cmd += " && sudo yum -y -q install telegraf"
+        cmd = "curl -s %s | bash" % (agent_pkg_rpm)
+        cmd += " && yum -y -q install telegraf"
         return cmd
     elif dist == "Ubuntu":
-        cmd = "curl -s %s | sudo bash" % (agent_pkg_deb)
-        cmd += " && sudo apt-get -y -q install telegraf"
+        cmd = "curl -s %s | bash" % (agent_pkg_deb)
+        cmd += ' && apt-get -y -qq -o Dpkg::Options::="--force-confold" install telegraf'
         return cmd
     elif dist == "debian":
-        cmd = "curl -s %s | sudo bash" % (agent_pkg_deb)
-        cmd += ' && sudo apt-get -o Dpkg::Options::="--force-confnew" -y install telegraf'
+        cmd = "curl -s %s | bash" % (agent_pkg_deb)
+        cmd += ' && apt-get -o Dpkg::Options::="--force-confnew" -y install telegraf'
         return cmd
     else:
         message.print_warn("Error: Unsupported OS version: %s. Please contact support@wavefront.com." % (dist))
@@ -49,22 +49,21 @@ def tag_telegraf_config(comment, tags):
 
     # remove existing ec2 tags
     conf = conf_path
-    cmd = "sudo sed -i '/%s/,/%s/d' %s" % (tags_pre, tags_post, conf)
-
+    cmd = "sed -i '/%s/,/%s/d' %s" % (tags_pre, tags_post, conf)
 
     ret_code = system.run_command(cmd)
     if ret_code > 0:
-        message.print_warn("Error adding tags to Telegraf config")
+        message.print_warn("Error adding tags to Telegraf configuration")
         return False
 
-    cmd = "sudo sed -i '/\[global_tags\]/r tags.txt' %s" % (conf)
+    cmd = "sed -i '/\[global_tags\]/r tags.txt' %s" % (conf)
 
     ret_code = system.run_command(cmd)
     if ret_code > 0:
         message.print_warn("Error overwriting telegraf.conf. Is the file located at " + conf + "? ")
 
 
-    message.print_success("Finished adding tags.")
+    message.print_success("Finished adding tags to Telegraf configuration.")
     return True
 
 
@@ -73,7 +72,7 @@ def install_agent():
     message.print_bold("Starting Telegraf Installation!")
     print "Downloading configuration to ", conf_path
 
-    cmd = "sudo mkdir -p /etc/telegraf && sudo curl -o %s %s" % (conf_path,telegraf_conf)
+    cmd = "mkdir -p /etc/telegraf && sudo curl -o %s %s" % (conf_path,telegraf_conf)
     ret_code = system.run_command(cmd)
     if ret_code > 0:
         message.print_warn("Error downloading Telegraf config file.")
@@ -87,6 +86,7 @@ def install_agent():
         return False
 
     message.print_success("Finished Installing Telegraf!")
+    message.print_success("The Telegraf configuration file can be found at /etc/telegraf/telegraf.conf")
     return True
 
 

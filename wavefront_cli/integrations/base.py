@@ -10,7 +10,7 @@ class Base(object):
         self.name = name
         self.options = options
 
-        cmd = "sudo mkdir -p /etc/telegraf/telegraf.d"
+        cmd = "mkdir -p /etc/telegraf/telegraf.d"
         ret_code = subprocess.call(cmd, shell=True)
         if ret_code > 0:
             message.print_warn("Unable to create integrations config directory at /etc/telegraf/telegraf.d")

@@ -56,7 +56,7 @@ class StatsD(Base):
 
         out = self.conf % (statsd_port)
         if system.write_file(self.conf_path, out):
-            message.print_success("Wrote wavefront config to %s" % (self.conf_path))
+            message.print_success("Wrote StatsD service plugin configuration to %s" % (self.conf_path))
         else:
             message.print_warn("Failed writing config file to %s - do you have write permission on this location?" % (self.conf_path))
             return False

@@ -13,12 +13,12 @@ def get_proxy_install_cmd():
     dist = system.check_os()
     print "Detected ", dist
     if dist == "Amazon Linux AMI" or dist == "Red Hat Enterprise Linux Server" or dist == "CentOS" or dist == "CentOS Linux":
-        cmd = "sudo curl -s %s | sudo bash" % (proxy_pkg_rpm)
-        cmd += " && sudo yum -y -q install wavefront-proxy"
+        cmd = "curl -s %s | bash" % (proxy_pkg_rpm)
+        cmd += " && yum -y -q install wavefront-proxy"
         return cmd
     elif dist == "Ubuntu" or dist == "debian":
-        cmd = "sudo curl -s %s | sudo bash" % (proxy_pkg_deb)
-        cmd += " && sudo apt-get -y -q install wavefront-proxy"
+        cmd = "curl -s %s | bash" % (proxy_pkg_deb)
+        cmd += " && apt-get -y -q install wavefront-proxy"
         return cmd
     else:
         print "Error: Unsupported OS version: %s. Please contact support@wavefront.com." % (dist)
@@ -49,13 +49,13 @@ def configure_proxy(url, token):
     print token
 
     # replace token
-    cmd = "sudo sed -i -e '/token=/c\ttoken=%s' /etc/wavefront/wavefront-proxy/wavefront.conf" % (token)
+    cmd = "sed -i -e '/token=/c\ttoken=%s' /etc/wavefront/wavefront-proxy/wavefront.conf" % (token)
     ret_code = system.run_command(cmd)
     if ret_code > 0:
         message.print_warn("Error Configuring Wavefront Proxy")
 
     # replace server url
-    cmd = "sudo sed -i -e '/server=/c\tserver=%s' /etc/wavefront/wavefront-proxy/wavefront.conf" % (url)
+    cmd = "sed -i -e '/server=/c\tserver=%s' /etc/wavefront/wavefront-proxy/wavefront.conf" % (url)
 
     ret_code = system.run_command(cmd)
     if ret_code > 0:
@@ -64,9 +64,10 @@ def configure_proxy(url, token):
     # restart proxy
     ret_code = system.restart_service("wavefront-proxy")
     if ret_code > 0:
-        message.print_warn("Error restarting proxy service: " + sys.exc_info())
+        message.print_warn("Error restarting proxy service")
         return False
 
-    message.print_success("Finished Wavefront Proxy Installation!")
+    message.print_success("Finished Wavefront Proxy Configuration!")
+    message.print_success("The Proxy's configuration file can be found at /etc/wavefront/wavefront-proxy/wavefront.conf")
 
     return True
