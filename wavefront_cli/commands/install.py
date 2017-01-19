@@ -106,6 +106,8 @@ class Install(Base):
             if not lib.proxy.configure_proxy(wavefront_url, api_token):
                 sys.exit(1)
 
+            lib.system.restart_service("wavefront-proxy")
+
 
         if agent:
             # required agent options
