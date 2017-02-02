@@ -68,13 +68,20 @@ class Install(Base):
             proxy_input = raw_input("Would you like to install the Wavefront Proxy on this host? (yes or no) [default: no]: \n").lower()
             if proxy_input == "y" or proxy_input == "yes":
                 proxy = True
+            else:
+                proxy = False
+
             agent_input = raw_input("Would you like to install Telegraf (metric collection agent) on this host? (yes or no) [default: no]: \n").lower()
             if agent_input == "y" or agent_input == "yes":
                 agent = True
                 agent_tags = raw_input('Please enter a comma separated list of tags you would like added to metrics from this Telegraf host ("env=dev,app=myapp") or press Enter to continue without adding any tags: \n')
-            statsd_input = raw_input("Would you like to configure StatsD integration on this host? (yes or no): \n").lower()
+            else:
+                agent = False
+            statsd_input = raw_input("Would you like to configure StatsD integration on this host? (yes or no) [default: no]: \n").lower()
             if statsd_input == "y" or statsd_input == "yes":
                 statsd = True
+            else:
+                statsd = False
 
             # if this is an ec2 instance, ask if they would like to add ec2 metadata
             if lib.aws.is_ec2_instance():
@@ -105,9 +112,6 @@ class Install(Base):
             # Configure Proxy
             if not lib.proxy.configure_proxy(wavefront_url, api_token):
                 sys.exit(1)
-
-            lib.system.restart_service("wavefront-proxy")
-
 
         if agent:
             # required agent options
