@@ -120,7 +120,7 @@ function install_pip() {
 function install_wavecli() {
     PIP_PATH=$(which pip)
     $PIP_PATH uninstall wavefront-cli -y >> ${INSTALL_LOG} 2>&1
-    $PIP_PATH install wavefront-cli --no-cache >> ${INSTALL_LOG} 2>&1
+    $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
     if [ $? -ne 0 ]; then
             exit_with_failure "Failed to install Wavefront CLI"
     fi
