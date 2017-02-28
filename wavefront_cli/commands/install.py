@@ -22,6 +22,7 @@ class Install(Base):
             [--proxy]
                 [--wavefront-url=<wavefront_url>]
                 [--api-token=<api_token>]
+                [--proxy-next]
             [--agent]
                 [--proxy-address=<address>]
                 [--proxy-port=<port>]
@@ -38,6 +39,7 @@ class Install(Base):
         proxy = self.options.get('--proxy')
         wavefront_url = self.options.get('--wavefront-url')
         api_token = self.options.get('--api-token')
+        proxy_next = self.options.get('--proxy-next')
 
         # agent options
         agent = self.options.get('--agent')
@@ -106,7 +108,7 @@ class Install(Base):
 
             lib.auth.save_auth(wavefront_url, api_token)
             # Install Proxy
-            if not lib.proxy.install_proxy():
+            if not lib.proxy.install_proxy(proxy_next):
                 sys.exit(1)
 
             # Configure Proxy

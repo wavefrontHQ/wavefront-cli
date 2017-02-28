@@ -8,16 +8,36 @@ import system
 proxy_pkg_deb = "https://packagecloud.io/install/repositories/wavefront/proxy/script.deb.sh"
 proxy_pkg_rpm = "https://packagecloud.io/install/repositories/wavefront/proxy/script.rpm.sh"
 
-def get_proxy_install_cmd():
+proxy_next_pkg_deb = "https://packagecloud.io/install/repositories/wavefront/proxy-next/script.deb.sh"
+proxy_next_pkg_rpm = "https://packagecloud.io/install/repositories/wavefront/proxy-next/script.rpm.sh"
+
+
+
+def get_proxy_install_cmd(proxy_next):
     # dist = self.check_os()
     dist = system.check_os()
+
+    if proxy_next:
+        message.print_bold("Using proxy-next option. This will install the latest beta version proxy.")
+
+
     print "Detected ", dist
     if dist == "Amazon Linux AMI" or dist == "Red Hat Enterprise Linux Server" or dist == "CentOS" or dist == "CentOS Linux":
-        cmd = "curl -s %s | bash" % (proxy_pkg_rpm)
+
+        pkg = proxy_pkg_rpm
+        if proxy_next:
+            pkg = proxy_next_pkg_rpm
+
+        cmd = "curl -s %s | bash" % (pkg)
         cmd += " && yum -y -q install wavefront-proxy"
         return cmd
     elif dist == "Ubuntu" or dist == "debian":
-        cmd = "curl -s %s | bash" % (proxy_pkg_deb)
+
+        pkg = proxy_pkg_deb
+        if proxy_next:
+            pkg = proxy_next_pkg_deb
+
+        cmd = "curl -s %s | bash" % (pkg)
         cmd += " && apt-get -y -q install wavefront-proxy"
         return cmd
     else:
@@ -25,10 +45,10 @@ def get_proxy_install_cmd():
         return None
 
 
-def install_proxy():
+def install_proxy(proxy_next):
 
     message.print_bold("Starting Wavefront Proxy Installation!")
-    cmd = get_proxy_install_cmd()
+    cmd = get_proxy_install_cmd(proxy_next)
     try:
         ret_code = subprocess.call(cmd, shell=True)
         if ret_code > 0:
