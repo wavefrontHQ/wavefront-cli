@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INSTALL_LOG="/tmp/install_wavefront_$(< /dev/urandom tr -dc A-Z-a-z-0-9 | head -c${1:-10};echo;).log"
+INSTALL_LOG=`mktemp /tmp/install_wavefront_XXXXXXXXXX.log`
 
 function check_if_root_or_die() {
     echo "Checking installation privileges"
