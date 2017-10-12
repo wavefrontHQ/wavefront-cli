@@ -11,8 +11,7 @@ The Wavefront CLI is currently supported on Linux environments only and has been
 -   RedHat 6.6, 7.3
 -   Ubuntu 14.04, 16.04
 
-The lowest version of Python the CLI has been tested with is 2.6.6. If you do not see your family of operating system
-listed above or receive an error, contact <support@wavefront.com>.
+The lowest version of Python the CLI has been tested with is 2.6.6.
 
 **Note:** If you're using Docker or a Docker optimized operating system such as CentOS Atomic, we highly recommend
 looking at Wavefront's options for [Monitoring Docker Containers](https://community.wavefront.com/docs/DOC-1186).
