@@ -71,6 +71,7 @@ function install_python() {
 
     if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
         echo "Installing Python using apt-get"
+        apt-get update >> ${INSTALL_LOG} 2>&1
         apt-get install python -y >> ${INSTALL_LOG} 2>&1
     elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
         echo "Installing Python using yum"
