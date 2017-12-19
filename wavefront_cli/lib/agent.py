@@ -13,7 +13,7 @@ conf_path = "/etc/telegraf/telegraf.conf"
 
 def get_install_agent_cmd():
     dist = system.check_os()
-    if dist == "Amazon Linux AMI" or dist == "Red Hat Enterprise Linux Server" or dist == "CentOS" or dist == "CentOS Linux":
+    if dist == "Amazon Linux AMI" or dist == "Red Hat Enterprise Linux Server" or dist == "Red Hat Enterprise Linux Workstation" or dist == "CentOS" or dist == "CentOS Linux":
         cmd = "curl -s %s | bash" % (agent_pkg_rpm)
         cmd += " && yum -y -q install telegraf"
         return cmd
@@ -88,6 +88,3 @@ def install_agent():
     message.print_success("Finished Installing Telegraf!")
     message.print_success("The Telegraf configuration file can be found at /etc/telegraf/telegraf.conf")
     return True
-
-
-
