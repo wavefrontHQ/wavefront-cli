@@ -25,6 +25,10 @@ def get_install_agent_cmd():
         cmd = "curl -s %s | bash" % (agent_pkg_deb)
         cmd += ' && apt-get -o Dpkg::Options::="--force-confnew" -y install telegraf'
         return cmd
+    elif dist.strip() == "openSUSE":
+        cmd = "curl -s %s | bash" % (agent_pkg_rpm)
+        cmd += ' && zypper install telegraf'
+        return cmd
     else:
         message.print_warn("Error: Unsupported OS version: %s. Please contact support@wavefront.com." % (dist))
         return None
