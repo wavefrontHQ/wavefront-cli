@@ -40,6 +40,15 @@ def get_proxy_install_cmd(proxy_next):
         cmd = "curl -s %s | bash" % (pkg)
         cmd += " && apt-get -y -q install wavefront-proxy"
         return cmd
+    elif dist.strip() == "openSUSE":
+
+        pkg = proxy_pkg_rpm
+        if proxy_next:
+            pkg = proxy_next_pkg_rpm
+
+        cmd = "curl -s %s | bash" % (pkg)
+        cmd += " && zypper install wavefront-proxy"
+        return cmd
     else:
         print "Error: Unsupported OS version: %s. Please contact support@wavefront.com." % (dist)
         return None
