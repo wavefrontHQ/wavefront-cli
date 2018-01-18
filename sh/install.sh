@@ -115,6 +115,9 @@ function remove_python() {
 
 function install_pip() {
     $PYTHON_PATH=$(which python) 2> /dev/null
+    if [ $OPERATING_SYSTEM == "openSUSE" ]; then
+       $PYTHON_PATH=$(which python2.7) 2>/dev/null
+    fi
     curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py >> ${INSTALL_LOG} 2>&1
     if [ $? -ne 0 ]; then
             exit_with_failure "Failed to download Pip"
@@ -181,12 +184,12 @@ fi
 if [ $OPERATING_SYSTEM == "openSUSE" ]; then
     echo "Checking pip version"
     pip_version=`pip --version`
+    pip_python_version="python 3"
 
-    if [ $pip_version != *"python 2"* ]; then
-       echo "Unsupported pip version."
-       exit 1
+    if [[ $pip_version == *$pip_python_version* ]]; then
+       install_pip
     fi
-fi 
+fi
 # Make sure Wavefront CLI is installed. This function will export WAVE_PATH - holds the location of the wavefront cli binary
 install_wavecli
 
