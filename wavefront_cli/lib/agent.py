@@ -26,7 +26,7 @@ def get_install_agent_cmd():
         cmd += ' && apt-get -o Dpkg::Options::="--force-confnew" -y install telegraf'
         return cmd
     else:
-        message.print_warn("Error: Unsupported OS version: %s. Please contact support@wavefront.com." % (dist))
+        message.print_warn("Error: Unsupported OS version: %s." % (dist))
         return None
 
 def tag_telegraf_config(comment, tags):
