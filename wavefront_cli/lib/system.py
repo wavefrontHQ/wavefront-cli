@@ -54,7 +54,7 @@ def remove_service(service_name):
     elif dist == "Ubuntu":
         cmd = "apt-get -y remove " + service_name
     else:
-        print "Error: Unsupported OS version: %s. Please contact support@wavefront.com." % (dist)
+        print "Error: Unsupported OS version: %s." % (dist)
 
     print "Running ", cmd
     ret_code = subprocess.call(cmd, shell=True)
