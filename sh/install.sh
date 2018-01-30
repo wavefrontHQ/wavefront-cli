@@ -58,6 +58,9 @@ function detect_operating_system() {
         OPERATING_SYSTEM="MAC"
         echo "Mac is not yet supported!"
         exit 1
+    elif [ -f /etc/SUSE-brand ]; then
+        echo "openSUSE"
+        OPERATING_SYSTEM="openSUSE"
     else
         echo -e "\ntest -f /etc/debian_version" >> "/tmp/wavefront_install.log"
         echo -e "\ntest -f /etc/redhat-release || test -f /etc/system-release-cpe" >> ${INSTALL_LOG}
@@ -76,6 +79,9 @@ function install_python() {
     elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
         echo "Installing Python using yum"
         yum install python -y >> ${INSTALL_LOG} 2>&1
+    elif [ $OPERATING_SYSTEM == "openSUSE" ]; then
+        echo "Installing Python using zypper"
+        zypper install python >> ${INSTALL_LOG} 2>&1
     fi
 
     if [ $? -ne 0 ]; then
@@ -97,8 +103,11 @@ function remove_python() {
         apt-get remove python -y &> ${INSTALL_LOG}
         apt-get autoremove -y &> ${INSTALL_LOG}
     elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
-        echo "Installing Python using yum"
+        echo "Uninstalling Python using yum"
         yum remove python -y &> ${INSTALL_LOG}
+    elif [ $OPERATING_SYSTEM == "openSUSE" ]; then
+        echo "Uninstalling Python using zypper"
+        zypper remove python &> ${INSTALL_LOG}
     fi
 
 }
@@ -106,6 +115,9 @@ function remove_python() {
 
 function install_pip() {
     $PYTHON_PATH=$(which python) 2> /dev/null
+    if [ $OPERATING_SYSTEM == "openSUSE" ]; then
+       $PYTHON_PATH=$(which python2.7) 2>/dev/null
+    fi
     curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py >> ${INSTALL_LOG} 2>&1
     if [ $? -ne 0 ]; then
             exit_with_failure "Failed to download Pip"
@@ -169,6 +181,15 @@ if [ -z "$PIP_PATH" ]; then
     install_pip
 fi
 
+if [ $OPERATING_SYSTEM == "openSUSE" ]; then
+    echo "Checking pip version"
+    pip_version=`pip --version`
+    pip_python_version="python 3"
+
+    if [[ $pip_version == *$pip_python_version* ]]; then
+       install_pip
+    fi
+fi
 # Make sure Wavefront CLI is installed. This function will export WAVE_PATH - holds the location of the wavefront cli binary
 install_wavecli
 
