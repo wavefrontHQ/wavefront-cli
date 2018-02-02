@@ -37,7 +37,7 @@ setup(
     version = __version__,
     description = 'Wavefront client CLI utility.',
     long_description = long_description,
-    url = 'https://github.com/wavefontHQ/wavefront-cli',
+    url = 'https://github.com/wavefrontHQ/wavefront-cli',
     author = 'Evan Pease',
     author_email = 'evan@wavefront.com',
     license = 'UNLICENSE',
