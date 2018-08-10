@@ -49,7 +49,7 @@ def write_file(path, text):
 def remove_service(service_name):
     dist = check_os()
     print "Detected ", dist
-    if dist == "Amazon Linux AMI" or dist == "Red Hat Enterprise Linux Server":
+    if dist == "Amazon Linux AMI" or dist == "Amazon Linux " or dist == "Red Hat Enterprise Linux Server":
         cmd = "yum -y remove " + service_name
     elif dist == "Ubuntu":
         cmd = "apt-get -y remove " + service_name

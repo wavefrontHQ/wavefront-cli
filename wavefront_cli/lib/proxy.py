@@ -20,9 +20,10 @@ def get_proxy_install_cmd(proxy_next):
     if proxy_next:
         message.print_bold("Using proxy-next option. This will install the latest beta version proxy.")
 
-
     print "Detected ", dist
-    if dist == "Oracle Linux Server" or dist.strip() == "Fedora" or dist == "Amazon Linux AMI" or dist == "Red Hat Enterprise Linux Server" or dist == "Red Hat Enterprise Linux Workstation" or dist == "CentOS" or dist == "CentOS Linux":
+    if dist == "Oracle Linux Server" or dist.strip() == "Fedora" or dist == "Amazon Linux AMI" or \
+            dist == "Red Hat Enterprise Linux Server" or dist == "Red Hat Enterprise Linux Workstation" or \
+            dist == "CentOS" or dist == "CentOS Linux" or dist == "Amazon Linux ":
 
         pkg = proxy_pkg_rpm
         if proxy_next:
