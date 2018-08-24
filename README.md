@@ -1,9 +1,9 @@
-The Wavefront Command Line Interface (CLI) is a utility for installing and configuring the Wavefront proxy, Telegraf
+The Wavefront Integration Command Line Interface (CLI) is a utility for installing and configuring the Wavefront proxy, Telegraf
 collector agent, and integrations. The CLI uses native package managers to install packages (i.e. yum, apt-get) and therefore should be run as sudo.
 
 ## Requirements
 
-The Wavefront CLI is currently supported on Linux environments only and has been tested on the following Linux versions:
+The Wavefront Integration CLI is currently supported on Linux environments only and has been tested on the following Linux versions:
 
 -   Amazon Linux AMI 2016.09.0
 -   CentOS 6.7, 7.2
@@ -16,25 +16,25 @@ The lowest version of Python the CLI has been tested with is 2.6.6.
 **Note:** If you're using Docker or a Docker optimized operating system such as CentOS Atomic, we highly recommend
 looking at Wavefront's options for [Monitoring Docker Containers](https://community.wavefront.com/docs/DOC-1186).
 
-## Installing Wavefront CLI
+## Installing Wavefront Integration CLI
 
-The Wavefront CLI is available on PyPI as a pip package. To install the CLI, run:
+The Wavefront Integration CLI is available on PyPI as a pip package. To install the CLI, run:
 
 ```shell
 $ sudo pip install wavefront-cli
 ```
 
-## Installing and Running Wavefront CLI
+## Installing and Running Wavefront Integration CLI
 
-You can install and run the Wavefront CLI directly via `curl`. This is useful when you want to install the Wavefront CLI, Wavefront proxy, and/or agent in a single command. Arguments added to the following command are passed to the Wavefront CLI.
+You can install and run the Wavefront Integration CLI directly via `curl`. This is useful when you want to install the CLI, Wavefront proxy, and/or agent in a single command. Arguments added to the following command are passed to the CLI.
 
 ```shell
 $ sudo bash -c "$(curl -sL https://raw.githubusercontent.com/wavefronthq/wavefront-cli/master/sh/install.sh)" --
 ```
 
-## Wavefront CLI Usage
+## Usage
 
-To invoke the Wavefront CLI, run
+To invoke the Wavefront Integration CLI, run
 
 ```shell
 $ sudo wave <command>
@@ -44,7 +44,7 @@ where `<command>` is `install`, `integration`, or `configure`. To see a full lis
 
 ### The Install Command
 
-The most common use for the Wavefront CLI is installing the Wavefront proxy and/or Telegraf. The `install` command
+The most common use for the Wavefront Integration CLI is installing the Wavefront proxy and/or Telegraf. The `install` command
 accepts multiple options each of which accepts arguments. If a required argument is not passed to an option, the CLI
 prompts you for missing input. If all required arguments are passed, the CLI does not prompt for input.
 
