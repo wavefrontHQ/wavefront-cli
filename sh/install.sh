@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 INSTALL_LOG=`mktemp /tmp/install_wavefront_XXXXXXXXXX.log`
 
 function check_if_root_or_die() {
