@@ -16,14 +16,17 @@ proxy_next_pkg_rpm = "https://packagecloud.io/install/repositories/wavefront/pro
 def get_proxy_install_cmd(proxy_next):
     # dist = self.check_os()
     dist = system.check_os()
+    if not dist:
+        print "Error: Unsupported OS version. Please contact support@wavefront.com."
+        return None
 
     if proxy_next:
         message.print_bold("Using proxy-next option. This will install the latest beta version proxy.")
 
     print "Detected ", dist
-    if dist == "Oracle Linux Server" or dist.strip() == "Fedora" or dist == "Amazon Linux AMI" or \
+    if dist == "Oracle Linux Server" or dist.strip() == "Fedora" or \
             dist == "Red Hat Enterprise Linux Server" or dist == "Red Hat Enterprise Linux Workstation" or \
-            dist == "CentOS" or dist == "CentOS Linux" or dist == "Amazon Linux ":
+            dist == "CentOS" or dist == "CentOS Linux" or dist.startswith("Amazon Linux"):
 
         pkg = proxy_pkg_rpm
         if proxy_next:

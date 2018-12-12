@@ -13,9 +13,12 @@ conf_path = "/etc/telegraf/telegraf.conf"
 
 def get_install_agent_cmd():
     dist = system.check_os()
-    if dist == "Oracle Linux Server" or dist.strip() == "Fedora" or dist == "Amazon Linux AMI" or \
+    if not dist:
+        print "Error: Unsupported OS version. Please contact support@wavefront.com."
+        return None
+    if dist == "Oracle Linux Server" or dist.strip() == "Fedora" or \
             dist == "Red Hat Enterprise Linux Server" or dist == "Red Hat Enterprise Linux Workstation" or \
-            dist == "CentOS" or dist == "CentOS Linux" or dist == "Amazon Linux ":
+            dist == "CentOS" or dist == "CentOS Linux" or dist.startswith("Amazon Linux"):
         cmd = "curl -s %s | bash" % (agent_pkg_rpm)
         cmd += " && yum -y -q install telegraf"
         return cmd
