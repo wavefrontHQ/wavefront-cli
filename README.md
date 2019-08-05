@@ -13,9 +13,6 @@ The Wavefront Integration CLI is currently supported on Linux environments only 
 
 The lowest version of Python the CLI has been tested with is 2.6.6.
 
-**Note:** If you're using Docker or a Docker optimized operating system such as CentOS Atomic, we highly recommend
-looking at Wavefront's options for [Monitoring Docker Containers](https://community.wavefront.com/docs/DOC-1186).
-
 ## Installing Wavefront Integration CLI
 
 The Wavefront Integration CLI is available on PyPI as a pip package. To install the CLI, run:
