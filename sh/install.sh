@@ -1,6 +1,7 @@
 #!/bin/bash
 
 INSTALL_LOG=`mktemp /tmp/install_wavefront_XXXXXXXXXX.log`
+PYTHON2_INSTALLED=false
 
 function check_if_root_or_die() {
     echo "Checking installation privileges"
@@ -43,6 +44,40 @@ function exit_with_failure() {
     exit_with_message "FAILURE: $1" 1
 }
 
+function install_python_rhel() {
+        file_name=$1
+        # Get the redhat version
+        major=$(cat $file_name | tr -dc '0-9.'|cut -d \. -f1)
+        echo $major
+        if [ $major -le 7 ]
+        then
+            yum install -y python >> ${INSTALL_LOG} 2>&1
+            if [ $? -eq 0 ]
+            then
+                    echo "Installed python"
+            else
+                    echo "Failed to install python"
+            fi
+        else
+            PYTHON_PATH=$(which python2)
+            if [ -z "$PYTHON_PATH" ]
+            then
+                echo "Python2 is not installed. Installing...."
+                yum install -y python2 >> ${INSTALL_LOG} 2>&1
+                if [ $? -eq 0 ]
+                then
+                    PYTHON2_INSTALLED=true
+                        echo "Installed python2"
+                    else
+                        echo "Failed to install python2."
+                    fi
+		    fi
+		    echo "Creating symlink python2 -> python"
+		    PYTHON_PATH=$(which python2)
+            ln -s $PYTHON_PATH ${PYTHON_PATH::-1}
+        fi
+}
+
 function detect_operating_system() {
 
     echo "Detecting operating system:"
@@ -79,7 +114,16 @@ function install_python() {
         apt-get install python -y >> ${INSTALL_LOG} 2>&1
     elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
         echo "Installing Python using yum"
-        yum install python -y >> ${INSTALL_LOG} 2>&1
+
+        file_name=/etc/redhat-release
+
+        # Check if file exists
+        if [ -f $file_name ]
+        then
+            install_python_rhel $file_name
+        else
+            yum install python -y >> ${INSTALL_LOG} 2>&1
+        fi
     elif [ $OPERATING_SYSTEM == "openSUSE" ] || [ $OPERATING_SYSTEM == "SLE" ]; then
         echo "Installing Python using zypper"
         zypper install python >> ${INSTALL_LOG} 2>&1
@@ -89,6 +133,16 @@ function install_python() {
             exit_with_failure "Failed to install Python"
     fi
 
+}
+
+function uninstall_python_rhel() {
+	if [ $PYTHON2_INSTALLED == true ]
+	then
+	    rm -rf $(which python)
+		yum remove python2 -y &> ${INSTALL_LOG}
+	else
+		rm -rf $(which python)
+	fi
 }
 
 function remove_python() {
@@ -105,7 +159,16 @@ function remove_python() {
         apt-get autoremove -y &> ${INSTALL_LOG}
     elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
         echo "Uninstalling Python using yum"
-        yum remove python -y &> ${INSTALL_LOG}
+
+        file_name=/etc/redhat-release
+
+        # Check if file exists
+        if [ -f $file_name ]
+        then
+                uninstall_python_rhel
+        else
+                yum remove python -y &> ${INSTALL_LOG}
+        fi
     elif [ $OPERATING_SYSTEM == "openSUSE" ] || [ $OPERATING_SYSTEM == "SLE" ]; then
         echo "Uninstalling Python using zypper"
         zypper remove python &> ${INSTALL_LOG}

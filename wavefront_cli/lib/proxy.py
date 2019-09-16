@@ -26,6 +26,7 @@ def get_proxy_install_cmd(proxy_next):
     print "Detected ", dist
     if dist == "Oracle Linux Server" or dist.strip() == "Fedora" or \
             dist == "Red Hat Enterprise Linux Server" or dist == "Red Hat Enterprise Linux Workstation" or \
+            dist == "Red Hat Enterprise Linux" or \
             dist == "CentOS" or dist == "CentOS Linux" or dist.startswith("Amazon Linux"):
 
         pkg = proxy_pkg_rpm
