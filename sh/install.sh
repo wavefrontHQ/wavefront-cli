@@ -48,7 +48,6 @@ function install_python_rhel() {
         file_name=$1
         # Get the redhat version
         major=$(cat $file_name | tr -dc '0-9.'|cut -d \. -f1)
-        echo $major
         if [ $major -le 7 ]
         then
             yum install -y python >> ${INSTALL_LOG} 2>&1
@@ -68,13 +67,13 @@ function install_python_rhel() {
                 then
                     PYTHON2_INSTALLED=true
                         echo "Installed python2"
+                        echo "Creating symlink python2 -> python"
+		                PYTHON_PATH=$(which python2)
+                        ln -s $PYTHON_PATH ${PYTHON_PATH::-1}
                     else
                         echo "Failed to install python2."
-                    fi
+                fi
 		    fi
-		    echo "Creating symlink python2 -> python"
-		    PYTHON_PATH=$(which python2)
-            ln -s $PYTHON_PATH ${PYTHON_PATH::-1}
         fi
 }
 
