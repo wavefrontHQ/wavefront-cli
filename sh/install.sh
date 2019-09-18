@@ -45,36 +45,40 @@ function exit_with_failure() {
 }
 
 function install_python_rhel() {
-        file_name=$1
-        # Get the redhat version
-        major=$(cat $file_name | tr -dc '0-9.'|cut -d \. -f1)
-        if [ $major -le 7 ]
+    # Get the redhat version
+    if [ -f /etc/redhat-release ]; then
+        major=$(cat /etc/redhat-release | tr -dc '0-9.'|cut -d \. -f1)
+    elif [ -f /etc/system-release-cpe ]; then
+        major=$(cat /etc/system-release-cpe | tr -dc '0-9.'|cut -d \. -f1)
+    fi
+
+    if [ $major -le 7 ]
+    then
+        yum install -y python >> ${INSTALL_LOG} 2>&1
+        if [ $? -eq 0 ]
         then
-            yum install -y python >> ${INSTALL_LOG} 2>&1
+                echo "Installed python"
+        else
+                echo "Failed to install python"
+        fi
+    else
+        PYTHON_PATH=$(which python2)
+        if [ -z "$PYTHON_PATH" ]
+        then
+            echo "Python2 is not installed. Installing...."
+            yum install -y python2 >> ${INSTALL_LOG} 2>&1
             if [ $? -eq 0 ]
             then
-                    echo "Installed python"
-            else
-                    echo "Failed to install python"
+                PYTHON2_INSTALLED=true
+                    echo "Installed python2"
+                    echo "Creating symlink python2 -> python"
+                    PYTHON_PATH=$(which python2)
+                    ln -s $PYTHON_PATH ${PYTHON_PATH::-1}
+                else
+                    echo "Failed to install python2."
             fi
-        else
-            PYTHON_PATH=$(which python2)
-            if [ -z "$PYTHON_PATH" ]
-            then
-                echo "Python2 is not installed. Installing...."
-                yum install -y python2 >> ${INSTALL_LOG} 2>&1
-                if [ $? -eq 0 ]
-                then
-                    PYTHON2_INSTALLED=true
-                        echo "Installed python2"
-                        echo "Creating symlink python2 -> python"
-		                PYTHON_PATH=$(which python2)
-                        ln -s $PYTHON_PATH ${PYTHON_PATH::-1}
-                    else
-                        echo "Failed to install python2."
-                fi
-		    fi
         fi
+    fi
 }
 
 function detect_operating_system() {
@@ -113,16 +117,7 @@ function install_python() {
         apt-get install python -y >> ${INSTALL_LOG} 2>&1
     elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
         echo "Installing Python using yum"
-
-        file_name=/etc/redhat-release
-
-        # Check if file exists
-        if [ -f $file_name ]
-        then
-            install_python_rhel $file_name
-        else
-            yum install python -y >> ${INSTALL_LOG} 2>&1
-        fi
+        install_python_rhel
     elif [ $OPERATING_SYSTEM == "openSUSE" ] || [ $OPERATING_SYSTEM == "SLE" ]; then
         echo "Installing Python using zypper"
         zypper install python >> ${INSTALL_LOG} 2>&1
