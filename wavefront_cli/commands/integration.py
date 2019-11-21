@@ -1,4 +1,4 @@
-
+from __future__ import print_function
 from wavefront_cli.lib import message
 from wavefront_cli.lib import util
 from wavefront_cli.lib import system
@@ -23,7 +23,7 @@ class Integration(Base):
 
         message.print_bold(int_name + " Integration with Options:")
         for k,v in int_options.iteritems():
-            print k,": ",v
+            print(k,": ",v)
 
 
         integration_class = None
@@ -36,7 +36,7 @@ class Integration(Base):
 
 
         if self.options['install']:
-            print "Action: install"
+            print("Action: install")
             if not instance.install():
                 instance.print_failure()
                 sys.exit(1)
@@ -44,7 +44,7 @@ class Integration(Base):
                 instance.print_success()
 
         elif self.options['remove']:
-            print "Action: remove"
+            print("Action: remove")
             if not instance.remove():
                 instance.print_failure()
                 sys.exit(1)

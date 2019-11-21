@@ -1,9 +1,11 @@
+from __future__ import print_function
+
+from . import api
+from . import message
+from . import system
+
 import subprocess
 import sys
-
-import api
-import message
-import system
 
 proxy_pkg_deb = "https://packagecloud.io/install/repositories/wavefront/proxy/script.deb.sh"
 proxy_pkg_rpm = "https://packagecloud.io/install/repositories/wavefront/proxy/script.rpm.sh"
@@ -17,13 +19,13 @@ def get_proxy_install_cmd(proxy_next):
     # dist = self.check_os()
     dist = system.check_os()
     if not dist:
-        print "Error: Unsupported OS version. Please contact support@wavefront.com."
+        print("Error: Unsupported OS version. Please contact support@wavefront.com.")
         return None
 
     if proxy_next:
         message.print_bold("Using proxy-next option. This will install the latest beta version proxy.")
 
-    print "Detected ", dist
+    print("Detected ", dist)
     if dist == "Oracle Linux Server" or dist.strip() == "Fedora" or \
             dist == "Red Hat Enterprise Linux Server" or dist == "Red Hat Enterprise Linux Workstation" or \
             dist == "CentOS" or dist == "CentOS Linux" or dist.startswith("Amazon Linux"):
@@ -54,7 +56,7 @@ def get_proxy_install_cmd(proxy_next):
         cmd += " && zypper install wavefront-proxy"
         return cmd
     else:
-        print "Error: Unsupported OS version: %s. Please contact support@wavefront.com." % (dist)
+        print("Error: Unsupported OS version: %s. Please contact support@wavefront.com." % (dist))
         return None
 
 
@@ -78,8 +80,8 @@ def install_proxy(proxy_next):
 def configure_proxy(url, token):
     message.print_bold("Starting Wavefront Proxy Configuration!")
     url = api.clean_url(url) + "/api/"
-    print url
-    print token
+    print(url)
+    print(token)
 
     # replace token
     cmd = "sed -i -e '/token=/c\ttoken=%s' /etc/wavefront/wavefront-proxy/wavefront.conf" % (token)

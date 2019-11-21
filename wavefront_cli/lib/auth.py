@@ -1,9 +1,9 @@
+from . import api
+from . import message
 
 import os
 import sys
-import api
 from os.path import expanduser
-import message
 
 
 WF_URL_ENVKEY = "WAVEFRONT_URL"
@@ -12,18 +12,23 @@ WF_TOKEN_ENVKEY = "WAVEFRONT_TOKEN"
 user_token = ""
 user_url = ""
 
+try:
+    input = raw_input
+except NameError:
+    pass
+
 def do_auth(options):
 
     if options and options['--wavefront-url']:
         user_url = options['--wavefront-url']
     else:
-        user_url = raw_input("Please enter your Wavefront URL: ")
+        user_url = input("Please enter your Wavefront URL: ")
 
 
     if options and options['--api-token']:
         user_token = options['--api-token']
     else:
-        user_token = raw_input("Please enter your Wavefront API Token: ")
+        user_token = input("Please enter your Wavefront API Token: ")
 
     save_auth(user_url,user_token)
 
@@ -72,7 +77,7 @@ def get_auth():
                 "user_token": user_token
             }
         else:
-            print "Your previously saved API Token failed to validate. Was it deactivated?"
+            print("Your previously saved API Token failed to validate. Was it deactivated?")
             return None
     except:
        return None

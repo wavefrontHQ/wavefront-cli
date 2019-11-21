@@ -1,12 +1,11 @@
+from . import agent
+from . import message
+
 import subprocess
 import sys
 
 import boto.ec2
 import requests
-
-import agent
-import message
-
 
 def get_instance_id():
     r = requests.get("http://instance-data/latest/meta-data/instance-id")

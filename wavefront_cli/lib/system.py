@@ -1,10 +1,11 @@
+from __future__ import print_function
+
+from . import message
+
 import platform
 import subprocess
 import sys
 import time
-
-import message
-
 
 def check_os():
     try:
@@ -15,7 +16,7 @@ def check_os():
         else:
             return platform.linux_distribution()[0]
     except:
-        print "Unable to detect Linux distribution. ", sys.exc_info()
+        print("Unable to detect Linux distribution. ", sys.exc_info())
 
 
 def run_command(cmd):
@@ -28,7 +29,7 @@ def run_command(cmd):
 
 
 def restart_service(service_name):
-    print "Restarting %s" % (service_name)
+    print("Restarting %s" % (service_name))
     time.sleep(3)
     cmd = "service %s restart" % (service_name)
     return run_command(cmd)
@@ -48,17 +49,17 @@ def write_file(path, text):
 
 def remove_service(service_name):
     dist = check_os()
-    print "Detected ", dist
+    print("Detected ", dist)
     if dist.startswith("Amazon Linux") or dist == "Red Hat Enterprise Linux Server":
         cmd = "yum -y remove " + service_name
     elif dist == "Ubuntu":
         cmd = "apt-get -y remove " + service_name
     else:
-        print "Error: Unsupported OS version: %s." % (dist)
+        print("Error: Unsupported OS version: %s." % (dist))
 
-    print "Running ", cmd
+    print("Running ", cmd)
     ret_code = subprocess.call(cmd, shell=True)
     if ret_code > 0:
-        print "Error removing service %s. Please check the output above this message." % (service_name)
+        print("Error removing service %s. Please check the output above this message." % (service_name))
 
     return ret_code

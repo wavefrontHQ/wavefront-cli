@@ -36,12 +36,12 @@ from . import __version__ as VERSION
 
 def main():
     """Main CLI entrypoint."""
-    import commands
+    from . import commands
     options = docopt(__doc__, version=VERSION)
 
     # Here we'll try to dynamically match the command the user is trying to run
     # with a pre-defined command class we've already created.
-    for k, v in options.iteritems():
+    for k, v in options.items():
         if hasattr(commands, k) and v:
             module = getattr(commands, k)
             commands = getmembers(module, isclass)

@@ -11,7 +11,7 @@ class Example(Base):
     '''
     def install(self):
 
-        print "This is an example integration subclass"
+        print("This is an example integration subclass")
 
         # call validate_options() if you need to validate what options were passed
         # before writing the config file to /etc/telegraf/telegraf.d

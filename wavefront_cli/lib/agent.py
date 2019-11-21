@@ -1,9 +1,9 @@
+from . import message
+from . import system
+
 import subprocess
 import sys
 
-import message
-import system
-import aws
 
 agent_pkg_deb = "https://packagecloud.io/install/repositories/wavefront/telegraf/script.deb.sh"
 agent_pkg_rpm = "https://packagecloud.io/install/repositories/wavefront/telegraf/script.rpm.sh"
@@ -14,7 +14,7 @@ conf_path = "/etc/telegraf/telegraf.conf"
 def get_install_agent_cmd():
     dist = system.check_os()
     if not dist:
-        print "Error: Unsupported OS version. Please contact support@wavefront.com."
+        print("Error: Unsupported OS version. Please contact support@wavefront.com.")
         return None
     if dist == "Oracle Linux Server" or dist.strip() == "Fedora" or \
             dist == "Red Hat Enterprise Linux Server" or dist == "Red Hat Enterprise Linux Workstation" or \
@@ -45,7 +45,7 @@ def tag_telegraf_config(comment, tags):
     tags_pre = "- %s -" % (comment)
     tags_post = "- end %s tags - " % (comment)
     tagStr = "  # %s\n" % (tags_pre)
-    for k,v in tags.iteritems():
+    for k,v in list(tags.items()):
         tagStr += '  %s = "%s"\n' % (k.lower(),v)
     tagStr += "  # %s\n" % (tags_post)
     try:
@@ -79,7 +79,7 @@ def tag_telegraf_config(comment, tags):
 def install_agent():
 
     message.print_bold("Starting Telegraf Installation!")
-    print "Downloading configuration to ", conf_path
+    print("Downloading configuration to ", conf_path)
 
     cmd = "mkdir -p /etc/telegraf && sudo curl -o %s %s" % (conf_path,telegraf_conf)
     ret_code = system.run_command(cmd)
@@ -88,7 +88,7 @@ def install_agent():
         return False
 
     cmd = get_install_agent_cmd()
-    print "Running ", cmd
+    print("Running ", cmd)
     ret_code = system.run_command(cmd)
     if ret_code > 0:
         message.print_warn("Error installing Telegraf")

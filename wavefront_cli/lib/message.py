@@ -21,13 +21,13 @@ def print_welcome():
     print_success(msg)
 
 def print_header(msg):
-    print bcolors.HEADER + msg + bcolors.ENDC
+    print(colors.HEADER + msg + bcolors.ENDC)
 
 def print_bold(msg):
-    print bcolors.BOLD + msg + bcolors.ENDC
+    print(bcolors.BOLD + msg + bcolors.ENDC)
 
 def print_warn(msg):
-    print bcolors.WARNING + msg + bcolors.ENDC
+    print(bcolors.WARNING + msg + bcolors.ENDC)
 
 def print_success(msg):
-    print bcolors.OKBLUE + msg + bcolors.ENDC
+    print(bcolors.OKBLUE + msg + bcolors.ENDC)
