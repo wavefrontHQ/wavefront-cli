@@ -7,8 +7,6 @@ python:
   - "3.7"
   - "3.8"
 script:
-  - mkdir dist
-  - rm dist/*
   - python setup.py sdist bdist_wheel
   - pip install dist/wavefront_cli-*.whl
   - wave -h
