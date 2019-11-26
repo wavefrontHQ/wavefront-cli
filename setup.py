@@ -1,6 +1,8 @@
 """Packaging settings."""
 
 
+import sys
+
 from codecs import open
 from os.path import abspath, dirname, join
 from subprocess import call
@@ -9,8 +11,13 @@ from setuptools import Command, find_packages, setup
 
 from wavefront_cli import __version__
 
-
+py_version = sys.version_info[0]
 this_dir = abspath(dirname(__file__))
+
+INSTALL_REQUIRES = ['docopt','requests', 'boto']
+if py_version == 2:
+    INSTALL_REQUIRES.append('importlib')
+
 with open(join(this_dir, 'README.rst'), encoding='utf-8') as file:
     long_description = file.read()
 
@@ -62,7 +69,7 @@ setup(
     keywords = ['lib','cli'],
     packages = find_packages(exclude=['docs', 'tests*']),
     #packages = ['wave'],
-    install_requires = ['docopt','requests', 'boto', 'importlib'],
+    install_requires = INSTALL_REQUIRES,
     extras_require = {
         'test': ['coverage', 'pytest', 'pytest-cov'],
     },
