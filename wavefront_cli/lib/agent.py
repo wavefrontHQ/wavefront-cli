@@ -52,14 +52,14 @@ def tag_telegraf_config(comment, tags):
 
     tags_pre = "- %s -" % (comment)
     tags_post = "- end %s tags - " % (comment)
-    tagStr = "  # %s\n" % (tags_pre)
+    tag_str = "  # %s\n" % (tags_pre)
     for k, v in list(tags.items()):
-        tagStr += '  %s = "%s"\n' % (k.lower(), v)
-    tagStr += "  # %s\n" % (tags_post)
+        tag_str += '  %s = "%s"\n' % (k.lower(), v)
+    tag_str += "  # %s\n" % (tags_post)
     try:
-        tagTxt = open("tags.txt", "w")
-        tagTxt.write(tagStr)
-        tagTxt.close()
+        tag_txt = open("tags.txt", "w")
+        tag_txt.write(tag_str)
+        tag_txt.close()
     except Exception:
         message.print_warn("Error writing tags.txt: " + sys.exc_info())
         return False

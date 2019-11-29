@@ -1,4 +1,4 @@
-class bcolors:
+class Bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
@@ -23,16 +23,16 @@ def print_welcome():
 
 
 def print_header(msg):
-    print(bcolors.HEADER + msg + bcolors.ENDC)
+    print(Bcolors.HEADER + msg + Bcolors.ENDC)
 
 
 def print_bold(msg):
-    print(bcolors.BOLD + msg + bcolors.ENDC)
+    print(Bcolors.BOLD + msg + Bcolors.ENDC)
 
 
 def print_warn(msg):
-    print(bcolors.WARNING + msg + bcolors.ENDC)
+    print(Bcolors.WARNING + msg + Bcolors.ENDC)
 
 
 def print_success(msg):
-    print(bcolors.OKBLUE + msg + bcolors.ENDC)
+    print(Bcolors.OKBLUE + msg + Bcolors.ENDC)
