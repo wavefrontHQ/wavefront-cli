@@ -1,8 +1,6 @@
 """Packaging settings."""
 
 
-import sys
-
 from codecs import open
 from os.path import abspath, dirname, join
 from subprocess import call
@@ -11,12 +9,7 @@ from setuptools import Command, find_packages, setup
 
 from wavefront_cli import __version__
 
-py_version = sys.version_info[0]
 this_dir = abspath(dirname(__file__))
-
-INSTALL_REQUIRES = ['docopt','requests', 'boto']
-if py_version == 2:
-    INSTALL_REQUIRES.append('importlib')
 
 with open(join(this_dir, 'README.rst'), encoding='utf-8') as file:
     long_description = file.read()
@@ -40,15 +33,15 @@ class RunTests(Command):
 
 
 setup(
-    name = 'wavefront-cli',
-    version = __version__,
-    description = 'Wavefront client CLI utility.',
-    long_description = long_description,
-    url = 'https://github.com/wavefrontHQ/wavefront-cli',
-    author = 'Evan Pease',
-    author_email = 'evan@wavefront.com',
-    license = 'UNLICENSE',
-    classifiers = [
+    name='wavefront-cli',
+    version=__version__,
+    description='Wavefront client CLI utility.',
+    long_description=long_description,
+    url='https://github.com/wavefrontHQ/wavefront-cli',
+    author='Evan Pease',
+    author_email='evan@wavefront.com',
+    license='UNLICENSE',
+    classifiers=[
         'Intended Audience :: Developers',
         'Topic :: Utilities',
         'License :: Public Domain',
@@ -66,17 +59,17 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    keywords = ['lib','cli'],
-    packages = find_packages(exclude=['docs', 'tests*']),
-    #packages = ['wave'],
-    install_requires = INSTALL_REQUIRES,
-    extras_require = {
+    keywords=['lib', 'cli'],
+    packages=find_packages(exclude=['docs', 'tests*']),
+    # packages=['wave'],
+    install_requires=['docopt', 'requests', 'boto'],
+    extras_require={
         'test': ['coverage', 'pytest', 'pytest-cov'],
     },
-    entry_points = {
+    entry_points={
         'console_scripts': [
             'wave=wavefront_cli.cli:main',
         ],
     },
-    cmdclass = {'test': RunTests},
+    cmdclass={'test': RunTests},
 )

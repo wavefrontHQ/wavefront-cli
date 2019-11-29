@@ -1,4 +1,4 @@
-from .hello import *
 from .configure import *
+from .hello import *
 from .install import *
 from .integration import *

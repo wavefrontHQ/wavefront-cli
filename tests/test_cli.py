@@ -3,7 +3,6 @@
 
 from subprocess import PIPE, Popen as popen
 from unittest import TestCase
-
 from wave import __version__ as VERSION
 
 
@@ -12,7 +11,7 @@ class TestHelp(TestCase):
         output = popen(['wave', '-h'], stdout=PIPE).communicate()[0]
         self.assertTrue('Usage:' in output)
 
-        output = popen(['wave','--help'], stdout=PIPE).communicate()[0]
+        output = popen(['wave', '--help'], stdout=PIPE).communicate()[0]
         self.assertTrue('Usage:' in output)
 
 

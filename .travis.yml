@@ -12,9 +12,7 @@ install:
   - pip install pydocstyle
   - pip install pylint
 before_script:
-  - python -m flake8
-  - python -m pylint wavefront_sdk
-  - python -m pydocstyle
+  - python -m flake8 --extend-ignore=F403,F401,W605,E501
 script:
   - python setup.py sdist bdist_wheel
   - pip install dist/wavefront_cli-*.whl

@@ -1,13 +1,14 @@
 from __future__ import print_function
-from wavefront_cli.lib import message
-from wavefront_cli.lib import util
-from wavefront_cli.lib import system
 
-from json import dumps
 import importlib
 import sys
-from .base import Base
 
+from wavefront_cli.lib import message
+from wavefront_cli.lib import system
+from wavefront_cli.lib import util
+
+
+from .base import Base
 
 
 class Integration(Base):
@@ -20,20 +21,18 @@ class Integration(Base):
         int_options = self.options['<option>']
         int_options = util.option_to_dict(int_options)
 
-
         message.print_bold(int_name + " Integration with Options:")
-        for k,v in int_options.iteritems():
-            print(k,": ",v)
-
+        for k, v in int_options.iteritems():
+            print(k, ": ", v)
 
         integration_class = None
         try:
-            integration_class = getattr(importlib.import_module("wavefront_cli.integrations"), int_name)
+            integration_class = getattr(importlib.import_module(
+                "wavefront_cli.integrations"), int_name)
             instance = integration_class(int_name, int_options)
-        except:
+        except Exception:
             message.print_warn("Error: Unrecognized Integration: " + int_name)
             sys.exit(1)
-
 
         if self.options['install']:
             print("Action: install")

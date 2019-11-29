@@ -9,14 +9,14 @@ Usage:
   wave --version
 
 Options:
-  -h --help                         Show this screen.
-  --version                         Show version.
-  -u --wavefront-url <wavefront_url>             The URL to your Wavefront instance.
-  -a --api-token <api_token>                     Your Wavefront API Token.
-  -p --proxy-address <address>                   The Address of your Wavefront proxy.
-  -P --proxy-port <proxy_port>                   The port of your Wavefront proxy.
-  --statsd-port=PORT                             The port that StatsD should listen on [default: 8125]
-  --agent-tags <tags>                            A comma separated list of key value pairs i.e. env=dev,app=myapp
+  -h --help                             Show this screen.
+  --version                             Show version.
+  -u --wavefront-url <wavefront_url>    The URL to your Wavefront instance.
+  -a --api-token <api_token>            Your Wavefront API Token.
+  -p --proxy-address <address>          The Address of your Wavefront proxy.
+  -P --proxy-port <proxy_port>          The port of your Wavefront proxy.
+  --statsd-port=PORT                    The port that StatsD should listen on [default: 8125]
+  --agent-tags <tags>                   A comma separated list of key value pairs i.e. env=dev,app=myapp
 
 Examples:
   wave install --proxy --agent
@@ -27,12 +27,12 @@ Help:
   https://community.wavefront.com
 """
 
-
 from inspect import getmembers, isclass
 
 from docopt import docopt
 
 from . import __version__ as VERSION
+
 
 def main():
     """Main CLI entrypoint."""
@@ -45,6 +45,7 @@ def main():
         if hasattr(commands, k) and v:
             module = getattr(commands, k)
             commands = getmembers(module, isclass)
-            command = [command[1] for command in commands if command[0] != 'Base'][0]
+            command = [command[1] for command in commands if
+                       command[0] != 'Base'][0]
             command = command(options)
             command.run()

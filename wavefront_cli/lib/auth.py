@@ -1,9 +1,7 @@
-from . import api
-from . import message
-
 import os
-import sys
 from os.path import expanduser
+
+from . import api
 
 
 WF_URL_ENVKEY = "WAVEFRONT_URL"
@@ -17,6 +15,7 @@ try:
 except NameError:
     pass
 
+
 def do_auth(options):
 
     if options and options['--wavefront-url']:
@@ -24,13 +23,12 @@ def do_auth(options):
     else:
         user_url = input("Please enter your Wavefront URL: ")
 
-
     if options and options['--api-token']:
         user_token = options['--api-token']
     else:
         user_token = input("Please enter your Wavefront API Token: ")
 
-    save_auth(user_url,user_token)
+    save_auth(user_url, user_token)
 
 
 def save_auth(user_url, user_token):
@@ -43,25 +41,27 @@ def save_auth(user_url, user_token):
     valid = api.validate_token(user_url, user_token)
     if valid:
         creds = open(home + "credentials", "w")
-        creds.write("%s\n%s" % (user_url,user_token))
+        creds.write("%s\n%s" % (user_url, user_token))
         creds.close()
     return valid
+
 
 def get_or_set_auth(options):
 
     # did the user pass options?
     if options and options['--wavefront-url'] and options['--api-token']:
         # yes, save auth
-        save_auth(options['--wavefront-url'],options['--api-token'])
+        save_auth(options['--wavefront-url'], options['--api-token'])
         return get_auth()
     else:
         # the user didn't pass options, are there existing creds saved?
         creds = get_auth()
-        if creds != None:
+        if creds is not None:
             return creds
         else:
             do_auth(options)
             return get_auth()
+
 
 def get_auth():
     try:
@@ -77,7 +77,8 @@ def get_auth():
                 "user_token": user_token
             }
         else:
-            print("Your previously saved API Token failed to validate. Was it deactivated?")
+            print("Your previously saved API Token failed to validate."
+                  " Was it deactivated?")
             return None
-    except:
-       return None
+    except Exception:
+        return None
