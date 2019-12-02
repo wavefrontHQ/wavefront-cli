@@ -1,5 +1,6 @@
 """Utility for wavefront CLI."""
 
+
 def option_to_dict(options):
     """Convert user input options into dictionary."""
     new_opts = {}

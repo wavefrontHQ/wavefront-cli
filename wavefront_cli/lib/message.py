@@ -1,5 +1,6 @@
 """Manage messages for wavefront CLI."""
 
+
 class Bcolors:
     """Define different colors for wavefront messages."""
 
