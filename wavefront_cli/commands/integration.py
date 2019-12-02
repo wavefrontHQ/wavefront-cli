@@ -1,3 +1,5 @@
+"""Manage Integration command."""
+
 from __future__ import print_function
 
 import importlib
@@ -12,9 +14,10 @@ from .base import Base
 
 
 class Integration(Base):
+    """Manage Integrations."""
 
     def run(self):
-
+        """Install/Remove Integrations."""
         message.print_welcome()
 
         int_name = self.options['<name>']

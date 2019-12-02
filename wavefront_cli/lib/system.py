@@ -1,3 +1,5 @@
+"""Manage OS level commands like start/stop service."""
+
 from __future__ import print_function
 
 import platform
@@ -9,6 +11,7 @@ from . import message
 
 
 def check_os():
+    """Check OS distribution."""
     try:
         if platform.linux_distribution() == ('', '', ''):
             # aws linux workaround
@@ -23,6 +26,7 @@ def check_os():
 
 
 def run_command(cmd):
+    """Run OS commands."""
     try:
         ret_code = subprocess.call(cmd, shell=True)
         return ret_code
@@ -32,6 +36,7 @@ def run_command(cmd):
 
 
 def restart_service(service_name):
+    """Restart a service."""
     print("Restarting %s" % (service_name))
     time.sleep(3)
     cmd = "service %s restart" % (service_name)
@@ -40,6 +45,7 @@ def restart_service(service_name):
 
 
 def write_file(path, text):
+    """Write text to file."""
     try:
         file = open(path, "w")
         file.write(text)
@@ -52,6 +58,7 @@ def write_file(path, text):
 
 
 def remove_service(service_name):
+    """Delete a service."""
     dist = check_os()
     print("Detected ", dist)
     if dist.startswith("Amazon Linux") or\

@@ -1,3 +1,5 @@
+"""Wavefront API utility."""
+
 from __future__ import print_function
 
 import sys
@@ -6,6 +8,7 @@ import requests
 
 
 def clean_url(url):
+    """Convert user input URL to clean URL."""
     url = url
     if url.endswith("/api/"):
         url = url[:-5]
@@ -17,6 +20,7 @@ def clean_url(url):
 
 
 def validate_token(url, token):
+    """Validate wavefront credential."""
     url = clean_url(url)
     # /daemon/test?token=$TOKEN
     validate_url = "%s/api/daemon/test?token=%s" % (url, token)
@@ -40,6 +44,7 @@ def validate_token(url, token):
 
 
 def deploy_dashboard(db_json_url, wf_url, api_token):
+    """Deploy a dashboard in wavefront."""
     print("Deploying Dashboard with %s, %s, %s"
           % (db_json_url, wf_url, api_token))
     return True

@@ -1,3 +1,5 @@
+"""This class manages(Install/Remove) the StatsD input plugin."""
+
 import os
 
 from .base import Base
@@ -6,6 +8,7 @@ from ..lib import system
 
 
 class StatsD(Base):
+    """Manage StatsD input plugin."""
 
     conf_path = "/etc/telegraf/telegraf.d/10-statsd.conf"
     conf = """
@@ -47,7 +50,7 @@ class StatsD(Base):
            """
 
     def install(self):
-
+        """Install StatsD input plugin."""
         self.validate_options()
 
         statsd_port = self.options["statsd_port"]
@@ -64,6 +67,7 @@ class StatsD(Base):
         return True
 
     def remove(self):
+        """Remove StatsD input plugin."""
         try:
             os.remove(self.conf_path)
             message.print_success("Removed StatsD configuration file "
@@ -77,6 +81,7 @@ class StatsD(Base):
         return True
 
     def validate_options(self):
+        """Validate required parameter for StatsD input plugin."""
         if not self.options and not self.options['statsd_port']:
             # default value
             self.options['statsd_port'] = "8125"

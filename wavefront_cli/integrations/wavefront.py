@@ -1,4 +1,4 @@
-
+"""This class manages(Install/Remove) the wavefront output plugin."""
 import os
 
 from .base import Base
@@ -7,6 +7,7 @@ from ..lib import system
 
 
 class Wavefront(Base):
+    """Manage Wavefront Output Plugin."""
 
     conf_path = "/etc/telegraf/telegraf.d/10-wavefront.conf"
     conf = """
@@ -22,7 +23,7 @@ class Wavefront(Base):
         """
 
     def install(self):
-
+        """Install Wavefront Output Plugin."""
         if not self.validate_options():
             return False
 
@@ -43,6 +44,7 @@ class Wavefront(Base):
         return True
 
     def remove(self):
+        """Remove Wavefront Output Plugin."""
         try:
             os.remove(self.conf_path)
             message.print_success("Remove Wavefront configuration file "
@@ -56,6 +58,7 @@ class Wavefront(Base):
         return True
 
     def validate_options(self):
+        """Validate required parameters for Wavefront Output Plugin."""
         if not self.options['proxy_address']:
             message.print_warn("Missing required option: proxy_address")
             return False

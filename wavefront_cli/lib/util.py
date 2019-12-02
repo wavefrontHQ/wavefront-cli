@@ -1,7 +1,7 @@
-
+"""Utility for wavefront CLI."""
 
 def option_to_dict(options):
-
+    """Convert user input options into dictionary."""
     new_opts = {}
 
     for opt in options:
@@ -15,7 +15,7 @@ def option_to_dict(options):
 
 
 def cskv_to_dict(option):
-
+    """Convert kwargs into dictionary."""
     opts = {}
 
     list = option.split(',')

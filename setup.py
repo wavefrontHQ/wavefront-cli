@@ -17,17 +17,20 @@ with open(join(this_dir, 'README.rst'), encoding='utf-8') as file:
 
 class RunTests(Command):
     """Run all tests."""
+
     description = 'run tests'
     user_options = []
 
     def initialize_options(self):
+        """Skip this test case."""
         pass
 
     def finalize_options(self):
+        """Skip this test case."""
         pass
 
     def run(self):
-        """Run all tests!"""
+        """Run all tests."""
         errno = call(['py.test', '--cov=wave', '--cov-report=term-missing'])
         raise SystemExit(errno)
 

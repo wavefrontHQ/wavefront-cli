@@ -1,5 +1,5 @@
 """
-wave
+wave.
 
 Usage:
   wave install [--proxy] [--wavefront-url=<wavefront_url>] [--api-token=<api_token>] [--proxy-next] [--agent] [--proxy-address=<address>] [--proxy-port=<port>] [--agent-tags=<tags>] [--statsd] [--statsd-port=<statsd_port>] [--aws] [--aws-region=<aws_region>] [--aws-secret-key-id=<aws_secret_key_id>] [--aws-secret-key=<aws_secret_key]
@@ -25,6 +25,7 @@ Examples:
 Help:
   For help using the Wavefront client CLI, please visit:
   https://community.wavefront.com
+
 """
 
 from inspect import getmembers, isclass
@@ -35,7 +36,7 @@ from . import __version__ as version
 
 
 def main():
-    """Main CLI entrypoint."""
+    """CLI entry point for all the commands."""
     from . import commands
     options = docopt(__doc__, version=version)
 

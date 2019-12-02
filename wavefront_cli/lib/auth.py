@@ -1,3 +1,5 @@
+"""Class to manage the wavefront authentication."""
+
 import os
 from os.path import expanduser
 
@@ -17,7 +19,7 @@ except NameError:
 
 
 def do_auth(options):
-
+    """Store wavefront credential."""
     if options and options['--wavefront-url']:
         user_url = options['--wavefront-url']
     else:
@@ -32,6 +34,7 @@ def do_auth(options):
 
 
 def save_auth(user_url, user_token):
+    """Validate and Store wavefront credential."""
     home = expanduser("~") + "/.wavefront/"
     # make sure the wavefront home directory exists
     if not os.path.exists(home):
@@ -47,7 +50,7 @@ def save_auth(user_url, user_token):
 
 
 def get_or_set_auth(options):
-
+    """Manage wavefront credentials."""
     # did the user pass options?
     if options and options['--wavefront-url'] and options['--api-token']:
         # yes, save auth
@@ -64,6 +67,7 @@ def get_or_set_auth(options):
 
 
 def get_auth():
+    """Retrieve and validate already saved wavefront credentials."""
     try:
         home = expanduser("~") + "/.wavefront/"
         creds = open(home + "credentials", "r")

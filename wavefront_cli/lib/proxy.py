@@ -1,3 +1,5 @@
+"""Manage wavefront(Install/configure) proxy."""
+
 from __future__ import print_function
 
 import subprocess
@@ -19,6 +21,7 @@ proxy_next_pkg_rpm = "https://packagecloud.io/install/repositories/" \
 
 
 def get_proxy_install_cmd(proxy_next):
+    """Get proxy installation command for an operating system."""
     # dist = self.check_os()
     dist = system.check_os()
     if not dist:
@@ -70,7 +73,7 @@ def get_proxy_install_cmd(proxy_next):
 
 
 def install_proxy(proxy_next):
-
+    """Install wavefront proxy."""
     message.print_bold("Starting Wavefront Proxy Installation!")
     cmd = get_proxy_install_cmd(proxy_next)
     try:
@@ -87,6 +90,7 @@ def install_proxy(proxy_next):
 
 
 def configure_proxy(url, token):
+    """Configure wavefront proxy."""
     message.print_bold("Starting Wavefront Proxy Configuration!")
     url = api.clean_url(url) + "/api/"
     print(url)

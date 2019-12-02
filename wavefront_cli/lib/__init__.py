@@ -1,3 +1,5 @@
+"""Utility package for wavefront CLI."""
+
 from .agent import *
 from .api import *
 from .auth import *

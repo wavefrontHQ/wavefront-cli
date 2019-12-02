@@ -16,10 +16,10 @@ except NameError:
 
 
 class Install(Base):
-    """Install the Wavefront Proxy."""
+    """Manage agent installation."""
 
     def run(self):
-
+        """Install wavefront proxy/statsd/telegraf."""
         agent_name = "telegraf"
         lib.message.print_welcome()
         '''

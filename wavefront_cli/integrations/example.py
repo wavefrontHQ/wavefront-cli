@@ -1,16 +1,18 @@
+"""Example Class for managing sample configuration for integrations."""
 
 from .base import Base
 
 
 class Example(Base):
+    """Example to install/remove an integration."""
 
-    '''
-    install() - The install() method installs the integration. Usually
-    this means creating a Telegraf config file in /etc/telegraf/telegraf.d.
-    See statsd.py for a simple example.
-    '''
     def install(self):
+        """
+        Manage the installation of the integration.
 
+        Usually this means creating a Telegraf config file in /etc/telegraf/telegraf.d.
+        See statsd.py for a simple example.
+        """
         print("This is an example integration subclass")
 
         # call validate_options() if you need to validate what options
@@ -37,9 +39,14 @@ class Example(Base):
     the telegraf config file for this integration.
     '''
     def remove(self):
+        """
+        Manage the un-installation of the integration.
 
-        # os.remove("/etc/telegraf/telegraf.d/10-example.conf")
+        Usually this means removing the example configuration file
+        e.g. "/etc/telegraf/telegraf.d/10-example.conf"
+        """
         return True
 
     def validate_options(self):
+        """Validate options that were passed to the CLI."""
         return True

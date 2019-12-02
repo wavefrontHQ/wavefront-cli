@@ -1,3 +1,5 @@
+"""Manage Telegraf agent."""
+
 import sys
 
 from . import message
@@ -13,6 +15,7 @@ conf_path = "/etc/telegraf/telegraf.conf"
 
 
 def get_install_agent_cmd():
+    """Get OS specific command to install Telegraf agent."""
     dist = system.check_os()
     if not dist:
         print("Error: Unsupported OS version. Please contact"
@@ -47,7 +50,7 @@ def get_install_agent_cmd():
 
 
 def tag_telegraf_config(comment, tags):
-
+    """Add custom tags into Telegraf."""
     message.print_bold("Adding custom tags to Telegraf configuration")
 
     tags_pre = "- %s -" % (comment)
@@ -85,7 +88,7 @@ def tag_telegraf_config(comment, tags):
 
 
 def install_agent():
-
+    """Install Telegraf."""
     message.print_bold("Starting Telegraf Installation!")
     print("Downloading configuration to ", conf_path)
 

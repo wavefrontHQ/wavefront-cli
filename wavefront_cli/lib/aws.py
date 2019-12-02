@@ -1,3 +1,5 @@
+"""Manage AWS instance tags for telegraf."""
+
 import boto.ec2
 
 import requests
@@ -7,11 +9,13 @@ from . import message
 
 
 def get_instance_id():
+    """Retrieve instance ID."""
     r = requests.get("http://instance-data/latest/meta-data/instance-id")
     return r.content
 
 
 def is_ec2_instance():
+    """Validate EC2 instance."""
     try:
         r = requests.get("http://instance-data/latest/meta-data/instance-id")
     except Exception:
@@ -24,7 +28,7 @@ def is_ec2_instance():
 
 
 def tag_telegraf_config(aws_region, aws_key_id, aws_secret_key):
-
+    """Configure telegraf for EC2 tags."""
     message.print_bold("Starting Telegraf Configuration for EC2 Tags")
     tags = get_instance_tags(aws_key_id, aws_secret_key, aws_region)
 
@@ -32,6 +36,7 @@ def tag_telegraf_config(aws_region, aws_key_id, aws_secret_key):
 
 
 def get_instance_tags(aws_access_key_id, aws_secret_key, aws_region):
+    """Retrieve Ec2 tags from AWS."""
     conn = boto.ec2.connect_to_region(aws_region,
                                       aws_access_key_id=aws_access_key_id,
                                       aws_secret_access_key=aws_secret_key)

@@ -1,8 +1,11 @@
+"""Script to verify os distribution."""
+
 import platform
 import sys
 
 
 def check_os():
+    """Check OS distribution."""
     try:
         if platform.linux_distribution() == ('', '', ''):
             # aws linux workaround
