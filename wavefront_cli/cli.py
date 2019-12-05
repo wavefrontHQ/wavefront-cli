@@ -35,11 +35,12 @@ from inspect import getmembers, isclass
 from docopt import docopt
 
 from . import __version__ as version
+# pylint: disable=W0611
+from . import commands
 
 
 def main():
     """CLI entry point for all the commands."""
-    from . import commands
     options = docopt(__doc__, version=version)
 
     # Here we'll try to dynamically match the command the user is trying to run
@@ -47,8 +48,8 @@ def main():
     for key, value in options.items():
         if hasattr(commands, key) and value:
             module = getattr(commands, key)
-            commands = getmembers(module, isclass)
-            command = [command[1] for command in commands if
+            wave_commands = getmembers(module, isclass)
+            command = [command[1] for command in wave_commands if
                        command[0] != 'Base'][0]
             command = command(options)
             command.run()

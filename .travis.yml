@@ -13,6 +13,7 @@ install:
   - pip install pylint
   - pip install requests
   - pip install docopt
+  - pip install boto
 before_script:
   - python -m flake8 --extend-ignore=F403,F401,W605,E501
   - python -m pydocstyle

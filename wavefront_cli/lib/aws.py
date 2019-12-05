@@ -21,7 +21,7 @@ def is_ec2_instance():
     except requests.exceptions.RequestException:
         return False
     else:
-        return True if (response.status_code == 200) else False
+        return bool(response.status_code == 200)
 
 
 def tag_telegraf_config(aws_region, aws_key_id, aws_secret_key):

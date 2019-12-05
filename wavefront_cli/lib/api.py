@@ -9,7 +9,6 @@ import requests
 
 def clean_url(url):
     """Convert user input URL to clean URL."""
-    url = url
     if url.endswith("/api/"):
         url = url[:-5]
     elif url.endswith("/api"):

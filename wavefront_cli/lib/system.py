@@ -52,9 +52,9 @@ def restart_service(service_name):
 def write_file(path, text):
     """Write text to file."""
     try:
-        file = open(path, "w")
-        file.write(text)
-        file.close()
+        file_ref = open(path, "w")
+        file_ref.write(text)
+        file_ref.close()
         return True
     except IOError:
         message.print_warn("Unable to write file at " + path + ": "

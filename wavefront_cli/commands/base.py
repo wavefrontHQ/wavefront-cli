@@ -1,9 +1,9 @@
 """The Blueprint for all the command."""
 
-# pylint: disable=R0903, R0801
+# pylint: disable=C,R
 
 
-class Base(object):
+class Base:
     """A base command."""
 
     def __init__(self, options, *args, **kwargs):

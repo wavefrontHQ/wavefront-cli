@@ -25,9 +25,8 @@ def cskv_to_dict(option):
         # skip items that aren't kvs
         if len(opt.split('=')) != 2:
             continue
-        else:
-            key = opt.split('=')[0]
-            value = opt.split('=')[1]
-            opts[key] = value
+        key = opt.split('=')[0]
+        value = opt.split('=')[1]
+        opts[key] = value
 
     return opts

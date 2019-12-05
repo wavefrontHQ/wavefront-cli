@@ -3,9 +3,10 @@
 import subprocess
 
 from ..lib import message
+# pylint: disable=C
 
 
-class Base(object):
+class Base:
     """base integration class."""
 
     def __init__(self, name, options):
