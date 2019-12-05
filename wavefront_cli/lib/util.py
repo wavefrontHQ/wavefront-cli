@@ -19,15 +19,15 @@ def cskv_to_dict(option):
     """Convert kwargs into dictionary."""
     opts = {}
 
-    list = option.split(',')
+    option_list = option.split(',')
 
-    for opt in list:
+    for opt in option_list:
         # skip items that aren't kvs
         if len(opt.split('=')) != 2:
             continue
         else:
-            k = opt.split('=')[0]
-            v = opt.split('=')[1]
-            opts[k] = v
+            key = opt.split('=')[0]
+            value = opt.split('=')[1]
+            opts[key] = value
 
     return opts

@@ -1,4 +1,6 @@
-"""The base command."""
+"""The Blueprint for all the command."""
+
+# pylint: disable=R0903, R0801
 
 
 class Base(object):

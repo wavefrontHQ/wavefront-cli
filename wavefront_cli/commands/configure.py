@@ -1,5 +1,8 @@
 """The hello command."""
 
+# pylint: disable=R0903
+
+
 from .base import Base
 from ..lib import auth
 

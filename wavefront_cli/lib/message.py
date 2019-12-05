@@ -1,5 +1,7 @@
 """Manage messages for wavefront CLI."""
 
+# pylint: disable=R0903
+
 
 class Bcolors:
     """Define different colors for wavefront messages."""
@@ -12,6 +14,8 @@ class Bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+
+# pylint: disable=W1401
 
 
 def print_welcome():

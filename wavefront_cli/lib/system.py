@@ -9,20 +9,25 @@ import time
 
 from . import message
 
+# pylint: disable=W1505
+
 
 def check_os():
     """Check OS distribution."""
+    distribution = None
     try:
         if platform.linux_distribution() == ('', '', ''):
             # aws linux workaround
             if platform.linux_distribution(supported_dists=['system'])[0]\
                     is not None:
-                return platform.linux_distribution(
+                distribution = platform.linux_distribution(
                     supported_dists=['system'])[0]
         else:
-            return platform.linux_distribution()[0]
-    except Exception:
+            distribution = platform.linux_distribution()[0]
+    except OSError:
         print("Unable to detect Linux distribution. ", sys.exc_info())
+
+    return distribution
 
 
 def run_command(cmd):
@@ -30,7 +35,7 @@ def run_command(cmd):
     try:
         ret_code = subprocess.call(cmd, shell=True)
         return ret_code
-    except Exception:
+    except (OSError, ValueError):
         message.print_warn('Error running command: "%s"' % (cmd))
         return 1
 
@@ -51,7 +56,7 @@ def write_file(path, text):
         file.write(text)
         file.close()
         return True
-    except Exception:
+    except IOError:
         message.print_warn("Unable to write file at " + path + ": "
                            + str(sys.exc_info()))
         return False

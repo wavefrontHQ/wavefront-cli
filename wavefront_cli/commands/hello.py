@@ -1,5 +1,5 @@
 """The hello command."""
-
+# pylint: disable=R0903
 
 from __future__ import print_function
 

@@ -49,7 +49,7 @@ class Wavefront(Base):
             os.remove(self.conf_path)
             message.print_success("Remove Wavefront configuration file "
                                   + self.conf_path)
-        except Exception:
+        except OSError:
             message.print_warn("Unable to remove conf file at: "
                                + self.conf_path)
             message.print_warn("Was Wavefront integration already removed?")

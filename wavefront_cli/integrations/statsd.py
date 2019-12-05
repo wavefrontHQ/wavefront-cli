@@ -72,7 +72,7 @@ class StatsD(Base):
             os.remove(self.conf_path)
             message.print_success("Removed StatsD configuration file "
                                   + self.conf_path)
-        except Exception:
+        except OSError:
             message.print_warn("Unable to remove conf file at: "
                                + self.conf_path)
             message.print_warn("Was StatsD integration already removed?")

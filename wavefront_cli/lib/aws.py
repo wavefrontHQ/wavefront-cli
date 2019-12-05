@@ -10,21 +10,18 @@ from . import message
 
 def get_instance_id():
     """Retrieve instance ID."""
-    r = requests.get("http://instance-data/latest/meta-data/instance-id")
-    return r.content
+    response = requests.get("http://instance-data/latest/meta-data/instance-id")
+    return response.content
 
 
 def is_ec2_instance():
     """Validate EC2 instance."""
     try:
-        r = requests.get("http://instance-data/latest/meta-data/instance-id")
-    except Exception:
+        response = requests.get("http://instance-data/latest/meta-data/instance-id")
+    except requests.exceptions.RequestException:
         return False
     else:
-        if r.status_code == 200:
-            return True
-        else:
-            return False
+        return True if (response.status_code == 200) else False
 
 
 def tag_telegraf_config(aws_region, aws_key_id, aws_secret_key):
@@ -47,6 +44,7 @@ def get_instance_tags(aws_access_key_id, aws_secret_key, aws_region):
 
     try:
         reservations = conn.get_all_instances(instance_ids=[get_instance_id()])
+    # pylint: disable=W0703
     except Exception:
         message.print_warn("Unable to authenticate with Amazon EC2 metadata"
                            " API for instance:" + get_instance_id())

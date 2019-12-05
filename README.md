@@ -1,6 +1,6 @@
 # wavefront-cli
 
-[![travis build status](https://travis-ci.org/yogeshprasad/wavefront-cli.svg?branch=master)](https://travis-ci.org/yogeshprasad/wavefront-cli)
+[![travis build status](https://travis-ci.org/wavefrontHQ/wavefront-cli.svg?branch=master)](https://travis-ci.org/wavefrontHQ/wavefront-cli)
 
 
 The Wavefront Integration Command Line Interface (CLI) is a utility for installing and configuring the Wavefront proxy, Telegraf

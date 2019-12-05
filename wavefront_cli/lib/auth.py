@@ -9,17 +9,15 @@ from . import api
 WF_URL_ENVKEY = "WAVEFRONT_URL"
 WF_TOKEN_ENVKEY = "WAVEFRONT_TOKEN"
 
-user_token = ""
-user_url = ""
-
-try:
-    input = raw_input
-except NameError:
-    pass
-
 
 def do_auth(options):
     """Store wavefront credential."""
+    try:
+        # pylint: disable=W0622
+        input = raw_input
+    except NameError:
+        pass
+
     if options and options['--wavefront-url']:
         user_url = options['--wavefront-url']
     else:
@@ -55,15 +53,16 @@ def get_or_set_auth(options):
     if options and options['--wavefront-url'] and options['--api-token']:
         # yes, save auth
         save_auth(options['--wavefront-url'], options['--api-token'])
-        return get_auth()
+        credential = get_auth()
     else:
         # the user didn't pass options, are there existing creds saved?
         creds = get_auth()
         if creds is not None:
-            return creds
+            credential = creds
         else:
             do_auth(options)
-            return get_auth()
+            credential = get_auth()
+    return credential
 
 
 def get_auth():
@@ -74,15 +73,14 @@ def get_auth():
         text = creds.read()
         user_url = text.split("\n")[0]
         user_token = text.split("\n")[1]
-        valid = api.validate_token(user_url, user_token)
-        if valid:
+        if api.validate_token(user_url, user_token):
             return {
                 "user_url": user_url,
                 "user_token": user_token
             }
-        else:
-            print("Your previously saved API Token failed to validate."
-                  " Was it deactivated?")
-            return None
-    except Exception:
+
+        print("Your previously saved API Token failed to validate."
+              " Was it deactivated?")
+        return None
+    except (OSError, IOError):
         return None

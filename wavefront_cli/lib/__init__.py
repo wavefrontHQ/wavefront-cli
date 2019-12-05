@@ -1,4 +1,5 @@
 """Utility package for wavefront CLI."""
+# pylint: disable=W0401
 
 from .agent import *
 from .api import *

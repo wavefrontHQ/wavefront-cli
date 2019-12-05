@@ -33,11 +33,6 @@ class Example(Base):
         # return False.
         return True
 
-    '''
-    remove() - The remove() method should remove the integration.
-    usually this means removing
-    the telegraf config file for this integration.
-    '''
     def remove(self):
         """
         Manage the un-installation of the integration.

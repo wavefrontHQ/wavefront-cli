@@ -1,5 +1,8 @@
 """Manage wavefront(Install/configure) proxy."""
 
+# pylint: disable=R0801
+
+
 from __future__ import print_function
 
 import subprocess
@@ -9,31 +12,31 @@ from . import message
 from . import system
 
 
-proxy_pkg_deb = "https://packagecloud.io/install/repositories/wavefront" \
-                "/proxy/script.deb.sh"
-proxy_pkg_rpm = "https://packagecloud.io/install/repositories/wavefront/" \
-                "proxy/script.rpm.sh"
-
-proxy_next_pkg_deb = "https://packagecloud.io/install/repositories/" \
-                     "wavefront/proxy-next/script.deb.sh"
-proxy_next_pkg_rpm = "https://packagecloud.io/install/repositories/" \
-                     "wavefront/proxy-next/script.rpm.sh"
-
-
 def get_proxy_install_cmd(proxy_next):
     """Get proxy installation command for an operating system."""
     # dist = self.check_os()
+    proxy_pkg_deb = "https://packagecloud.io/install/repositories/wavefront" \
+                    "/proxy/script.deb.sh"
+    proxy_pkg_rpm = "https://packagecloud.io/install/repositories/wavefront/" \
+                    "proxy/script.rpm.sh"
+
+    proxy_next_pkg_deb = "https://packagecloud.io/install/repositories/" \
+                         "wavefront/proxy-next/script.deb.sh"
+    proxy_next_pkg_rpm = "https://packagecloud.io/install/repositories/" \
+                         "wavefront/proxy-next/script.rpm.sh"
+    cmd = None
     dist = system.check_os()
     if not dist:
         print("Error: Unsupported OS version. Please contact"
               " support@wavefront.com.")
-        return None
+        return cmd
 
     if proxy_next:
         message.print_bold("Using proxy-next option. This will"
                            " install the latest beta version proxy.")
 
     print("Detected ", dist)
+    # pylint: disable=R0916
     if dist == "Oracle Linux Server" or dist.strip() == "Fedora" or \
             dist == "Red Hat Enterprise Linux Server" or \
             dist == "Red Hat Enterprise Linux Workstation" or \
@@ -46,7 +49,6 @@ def get_proxy_install_cmd(proxy_next):
 
         cmd = "curl -s %s | bash" % (pkg)
         cmd += " && yum -y -q install wavefront-proxy"
-        return cmd
     elif dist == "Ubuntu" or dist == "debian":
 
         pkg = proxy_pkg_deb
@@ -55,7 +57,6 @@ def get_proxy_install_cmd(proxy_next):
 
         cmd = "curl -s %s | bash" % pkg
         cmd += " && apt-get -y -q install wavefront-proxy"
-        return cmd
     elif dist.strip() == "openSUSE" or\
             dist.strip() == "SUSE Linux Enterprise Server":
 
@@ -65,28 +66,29 @@ def get_proxy_install_cmd(proxy_next):
 
         cmd = "curl -s %s | bash" % pkg
         cmd += " && zypper install wavefront-proxy"
-        return cmd
     else:
         print("Error: Unsupported OS version: %s. Please contact"
               " support@wavefront.com." % dist)
-        return None
+    return cmd
 
 
 def install_proxy(proxy_next):
     """Install wavefront proxy."""
     message.print_bold("Starting Wavefront Proxy Installation!")
     cmd = get_proxy_install_cmd(proxy_next)
+    install_status = False
     try:
         ret_code = subprocess.call(cmd, shell=True)
         if ret_code > 0:
             message.print_warn("Error installing proxy.")
-            return False
         else:
             message.print_success("Finished Wavefront Proxy Installation!")
-            return True
+            install_status = True
+    # pylint: disable=W0703
     except Exception:
         message.print_warn("Unable to install Wavefront Proxy")
-        return False
+
+    return install_status
 
 
 def configure_proxy(url, token):

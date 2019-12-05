@@ -1,5 +1,7 @@
 """Manage Integration command."""
 
+# pylint: disable=R0903
+
 from __future__ import print_function
 
 import importlib
@@ -25,15 +27,15 @@ class Integration(Base):
         int_options = util.option_to_dict(int_options)
 
         message.print_bold(int_name + " Integration with Options:")
-        for k, v in int_options.iteritems():
-            print(k, ": ", v)
+        for key, value in int_options.items():
+            print(key, ": ", value)
 
         integration_class = None
         try:
             integration_class = getattr(importlib.import_module(
                 "wavefront_cli.integrations"), int_name)
             instance = integration_class(int_name, int_options)
-        except Exception:
+        except AttributeError:
             message.print_warn("Error: Unrecognized Integration: " + int_name)
             sys.exit(1)
 
