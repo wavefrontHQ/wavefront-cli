@@ -11,6 +11,8 @@ install:
   - pip install pep8-naming
   - pip install pydocstyle
   - pip install pylint
+  - pip install requests
+  - pip install docopt
 before_script:
   - python -m flake8 --extend-ignore=F403,F401,W605,E501
   - python -m pydocstyle
