@@ -65,7 +65,7 @@ setup(
     keywords=['lib', 'cli'],
     packages=find_packages(exclude=['docs', 'tests*']),
     # packages=['wave'],
-    install_requires=['docopt', 'requests', 'boto'],
+    install_requires=['docopt', 'requests', 'boto', 'distro'],
     extras_require={
         'test': ['coverage', 'pytest', 'pytest-cov'],
     },

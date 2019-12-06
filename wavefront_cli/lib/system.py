@@ -2,10 +2,11 @@
 
 from __future__ import print_function
 
-import platform
 import subprocess
 import sys
 import time
+
+import distro
 
 from . import message
 
@@ -16,14 +17,7 @@ def check_os():
     """Check OS distribution."""
     distribution = None
     try:
-        if platform.linux_distribution() == ('', '', ''):
-            # aws linux workaround
-            if platform.linux_distribution(supported_dists=['system'])[0]\
-                    is not None:
-                distribution = platform.linux_distribution(
-                    supported_dists=['system'])[0]
-        else:
-            distribution = platform.linux_distribution()[0]
+        distribution = distro.linux_distribution()[0]
     except OSError:
         print("Unable to detect Linux distribution. ", sys.exc_info())
 
