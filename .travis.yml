@@ -23,6 +23,5 @@ script:
   - if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
       test -n "$(git diff -G __version__ $TRAVIS_COMMIT_RANGE wavefront_cli/__init__.py)";
     fi
-  - python setup.py sdist bdist_wheel
-  - pip install dist/wavefront_cli-*.whl
+  - pip install .
   - wave -h
