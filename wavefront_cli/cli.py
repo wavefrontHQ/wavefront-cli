@@ -47,6 +47,9 @@ def main():
     # with a pre-defined command class we've already created.
     for key, value in options.items():
         if hasattr(commands, key) and value:
+            # Don't call install while running integration command
+            if key == 'install' and options.get('integration'):
+                continue
             module = getattr(commands, key)
             wave_commands = getmembers(module, isclass)
             command = [command[1] for command in wave_commands if

@@ -58,7 +58,8 @@ def get_proxy_install_cmd(proxy_next):
         cmd = "curl -s %s | bash" % pkg
         cmd += " && apt-get -y -q install wavefront-proxy"
     elif dist.strip() == "openSUSE" or\
-            dist.strip() == "SUSE Linux Enterprise Server":
+            dist.strip() == "SUSE Linux Enterprise Server" or \
+            dist.strip() == "SLES":
 
         pkg = proxy_pkg_rpm
         if proxy_next:

@@ -40,7 +40,8 @@ def get_install_agent_cmd():
         cmd += ' && apt-get -o Dpkg::Options::="--force-confnew"' \
                ' -y install telegraf'
     elif dist.strip() == "openSUSE" or\
-            dist.strip() == "SUSE Linux Enterprise Server":
+            dist.strip() == "SUSE Linux Enterprise Server" or \
+            dist.strip() == "SLES":
         cmd = "curl -s %s | bash" % (agent_pkg_rpm)
         cmd += ' && zypper install telegraf'
     else:
