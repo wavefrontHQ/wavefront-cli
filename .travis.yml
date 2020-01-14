@@ -16,7 +16,7 @@ install:
   - pip install boto
   - pip install distro
 before_script:
-  - python -m flake8 --extend-ignore=F403,F401,W605,E501
+  - python -m flake8
   - python -m pydocstyle
   - python -m pylint wavefront_cli
 script:
@@ -25,3 +25,18 @@ script:
     fi
   - pip install .
   - wave -h
+deploy:
+  - provider: pypi
+    user: wavefront-cs
+    server: https://test.pypi.org/legacy/
+    password:
+      secure: "YI2NSm+wA5wVHZlRZrVGM2BxDitP8MDYz6oFYRaQYJABuq0/CmKYXL1fBgIYHcXx1uNniCsSPDto7eBIwC4AhdEXNnEHSu5PvdM6hA6oP8QpcLaiCbyVDMVPYygm0lJuJZdafTX+JSpbilsN4C4szHfiToTEWDxyAKerf9yMmc551kwTdI3MqgX3SYivwvwWuNuso7MotpvhDBg3XJhjJ+KRmluI7FuJVVa7jStEHjUv1YZVdLm8VHsnIRFlfVemxjuDvhSmVaSAmVK6s1eWMbUA6j/YdFuABVvguzGpN4DajlAH5G5wvxkw6gvunFD+Wt96kQZeIk1oCtLsSE+2YisS2g9y1OIZDq6qAR9Mia8m6IWKYrDaKRjUyKDZ3MpB2pAzn18fABz72OHItuZkMuKqq2nBjPlkrbtJExbMakZ2JQNeevG09440/94JTYkywUN1qgUYk/PRN/4DlbDAQmgn1mZl7nCk5IoyBmwoPyNbyYjoBKPLgkgeEE8ZJfw+kln63ZRBAjYDpkGWRqFoxVtzPDwCRT+CI+PX3in1BmBc1Rz/0cWSLnTWE0yAj38skrAK9zSzka704I7t0rHVm4ju3EyyUc+H8aaHEcGNkHfuMdbD429WwJuRGXm4+l7IKgIeG7MnOBGujp1iOEV4TGxHc+UwFEVxIpO72dubLAQ="
+    on:
+      python: 3.8
+  - provider: pypi
+    user: wavefront-cs
+    password:
+      secure: "YI2NSm+wA5wVHZlRZrVGM2BxDitP8MDYz6oFYRaQYJABuq0/CmKYXL1fBgIYHcXx1uNniCsSPDto7eBIwC4AhdEXNnEHSu5PvdM6hA6oP8QpcLaiCbyVDMVPYygm0lJuJZdafTX+JSpbilsN4C4szHfiToTEWDxyAKerf9yMmc551kwTdI3MqgX3SYivwvwWuNuso7MotpvhDBg3XJhjJ+KRmluI7FuJVVa7jStEHjUv1YZVdLm8VHsnIRFlfVemxjuDvhSmVaSAmVK6s1eWMbUA6j/YdFuABVvguzGpN4DajlAH5G5wvxkw6gvunFD+Wt96kQZeIk1oCtLsSE+2YisS2g9y1OIZDq6qAR9Mia8m6IWKYrDaKRjUyKDZ3MpB2pAzn18fABz72OHItuZkMuKqq2nBjPlkrbtJExbMakZ2JQNeevG09440/94JTYkywUN1qgUYk/PRN/4DlbDAQmgn1mZl7nCk5IoyBmwoPyNbyYjoBKPLgkgeEE8ZJfw+kln63ZRBAjYDpkGWRqFoxVtzPDwCRT+CI+PX3in1BmBc1Rz/0cWSLnTWE0yAj38skrAK9zSzka704I7t0rHVm4ju3EyyUc+H8aaHEcGNkHfuMdbD429WwJuRGXm4+l7IKgIeG7MnOBGujp1iOEV4TGxHc+UwFEVxIpO72dubLAQ="
+    on:
+      python: 3.8
+      tags: true
