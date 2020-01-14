@@ -1,3 +1,8 @@
+# wavefront-cli
+
+[![travis build status](https://travis-ci.org/wavefrontHQ/wavefront-cli.svg?branch=master)](https://travis-ci.org/wavefrontHQ/wavefront-cli)
+
+
 The Wavefront Integration Command Line Interface (CLI) is a utility for installing and configuring the Wavefront proxy, Telegraf
 collector agent, and integrations. The CLI uses native package managers to install packages (i.e. yum, apt-get) and therefore should be run as sudo.
 

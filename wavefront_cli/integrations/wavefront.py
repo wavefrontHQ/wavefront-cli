@@ -1,12 +1,13 @@
-
+"""This class manages(Install/Remove) the wavefront output plugin."""
 import os
-from wavefront_cli.lib import message
-from wavefront_cli.lib import system
-from .base import Base
 
+from .base import Base
+from ..lib import message
+from ..lib import system
 
 
 class Wavefront(Base):
+    """Manage Wavefront Output Plugin."""
 
     conf_path = "/etc/telegraf/telegraf.d/10-wavefront.conf"
     conf = """
@@ -22,7 +23,7 @@ class Wavefront(Base):
         """
 
     def install(self):
-
+        """Install Wavefront Output Plugin."""
         if not self.validate_options():
             return False
 
@@ -32,25 +33,32 @@ class Wavefront(Base):
         out = self.conf % (proxy_address, proxy_port)
 
         if system.write_file(self.conf_path, out):
-            message.print_success("Wrote Wavefront configuration to " + self.conf_path)
+            message.print_success("Wrote Wavefront configuration to " +
+                                  self.conf_path)
         else:
-            message.print_warn("Failed writing config file to %s - do you have write permission on this location?" % (self.conf_path))
+            message.print_warn("Failed writing config file to %s - do you have"
+                               " write permission on this location?"
+                               % self.conf_path)
             return False
 
         return True
 
     def remove(self):
+        """Remove Wavefront Output Plugin."""
         try:
             os.remove(self.conf_path)
-            message.print_success("Remove Wavefront configuration file " + self.conf_path)
-        except:
-            message.print_warn("Unable to remove conf file at: " + self.conf_path)
+            message.print_success("Remove Wavefront configuration file "
+                                  + self.conf_path)
+        except OSError:
+            message.print_warn("Unable to remove conf file at: "
+                               + self.conf_path)
             message.print_warn("Was Wavefront integration already removed?")
             return False
 
         return True
 
     def validate_options(self):
+        """Validate required parameters for Wavefront Output Plugin."""
         if not self.options['proxy_address']:
             message.print_warn("Missing required option: proxy_address")
             return False

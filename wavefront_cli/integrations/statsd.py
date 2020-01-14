@@ -1,12 +1,14 @@
+"""This class manages(Install/Remove) the StatsD input plugin."""
+
 import os
-from wavefront_cli.lib import message
-from wavefront_cli.lib import system
 
 from .base import Base
-
+from ..lib import message
+from ..lib import system
 
 
 class StatsD(Base):
+    """Manage StatsD input plugin."""
 
     conf_path = "/etc/telegraf/telegraf.d/10-statsd.conf"
     conf = """
@@ -47,33 +49,39 @@ class StatsD(Base):
   percentile_limit = 1000
            """
 
-
     def install(self):
-
+        """Install StatsD input plugin."""
         self.validate_options()
 
         statsd_port = self.options["statsd_port"]
 
         out = self.conf % (statsd_port)
         if system.write_file(self.conf_path, out):
-            message.print_success("Wrote StatsD service plugin configuration to %s" % (self.conf_path))
+            message.print_success("Wrote StatsD service plugin configuration"
+                                  " to %s" % (self.conf_path))
         else:
-            message.print_warn("Failed writing config file to %s - do you have write permission on this location?" % (self.conf_path))
+            message.print_warn("Failed writing config file to %s - do you"
+                               " have write permission on this location?"
+                               % self.conf_path)
             return False
         return True
 
     def remove(self):
+        """Remove StatsD input plugin."""
         try:
             os.remove(self.conf_path)
-            message.print_success("Removed StatsD configuration file " + self.conf_path)
-        except:
-            message.print_warn("Unable to remove conf file at: " + self.conf_path)
+            message.print_success("Removed StatsD configuration file "
+                                  + self.conf_path)
+        except OSError:
+            message.print_warn("Unable to remove conf file at: "
+                               + self.conf_path)
             message.print_warn("Was StatsD integration already removed?")
             return False
 
         return True
 
     def validate_options(self):
+        """Validate required parameter for StatsD input plugin."""
         if not self.options and not self.options['statsd_port']:
             # default value
             self.options['statsd_port'] = "8125"

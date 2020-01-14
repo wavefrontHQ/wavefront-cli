@@ -1,4 +1,11 @@
-class bcolors:
+"""Manage messages for wavefront CLI."""
+
+# pylint: skip-file
+
+
+class Bcolors:
+    """Define different colors for wavefront messages."""
+
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
@@ -8,7 +15,9 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+
 def print_welcome():
+    """Print wavefront welcome messages."""
     msg = """
          __      __                     _____                      __
         /  \    /  \_____ ___  __ _____/ ____\______  ____   _____/  |_
@@ -20,14 +29,22 @@ def print_welcome():
                 """
     print_success(msg)
 
+
 def print_header(msg):
-    print bcolors.HEADER + msg + bcolors.ENDC
+    """Print header messages."""
+    print(Bcolors.HEADER + msg + Bcolors.ENDC)
+
 
 def print_bold(msg):
-    print bcolors.BOLD + msg + bcolors.ENDC
+    """Print message in Bold."""
+    print(Bcolors.BOLD + msg + Bcolors.ENDC)
+
 
 def print_warn(msg):
-    print bcolors.WARNING + msg + bcolors.ENDC
+    """Print warning messages."""
+    print(Bcolors.WARNING + msg + Bcolors.ENDC)
+
 
 def print_success(msg):
-    print bcolors.OKBLUE + msg + bcolors.ENDC
+    """Print success message."""
+    print(Bcolors.OKBLUE + msg + Bcolors.ENDC)

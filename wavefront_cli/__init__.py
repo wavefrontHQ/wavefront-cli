@@ -1,1 +1,2 @@
-__version__ = '0.0.115'
+"""Initialize wavefront cli version."""
+__version__ = '0.0.116'

@@ -1,0 +1,27 @@
+dist: bionic
+language: python
+python:
+  - "2.7"
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
+install:
+  - pip install flake8 flake8-colors flake8-import-order
+  - pip install pep8-naming
+  - pip install pydocstyle
+  - pip install pylint
+  - pip install requests
+  - pip install docopt
+  - pip install boto
+  - pip install distro
+before_script:
+  - python -m flake8 --extend-ignore=F403,F401,W605,E501
+  - python -m pydocstyle
+  - python -m pylint wavefront_cli
+script:
+  - if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
+      test -n "$(git diff -G __version__ $TRAVIS_COMMIT_RANGE wavefront_cli/__init__.py)";
+    fi
+  - pip install .
+  - wave -h
