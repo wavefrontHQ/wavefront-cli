@@ -1,6 +1,6 @@
 # wavefront-cli
 
-[![travis build status](https://travis-ci.org/wavefrontHQ/wavefront-cli.svg?branch=master)](https://travis-ci.org/wavefrontHQ/wavefront-cli)
+[![travis build status](https://travis-ci.com/wavefrontHQ/wavefront-cli.svg?branch=master)](https://travis-ci.com/wavefrontHQ/wavefront-cli)
 
 
 The Wavefront Integration Command Line Interface (CLI) is a utility for installing and configuring the Wavefront proxy, Telegraf
@@ -8,13 +8,16 @@ collector agent, and integrations. The CLI uses native package managers to insta
 
 ## Requirements
 
-The Wavefront Integration CLI is currently supported on Linux environments only and has been tested on the following Linux versions:
+The Wavefront Integration CLI is currently supported on Linux environments only and is broadly compatible with:
 
--   Amazon Linux AMI 2016.09.0
--   CentOS 6.7, 7.2
--   Debian Jesse, Wheezy
--   RedHat 6.6, 7.3
--   Ubuntu 14.04, 16.04
+-   Amazon Linux AMI
+-   CentOS
+-   Debian
+-   RedHat Enterprise Linux
+-   Ubuntu
+-   SuSE Linux
+-   Oracle Linux
+-   Fedora
 
 The lowest version of Python the CLI has been tested with is 2.6.6.
 
