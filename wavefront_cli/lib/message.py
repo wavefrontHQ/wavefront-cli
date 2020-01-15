@@ -1,9 +1,7 @@
 """Manage messages for wavefront CLI."""
 
-# pylint: skip-file
 
-
-class Bcolors:
+class Bcolors:  # pylint: disable=too-few-public-methods
     """Define different colors for wavefront messages."""
 
     HEADER = '\033[95m'
@@ -18,7 +16,7 @@ class Bcolors:
 
 def print_welcome():
     """Print wavefront welcome messages."""
-    msg = """
+    msg = r"""
          __      __                     _____                      __
         /  \    /  \_____ ___  __ _____/ ____\______  ____   _____/  |_
         \   \/\/   /\__   \  \/ // __ \   __\ _  __ \/  _ \ /    \   __

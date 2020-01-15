@@ -3,7 +3,6 @@
 import subprocess
 
 from ..lib import message
-# pylint: disable=C
 
 
 class Base:

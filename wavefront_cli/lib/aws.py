@@ -1,8 +1,8 @@
 """Manage AWS instance tags for telegraf."""
 
-import boto.ec2
-
 import requests
+
+import boto.ec2
 
 from . import agent
 from . import message
@@ -10,14 +10,16 @@ from . import message
 
 def get_instance_id():
     """Retrieve instance ID."""
-    response = requests.get("http://instance-data/latest/meta-data/instance-id")
+    response = requests.get(
+        "http://instance-data/latest/meta-data/instance-id")
     return response.content
 
 
 def is_ec2_instance():
     """Validate EC2 instance."""
     try:
-        response = requests.get("http://instance-data/latest/meta-data/instance-id")
+        response = requests.get(
+            "http://instance-data/latest/meta-data/instance-id")
     except requests.exceptions.RequestException:
         return False
     else:
@@ -44,8 +46,8 @@ def get_instance_tags(aws_access_key_id, aws_secret_key, aws_region):
 
     try:
         reservations = conn.get_all_instances(instance_ids=[get_instance_id()])
-    # pylint: disable=W0703
-    except Exception:
+    # TODO(austinov): Need specific exception here.  # pylint: disable=fixme
+    except Exception:  # pylint: disable=broad-except
         message.print_warn("Unable to authenticate with Amazon EC2 metadata"
                            " API for instance:" + get_instance_id())
         return None

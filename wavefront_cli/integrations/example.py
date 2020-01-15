@@ -7,13 +7,12 @@ class Example(Base):
     """Example to install/remove an integration."""
 
     def install(self):
-        """
-        Manage the installation of the integration.
+        """Manage the installation of the integration.
 
-        Usually this means creating a Telegraf config file in /etc/telegraf/telegraf.d.
+        Usually this means creating a Telegraf
+        config file in /etc/telegraf/telegraf.d.
         See statsd.py for a simple example.
         """
-        # pylint: disable=C0325
         print("This is an example integration subclass")
 
         # call validate_options() if you need to validate what options

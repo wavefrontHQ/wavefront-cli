@@ -13,8 +13,7 @@ WF_TOKEN_ENVKEY = "WAVEFRONT_TOKEN"
 def do_auth(options):
     """Store wavefront credential."""
     try:
-        # pylint: disable=W0622
-        input = raw_input
+        input = raw_input  # pylint: disable=redefined-builtin
     except NameError:
         pass
 

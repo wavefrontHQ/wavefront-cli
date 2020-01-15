@@ -10,8 +10,6 @@ import distro
 
 from . import message
 
-# pylint: disable=W1505
-
 
 def check_os():
     """Check OS distribution."""
