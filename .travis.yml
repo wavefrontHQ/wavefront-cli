@@ -19,11 +19,11 @@ before_script:
   - python -m pydocstyle
   - python -m pylint wavefront_cli
 script:
+  - pip install .
+  - wave -h
   - if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
       test -n "$(git diff -G __version__ $TRAVIS_COMMIT_RANGE wavefront_cli/__init__.py)";
     fi
-  - pip install .
-  - wave -h
 deploy:
   - provider: pypi
     user: wavefront-cs
