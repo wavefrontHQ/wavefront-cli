@@ -1,9 +1,8 @@
 """The Blueprint for all the command."""
 
 
-class Base:
+class Base:  # pylint: disable=too-few-public-methods
     """A base command."""
-    # pylint: disable=too-few-public-methods
 
     def __init__(self, options, *args, **kwargs):
         """Prepare for a command."""
