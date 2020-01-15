@@ -1,13 +1,10 @@
 """The hello command."""
 
-# pylint: disable=R0903
-
-
 from .base import Base
 from ..lib import auth
 
 
-class Configure(Base):
+class Configure(Base):  # pylint: disable=too-few-public-methods
     """authenticate the user's session."""
 
     def run(self):

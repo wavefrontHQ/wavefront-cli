@@ -1,7 +1,5 @@
 """Manage Integration command."""
 
-# pylint: disable=R0903
-
 from __future__ import print_function
 
 import importlib
@@ -15,7 +13,7 @@ from wavefront_cli.lib import util
 from .base import Base
 
 
-class Integration(Base):
+class Integration(Base):  # pylint: disable=too-few-public-methods
     """Manage Integrations."""
 
     def run(self):

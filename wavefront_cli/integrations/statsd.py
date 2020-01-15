@@ -47,7 +47,7 @@ class StatsD(Base):
   ## calculation of percentiles. Raising this limit increases the accuracy
   ## of percentiles but also increases the memory usage and cpu time.
   percentile_limit = 1000
-           """
+"""  # noqa
 
     def install(self):
         """Install StatsD input plugin."""

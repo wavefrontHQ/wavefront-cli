@@ -23,12 +23,11 @@ def get_install_agent_cmd():
               " support@wavefront.com.")
         return cmd
 
-    # pylint: disable=R0916
-    if dist == "Oracle Linux Server" or dist.strip() == "Fedora" or \
-            dist == "Red Hat Enterprise Linux Server" or\
-            dist == "Red Hat Enterprise Linux Workstation" or \
-            dist == "CentOS" or dist == "CentOS Linux" or\
-            dist.startswith("Amazon Linux"):
+    if dist.strip() in ("Oracle Linux Server", "Fedora",
+                        "Red Hat Enterprise Linux Server",
+                        "Red Hat Enterprise Linux Workstation",
+                        "CentOS", "CentOS Linux"
+                        ) or dist.startswith("Amazon Linux"):
         cmd = "curl -s %s | bash" % (agent_pkg_rpm)
         cmd += " && yum -y -q install telegraf"
     elif dist == "Ubuntu":
@@ -70,7 +69,6 @@ def tag_telegraf_config(comment, tags):
 
     # remove existing ec2 tags
     conf = CONF_PATH
-    # pylint: disable=W1401
     cmd = "sed -i '/%s/,/%s/d' %s" % (tags_pre, tags_post, conf)
 
     ret_code = system.run_command(cmd)
@@ -78,7 +76,7 @@ def tag_telegraf_config(comment, tags):
         message.print_warn("Error adding tags to Telegraf configuration")
         return False
 
-    cmd = "sed -i '/\[global_tags\]/r tags.txt' %s" % (conf)
+    cmd = r"sed -i '/\[global_tags\]/r tags.txt' %s" % (conf)
 
     ret_code = system.run_command(cmd)
     if ret_code > 0:

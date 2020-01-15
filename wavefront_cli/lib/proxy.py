@@ -1,8 +1,5 @@
 """Manage wavefront(Install/configure) proxy."""
 
-# pylint: disable=R0801
-
-
 from __future__ import print_function
 
 import subprocess
@@ -36,12 +33,11 @@ def get_proxy_install_cmd(proxy_next):
                            " install the latest beta version proxy.")
 
     print("Detected ", dist)
-    # pylint: disable=R0916
-    if dist == "Oracle Linux Server" or dist.strip() == "Fedora" or \
-            dist == "Red Hat Enterprise Linux Server" or \
-            dist == "Red Hat Enterprise Linux Workstation" or \
-            dist == "CentOS" or dist == "CentOS Linux" or\
-            dist.startswith("Amazon Linux"):
+    if dist.strip() in ("CentOS", "CentOS Linux", "Fedora",
+                        "Oracle Linux Server",
+                        "Red Hat Enterprise Linux Server",
+                        "Red Hat Enterprise Linux Workstation",
+                        ) or dist.startswith("Amazon Linux"):
 
         pkg = proxy_pkg_rpm
         if proxy_next:
@@ -85,8 +81,8 @@ def install_proxy(proxy_next):
         else:
             message.print_success("Finished Wavefront Proxy Installation!")
             install_status = True
-    # pylint: disable=W0703
-    except Exception:
+    # TODO(austinov): More specific exception here.  # pylint: disable=fixme
+    except Exception:  # pylint: disable=broad-except
         message.print_warn("Unable to install Wavefront Proxy")
 
     return install_status

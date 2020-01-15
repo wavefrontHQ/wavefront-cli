@@ -1,5 +1,4 @@
-# pylint: disable=C0301
-
+# pylint: disable=line-too-long
 """
 wave.
 
@@ -28,14 +27,14 @@ Help:
   For help using the Wavefront client CLI, please visit:
   https://community.wavefront.com
 
-"""
+"""  # noqa;
+# pylint: enable=line-too-long
 
 from inspect import getmembers, isclass
 
 from docopt import docopt
 
 from . import __version__ as version
-# pylint: disable=W0611
 from . import commands
 
 

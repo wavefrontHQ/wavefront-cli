@@ -1,5 +1,4 @@
 """The hello command."""
-# pylint: disable=R0903
 
 from __future__ import print_function
 
@@ -8,7 +7,7 @@ from json import dumps
 from .base import Base
 
 
-class Hello(Base):
+class Hello(Base):  # pylint: disable=too-few-public-methods
     """Say hello, world."""
 
     def run(self):

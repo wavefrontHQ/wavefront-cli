@@ -1,5 +1,4 @@
 """The proxy command."""
-# pylint: skip-file
 
 from __future__ import print_function
 
@@ -12,18 +11,22 @@ from wavefront_cli.integrations.wavefront import Wavefront
 from .base import Base
 
 try:
-    input = raw_input
+    input = raw_input  # pylint: disable=invalid-name,redefined-builtin
 except NameError:
     pass
 
 
-class Install(Base):
+class Install(Base):  # pylint: disable=too-few-public-methods
     """Manage agent installation."""
 
     def run(self):
         """Install wavefront proxy/statsd/telegraf."""
+        # pylint: disable=too-many-branches
+        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-statements
         agent_name = "telegraf"
         lib.message.print_welcome()
+        # pylint: disable=pointless-string-statement
         '''
         wave install
             [--proxy]
@@ -75,15 +78,13 @@ class Install(Base):
             proxy_input = input("Would you like to install the Wavefront Proxy"
                                 " on this host? (yes or no)"
                                 " [default: no]: \n").lower()
-            if proxy_input == "y" or proxy_input == "yes":
-                proxy = True
-            else:
-                proxy = False
+
+            proxy = bool(proxy_input.lower() in ("y", "yes"))
 
             agent_input = input("Would you like to install Telegraf (metric"
                                 " collection agent) on this host? (yes or no)"
                                 " [default: no]: \n").lower()
-            if agent_input == "y" or agent_input == "yes":
+            if agent_input.lower() in ("y", "yes"):
                 agent = True
                 agent_tags = input('Please enter a comma separated list of'
                                    ' tags you would like added to metrics'
@@ -95,10 +96,7 @@ class Install(Base):
             statsd_input = input("Would you like to configure StatsD"
                                  " integration on this host? (yes or no)"
                                  " [default: no]: \n").lower()
-            if statsd_input == "y" or statsd_input == "yes":
-                statsd = True
-            else:
-                statsd = False
+            statsd = bool(statsd_input.lower() in ("y", "yes"))
 
             # if this is an ec2 instance, ask if they would like
             # to add ec2 metadata
@@ -106,10 +104,7 @@ class Install(Base):
                 aws_input = input("Would you like to add AWS EC2 Metadata to "
                                   "metrics from this host? (yes or no)"
                                   " [default: no]: \n").lower()
-                if aws_input == "y" or aws_input == "yes":
-                    aws = True
-                else:
-                    aws = False
+                aws = bool(aws_input.lower() in ("y", "yes"))
 
         if proxy:
             if not wavefront_url:
@@ -153,9 +148,9 @@ class Install(Base):
             wf_opts = {}
             wf_opts["proxy_address"] = proxy_address
             wf_opts["proxy_port"] = proxy_port
-            wf = Wavefront("Wavefront", wf_opts)
+            wavefront_integration = Wavefront("Wavefront", wf_opts)
 
-            if wf.install():
+            if wavefront_integration.install():
                 lib.message.print_success("Successfully Installed"
                                           " Wavefront Integration!")
             else:

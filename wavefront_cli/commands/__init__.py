@@ -1,7 +1,7 @@
 """Manage wavefront CLI commands."""
-# pylint: disable=W0401, W0622
 
-from .configure import *
-from .hello import *
-from .install import *
-from .integration import *
+# TODO(austinov): Refactor wildcard imports.  # pylint: disable=fixme
+from .configure import *  # noqa;
+from .hello import *  # noqa;
+from .install import *  # noqa;  # pylint: disable=redefined-builtin
+from .integration import *  # noqa;
