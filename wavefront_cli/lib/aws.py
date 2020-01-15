@@ -1,8 +1,8 @@
 """Manage AWS instance tags for telegraf."""
 
-import requests
-
 import boto.ec2
+
+import requests
 
 from . import agent
 from . import message
