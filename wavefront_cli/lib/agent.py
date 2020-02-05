@@ -32,7 +32,7 @@ def get_install_agent_cmd():
         cmd = "curl -s %s | bash" % (agent_pkg_deb)
         cmd += ' && apt-get -y -qq -o Dpkg::Options::="--force-confold"' \
                ' install telegraf'
-    elif dist.strip().startswith("Debian"):
+    elif dist.strip().lower().startswith("debian"):
         cmd = "curl -s %s | bash" % (agent_pkg_deb)
         cmd += ' && apt-get -o Dpkg::Options::="--force-confnew"' \
                ' -y install telegraf'

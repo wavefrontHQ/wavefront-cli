@@ -42,7 +42,7 @@ def get_proxy_install_cmd(proxy_next):
 
         cmd = "curl -s %s | bash" % (pkg)
         cmd += " && yum -y -q install wavefront-proxy"
-    elif dist.strip().startswith(("Ubuntu", "Debian")):
+    elif dist.strip().lower().startswith(("ubuntu", "debian")):
         pkg = proxy_pkg_deb
         if proxy_next:
             pkg = proxy_next_pkg_deb
