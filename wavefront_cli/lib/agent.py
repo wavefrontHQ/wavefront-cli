@@ -23,24 +23,21 @@ def get_install_agent_cmd():
               " support@wavefront.com.")
         return cmd
 
-    if dist.strip() in ("Oracle Linux Server", "Fedora",
-                        "Red Hat Enterprise Linux Server",
-                        "Red Hat Enterprise Linux Workstation",
-                        "CentOS", "CentOS Linux"
-                        ) or dist.startswith("Amazon Linux"):
+    if dist.strip().startswith(("Oracle Linux Server", "Fedora",
+                                "Amazon Linux", "CentOS",
+                                "Red Hat Enterprise Linux")):
         cmd = "curl -s %s | bash" % (agent_pkg_rpm)
         cmd += " && yum -y -q install telegraf"
-    elif dist == "Ubuntu":
+    elif dist.strip().startswith("Ubuntu"):
         cmd = "curl -s %s | bash" % (agent_pkg_deb)
         cmd += ' && apt-get -y -qq -o Dpkg::Options::="--force-confold"' \
                ' install telegraf'
-    elif dist == "debian":
+    elif dist.strip().lower().startswith("debian"):
         cmd = "curl -s %s | bash" % (agent_pkg_deb)
         cmd += ' && apt-get -o Dpkg::Options::="--force-confnew"' \
                ' -y install telegraf'
-    elif dist.strip() == "openSUSE" or\
-            dist.strip() == "SUSE Linux Enterprise Server" or \
-            dist.strip() == "SLES":
+    elif dist.strip().startswith(("openSUSE", "SUSE Linux Enterprise Server",
+                                  "SLES")):
         cmd = "curl -s %s | bash" % (agent_pkg_rpm)
         cmd += ' && zypper install telegraf'
     else:
