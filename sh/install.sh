@@ -44,38 +44,22 @@ function exit_with_failure() {
     exit_with_message "FAILURE: $1" 1
 }
 
-function install_python_rhel() {
-        file_name=$1
-        # Get the redhat version
-        major=$(cat $file_name | tr -dc '0-9.'|cut -d \. -f1)
-        echo "Detected operating system is RHEL $major"
-        if [ $major -le 7 ]; then
-            yum install -y python >> ${INSTALL_LOG} 2>&1
-            if [ $? -eq 0 ]; then
-                echo "Installed python"
-            else
-                echo "Failed to install python"
-            fi
-        else
-            PYTHON_PATH=$(which python3)
-            if [ -z "$PYTHON_PATH" ]; then
-                echo "Python is not installed. Installing...."
-                yum install -y python3 >> ${INSTALL_LOG} 2>&1
-                if [ $? -eq 0 ]; then
-                    PYTHON3_INSTALLED=true
-                    echo "Installed python3"
-                    echo "Creating symlink python3 -> python"
-		            PYTHON_PATH=$(which python3)
-                    ln -s $PYTHON_PATH ${PYTHON_PATH::-1}
-                else
-                    echo "Failed to install python3."
-                fi
-            else
-                echo "Existing installation of python3 found"
-                echo "Creating symlink python3 -> python"
-                ln -s $PYTHON_PATH ${PYTHON_PATH::-1}
-		    fi
-        fi
+function install_pkg() {
+    dpkg -s $1 >> ${INSTALL_LOG} 2>&1
+
+    if [ $? -ne 0 ]; then
+        echo "Installing $1 using apt-get"
+        apt-get install $1 -y >> ${INSTALL_LOG} 2>&1
+    fi
+}
+
+function remove_pkg() {
+    dpkg -s $1 >> ${INSTALL_LOG} 2>&1
+
+    if [ $? -eq 0 ]; then
+        echo "Uninstalling $1 using apt-get"
+        apt-get remove $1 -y >> ${INSTALL_LOG} 2>&1
+    fi
 }
 
 function detect_operating_system() {
@@ -111,21 +95,13 @@ function install_python() {
     if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
         echo "Installing Python using apt-get"
         apt-get update >> ${INSTALL_LOG} 2>&1
-        apt-get install python -y >> ${INSTALL_LOG} 2>&1
+        apt-get install python3 -y >> ${INSTALL_LOG} 2>&1
     elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
-        file_name=/etc/redhat-release
-
-        # Check if file exists
-        if [ -f $file_name ]
-        then
-            install_python_rhel $file_name
-        else
-            echo "Installing Python using yum"
-            yum install python -y >> ${INSTALL_LOG} 2>&1
-        fi
+        echo "Installing Python using yum"
+        yum install python3 -y >> ${INSTALL_LOG} 2>&1
     elif [ $OPERATING_SYSTEM == "openSUSE" ] || [ $OPERATING_SYSTEM == "SLE" ]; then
         echo "Installing Python using zypper"
-        zypper install python >> ${INSTALL_LOG} 2>&1
+        zypper install python3 >> ${INSTALL_LOG} 2>&1
     fi
 
     if [ $? -ne 0 ]; then
@@ -134,52 +110,32 @@ function install_python() {
 
 }
 
-function uninstall_python_rhel() {
-    echo "Removing symlink python3 -> python"
-    rm -rf $(which python)
-	if [ $PYTHON3_INSTALLED == true ]
-	then
-        echo "Uninstalling python3 using yum"
-		yum remove python3 -y &> ${INSTALL_LOG}
-	fi
-}
-
 function remove_python() {
-
+    PIP_PATH=$1
     # wavefront cli
-    pip uninstall wavefront-cli -y
+    $PIP_PATH uninstall wavefront-cli -y
     # pip
-    pip uninstall pip -y
+    $PIP_PATH uninstall pip -y
 
     # python
     if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
+        remove_pkg python3-distutils
         echo "Uninstalling Python using apt-get"
-        apt-get remove python -y &> ${INSTALL_LOG}
+        apt-get remove python3 -y &> ${INSTALL_LOG}
         apt-get autoremove -y &> ${INSTALL_LOG}
     elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
-        file_name=/etc/redhat-release
-
-        # Check if file exists
-        if [ -f $file_name ]
-        then
-                uninstall_python_rhel
-        else
-                echo "Uninstalling Python using yum"
-                yum remove python -y &> ${INSTALL_LOG}
-        fi
+        echo "Uninstalling Python using yum"
+        yum remove python3 -y &> ${INSTALL_LOG}
     elif [ $OPERATING_SYSTEM == "openSUSE" ] || [ $OPERATING_SYSTEM == "SLE" ]; then
         echo "Uninstalling Python using zypper"
-        zypper remove python &> ${INSTALL_LOG}
+        zypper remove python3 &> ${INSTALL_LOG}
     fi
 
 }
 
 
 function install_pip() {
-    $PYTHON_PATH=$(which python) 2> /dev/null
-    if [ $OPERATING_SYSTEM == "openSUSE" ]; then
-       $PYTHON_PATH=$(which python2.7) 2>/dev/null
-    fi
+    PYTHON_PATH=$1
     curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py >> ${INSTALL_LOG} 2>&1
     if [ $? -ne 0 ]; then
             exit_with_failure "Failed to download Pip"
@@ -193,7 +149,7 @@ function install_pip() {
 }
 
 function install_wavecli() {
-    PIP_PATH=$(which pip)
+    PIP_PATH=$1
     $PIP_PATH uninstall wavefront-cli -y >> ${INSTALL_LOG} 2>&1
     $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
     if [ $? -ne 0 ]; then
@@ -214,6 +170,43 @@ function install_wavecli() {
 
 }
 
+function detect_python(){
+    PYTHON_PATH=$(which python)
+
+    if [ -z "$PYTHON_PATH" ]; then
+        PYTHON_PATH=$(which python3)
+    fi
+
+    if [ -z "$PYTHON_PATH" ]; then
+        PYTHON_PATH=$(which python2)
+    fi
+
+    if [ -z "$PYTHON_PATH" ]; then
+        echo ""
+    else
+        echo "$PYTHON_PATH"
+    fi
+
+}
+
+function detect_pip(){
+    PIP_PATH=$(which pip)
+
+    if [ -z "$PIP_PATH" ]; then
+        PIP_PATH=$(which pip3)
+    fi
+
+    if [ -z "$PIP_PATH" ]; then
+        PIP_PATH=$(which pip2)
+    fi
+
+    if [ -z "$PIP_PATH" ]; then
+        echo ""
+    else
+        echo "$PIP_PATH"
+    fi
+
+}
 
 # main()
 
@@ -221,39 +214,43 @@ detect_operating_system
 check_if_root_or_die
 
 # Detect python
-PYTHON_PATH=$(which python)
+PYTHON_PATH=$( detect_python )
+
 # If python was not installed before this script runs, uninstall it at the end.
 PYTHON_INSTALLED=false
 
-if [ -z "$PYTHON_PATH" ]; then
+if [ "$PYTHON_PATH" == "" ]; then
     echo "Python is not installed. Installing Python."
     echo "Python will be uninstalled automatically after installation finishes."
     PYTHON_INSTALLED=false
     install_python
-    PYTHON_PATH=$(which python)
+    PYTHON_PATH=$( detect_python )
+    if [ "$PYTHON_PATH" == "" ]; then
+        exit_with_failure "Faild to install python."
+    fi
 else
     PYTHON_INSTALLED=true
     echo "Python detected in ${PYTHON_PATH}"
 fi
 
-# Detect pip
-PIP_PATH=$(which pip)
-if [ -z "$PIP_PATH" ]; then
-    echo "Pip is not installed, installing Pip."
-    install_pip
+# Install distutils in Ubuntu, if not installed.
+if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
+	install_pkg python3-distutils
 fi
 
-if [ $OPERATING_SYSTEM == "openSUSE" ]; then
-    echo "Checking pip version"
-    pip_version=`pip --version`
-    pip_python_version="python 3"
-
-    if [[ $pip_version == *$pip_python_version* ]]; then
-       install_pip
+# Detect pip
+PIP_PATH=$( detect_pip )
+if [ "$PIP_PATH" == "" ]; then
+    echo "Pip is not installed, installing Pip."
+    install_pip $PYTHON_PATH
+    PIP_PATH=$( detect_pip )
+    if [ "$PIP_PATH" == "" ]; then
+        exit_with_failure "Faild to install pip."
     fi
 fi
+
 # Make sure Wavefront CLI is installed. This function will export WAVE_PATH - holds the location of the wavefront cli binary
-install_wavecli
+install_wavecli $PIP_PATH
 
 # Capture command line args passed to shell script in a string
 cli_args=""
@@ -267,5 +264,5 @@ $WAVE_PATH $cli_args
 
 # Python was not installed before running this script, so remove it.
 if [ $PYTHON_INSTALLED == false ]; then
-    remove_python
+    remove_python $PIP_PATH
 fi
