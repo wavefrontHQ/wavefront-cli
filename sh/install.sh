@@ -226,7 +226,7 @@ if [ "$PYTHON_PATH" == "" ]; then
     install_python
     PYTHON_PATH=$( detect_python )
     if [ "$PYTHON_PATH" == "" ]; then
-        exit_with_failure "Faild to install python."
+        exit_with_failure "Failed to install python."
     fi
 else
     PYTHON_INSTALLED=true
