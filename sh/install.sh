@@ -1,7 +1,6 @@
 #!/bin/bash
 
 INSTALL_LOG=`mktemp /tmp/install_wavefront_XXXXXXXXXX.log`
-PYTHON3_INSTALLED=false
 
 function check_if_root_or_die() {
     echo "Checking installation privileges"
@@ -213,34 +212,34 @@ function detect_pip(){
 detect_operating_system
 check_if_root_or_die
 
-# Detect python
-PYTHON_PATH=$( detect_python )
-
 # If python was not installed before this script runs, uninstall it at the end.
-PYTHON_INSTALLED=false
-
-if [ "$PYTHON_PATH" == "" ]; then
-    echo "Python is not installed. Installing Python."
-    echo "Python will be uninstalled automatically after installation finishes."
-    PYTHON_INSTALLED=false
-    install_python
-    PYTHON_PATH=$( detect_python )
-    if [ "$PYTHON_PATH" == "" ]; then
-        exit_with_failure "Failed to install python."
-    fi
-else
-    PYTHON_INSTALLED=true
-    echo "Python detected in ${PYTHON_PATH}"
-fi
-
-# Install distutils in Ubuntu, if not installed.
-if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
-	install_pkg python3-distutils
-fi
+PYTHON_INSTALLED=true
 
 # Detect pip
 PIP_PATH=$( detect_pip )
+
 if [ "$PIP_PATH" == "" ]; then
+    # Detect python
+    PYTHON_PATH=$( detect_python )
+
+    if [ "$PYTHON_PATH" == "" ]; then
+        echo "Python is not installed. Installing Python."
+        echo "Python will be uninstalled automatically after installation finishes."
+        PYTHON_INSTALLED=false
+        install_python
+        PYTHON_PATH=$( detect_python )
+        if [ "$PYTHON_PATH" == "" ]; then
+            exit_with_failure "Failed to install python."
+        fi
+    else
+        echo "Python detected in ${PYTHON_PATH}"
+    fi
+
+    # Install distutils in Ubuntu, if not installed.
+    if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
+        install_pkg python3-distutils
+    fi
+
     echo "Pip is not installed, installing Pip."
     install_pip $PYTHON_PATH
     PIP_PATH=$( detect_pip )
