@@ -245,7 +245,7 @@ if [ "$PIP_PATH" == "" ]; then
     install_pip $PYTHON_PATH
     PIP_PATH=$( detect_pip )
     if [ "$PIP_PATH" == "" ]; then
-        exit_with_failure "Faild to install pip."
+        exit_with_failure "Failed to install pip."
     fi
 fi
 
