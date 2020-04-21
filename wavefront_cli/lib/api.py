@@ -29,7 +29,7 @@ def validate_token(url, token):
         status_code = response.status_code
         if status_code == 401:
             print("Error validating token: Unauthorized. Make sure your"
-                  " Wavefront account has Agent Management permissions.")
+                  " Wavefront account has Proxy Management permissions.")
         elif status_code == 200:
             print("Successfully validated token.")
             is_valid = True
