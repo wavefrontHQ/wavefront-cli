@@ -135,6 +135,7 @@ function remove_python() {
 
 function install_pip() {
     PYTHON_PATH=$1
+    sudo easy_install pip==20.3.4
     curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py >> ${INSTALL_LOG} 2>&1
     if [ $? -ne 0 ]; then
             exit_with_failure "Failed to download Pip"
