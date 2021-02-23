@@ -135,7 +135,12 @@ function remove_python() {
 
 function install_pip() {
     PYTHON_PATH=$1
-    curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py >> ${INSTALL_LOG} 2>&1
+    ver=$(python -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]\).*/\1\2/')
+    if [ "$ver" -lt "30" ]; then
+        curl -o /tmp/get-pip.py https://bootstrap.pypa.io/2.7/get-pip.py >> ${INSTALL_LOG} 2>&1
+    elif [ "$ver" -ge "30" ]; then
+        curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py >> ${INSTALL_LOG} 2>&1
+    fi
     if [ $? -ne 0 ]; then
             exit_with_failure "Failed to download Pip"
     fi
