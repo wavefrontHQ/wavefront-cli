@@ -135,8 +135,7 @@ function remove_python() {
 
 function install_pip() {
     PYTHON_PATH=$1
-    PYTHON_PATH=$(source ./install.sh)
-    ver=$(PYTHON_PATH -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]\).*/\1\2/')
+    ver=$($PYTHON_PATH -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]\).*/\1\2/')
     if [ "$ver" -lt "30" ]; then
         curl -o /tmp/get-pip.py https://bootstrap.pypa.io/2.7/get-pip.py >> ${INSTALL_LOG} 2>&1
     elif [ "$ver" -ge "30" ]; then
