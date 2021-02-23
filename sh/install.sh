@@ -152,6 +152,7 @@ function install_pip() {
     rm -f /tmp/get-pip.py 2> /dev/null
 }
 
+
 function install_wavecli() {
     PIP_PATH=$1
     $PIP_PATH uninstall wavefront-cli -y >> ${INSTALL_LOG} 2>&1
