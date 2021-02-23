@@ -1,5 +1,4 @@
 #!/bin/bash
-import sys
 
 INSTALL_LOG=`mktemp /tmp/install_wavefront_XXXXXXXXXX.log`
 
