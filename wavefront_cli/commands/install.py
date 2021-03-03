@@ -4,9 +4,7 @@ from __future__ import print_function
 
 import sys
 import pwd
-import grp
 import os
-import stat
 import time
 
 from wavefront_cli import lib
@@ -174,7 +172,7 @@ class Install(Base):  # pylint: disable=too-few-public-methods
 
             # check if user 'telegraf' has read permission for config path
             # if not change owner of telegraf path to 'telegraf' user recursively
-            uid = pwd.getpwnam("telegraf").pw_uid
+            uid = pwd.getpwnam(agent_name).pw_uid
             path = '/etc/telegraf'
 
             if not uid == os.stat(path).st_uid:
