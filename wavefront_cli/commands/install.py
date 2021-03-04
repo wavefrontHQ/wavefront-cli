@@ -182,6 +182,8 @@ class Install(Base):  # pylint: disable=too-few-public-methods
                         os.chown(os.path.join(root, name), uid, -1)
                     for name in files:
                         os.chown(os.path.join(root, name), uid, -1)
+            # The static sleep is added for `os.chown` to change owner of
+            # telegraf sub-directories and files
             time.sleep(5)
 
             lib.system.restart_service(agent_name)
