@@ -132,7 +132,6 @@ function remove_python() {
 
 }
 
-
 function install_pip() {
     PYTHON_PATH=$1
     ver=$($PYTHON_PATH -V 2>&1 | sed 's/.* \([0-9]\).\([0-9]\).*/\1\2/')
@@ -151,7 +150,6 @@ function install_pip() {
 
     rm -f /tmp/get-pip.py 2> /dev/null
 }
-
 
 function install_wavecli() {
     PIP_PATH=$1
