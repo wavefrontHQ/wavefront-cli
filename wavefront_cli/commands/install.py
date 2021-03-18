@@ -2,9 +2,9 @@
 
 from __future__ import print_function
 
-import sys
-import pwd
 import os
+import pwd
+import sys
 import time
 
 from wavefront_cli import lib
@@ -170,8 +170,8 @@ class Install(Base):  # pylint: disable=too-few-public-methods
                 if not lib.agent.tag_telegraf_config('cli user tags', tags):
                     sys.exit(1)
 
-            # check if user 'telegraf' has read permission for config path
-            # if not change owner of telegraf path to 'telegraf' user recursively
+            # check if user 'telegraf' has read permission for config path if
+            # not change owner of telegraf path to 'telegraf' user recursively
             uid = pwd.getpwnam(agent_name).pw_uid
             path = '/etc/telegraf'
 
