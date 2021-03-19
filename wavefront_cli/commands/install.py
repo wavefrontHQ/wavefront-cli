@@ -2,7 +2,10 @@
 
 from __future__ import print_function
 
+import os
+import pwd
 import sys
+import time
 
 from wavefront_cli import lib
 from wavefront_cli.integrations.statsd import StatsD
@@ -166,6 +169,22 @@ class Install(Base):  # pylint: disable=too-few-public-methods
                 tags = lib.util.cskv_to_dict(agent_tags)
                 if not lib.agent.tag_telegraf_config('cli user tags', tags):
                     sys.exit(1)
+
+            # check if user 'telegraf' has read permission for config path if
+            # not change owner of telegraf path to 'telegraf' user recursively
+            uid = pwd.getpwnam(agent_name).pw_uid
+            path = '/etc/telegraf'
+
+            if not uid == os.stat(path).st_uid:
+                os.chown(path, uid, -1)
+                for root, dirs, files in os.walk(path):
+                    for name in dirs:
+                        os.chown(os.path.join(root, name), uid, -1)
+                    for name in files:
+                        os.chown(os.path.join(root, name), uid, -1)
+            # The static sleep is added for `os.chown` to change owner of
+            # telegraf sub-directories and files
+            time.sleep(5)
 
             lib.system.restart_service(agent_name)
 
