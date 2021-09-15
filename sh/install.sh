@@ -23,7 +23,7 @@ function exit_with_message() {
     exit 1
 }
 
-function check_id_aptget_is_running() {
+function check_if_aptget_is_running() {
     if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
        i=0
        tput sc
@@ -236,7 +236,7 @@ function detect_pip(){
 
 detect_operating_system
 check_if_root_or_die
-check_id_aptget_is_running
+check_if_aptget_is_running
 
 # If python was not installed before this script runs, uninstall it at the end.
 PYTHON_INSTALLED=true
