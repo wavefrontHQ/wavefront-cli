@@ -23,6 +23,26 @@ function exit_with_message() {
     exit 1
 }
 
+function check_id_aptget_is_running() {
+    if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
+       i=0
+       tput sc
+       while fuser /var/lib/dpkg/lock >/dev/null 2>&1 ; do
+           case $(($i % 4)) in
+               0 ) j="-" ;;
+               1 ) j="\\" ;;
+               2 ) j="|" ;;
+               3 ) j="/" ;;
+           esac
+           tput rc
+           echo -en "\r[$j] Waiting for other software managers to finish..."
+           sleep 0.5
+           ((i=i+1))
+       done
+       echo
+    fi
+}
+
 function echo_right() {
     TEXT=$1
     echo
@@ -216,6 +236,7 @@ function detect_pip(){
 
 detect_operating_system
 check_if_root_or_die
+check_id_aptget_is_running
 
 # If python was not installed before this script runs, uninstall it at the end.
 PYTHON_INSTALLED=true
