@@ -37,29 +37,33 @@ def get_proxy_install_cmd(proxy_next):
                                 "Amazon Linux", "CentOS",
                                 "Red Hat Enterprise Linux")):
         pkg = proxy_pkg_rpm
+        cmd = "curl -s %s | bash" % (pkg)
         if proxy_next:
             pkg = proxy_next_pkg_rpm
-
-        cmd = "curl -s %s | bash" % (pkg)
+            cmd = "curl -s %s | os=any_rpm dist=any_rpm bash" % (pkg)
         cmd += " && yum -y -q install wavefront-proxy"
+        
     elif dist.strip().lower().startswith(("ubuntu", "debian")):
         pkg = proxy_pkg_deb
+        cmd = "curl -s %s | bash" % pkg
         if proxy_next:
             pkg = proxy_next_pkg_deb
-
-        cmd = "curl -s %s | bash" % pkg
+            cmd = "curl -s %s | os=any dist=any bash" % pkg
         cmd += " && apt-get -y -q install wavefront-proxy"
+        
     elif dist.strip().startswith(("openSUSE", "SUSE Linux Enterprise Server",
                                   "SLES")):
         pkg = proxy_pkg_rpm
+        cmd = "curl -s %s | bash" % pkg
         if proxy_next:
             pkg = proxy_next_pkg_rpm
-
-        cmd = "curl -s %s | bash" % pkg
+            cmd = "curl -s %s | os=any_rpm dist=any_rpm bash" % (pkg)
         cmd += " && zypper install wavefront-proxy"
+        
     else:
         print("Error: Unsupported OS version: %s. Please contact"
               " support@wavefront.com." % dist)
+        
     return cmd
 
 
