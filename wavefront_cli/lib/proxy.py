@@ -90,15 +90,15 @@ def configure_proxy(url, token):
     print(token)
 
     # replace token
-    cmd = f"sed -i -e '/token=/c\ttoken={token}' /etc/wavefront/wavefront-proxy/" \
-          "wavefront.conf"
+    cmd = f"sed -i -e '/token=/c\ttoken={token}' " \
+          "/etc/wavefront/wavefront-proxy/wavefront.conf"
     ret_code = system.run_command(cmd)
     if ret_code > 0:
         message.print_warn("Error Configuring Wavefront Proxy")
 
     # replace server url
-    cmd = f"sed -i -e '/server=/c\tserver={url}' /etc/wavefront/wavefront-proxy/" \
-          "wavefront.conf"
+    cmd = f"sed -i -e '/server=/c\tserver={url}' " \
+          "/etc/wavefront/wavefront-proxy/wavefront.conf"
 
     ret_code = system.run_command(cmd)
     if ret_code > 0:

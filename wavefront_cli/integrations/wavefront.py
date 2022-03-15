@@ -33,11 +33,12 @@ class Wavefront(Base):
         out = self.conf % (proxy_address, proxy_port)
 
         if system.write_file(self.conf_path, out):
-            message.print_success("Wrote Wavefront configuration to " +
-                                  self.conf_path)
+            message.print_success("Wrote Wavefront configuration "
+                                  f"to {self.conf_path}")
         else:
-            message.print_warn(f"Failed writing config file to {self.conf_path} - do you have"
-                               " write permission on this location?")
+            message.print_warn("Failed writing config file to "
+                               f"{self.conf_path} - do you have "
+                               "write permission on this location?")
             return False
 
         return True

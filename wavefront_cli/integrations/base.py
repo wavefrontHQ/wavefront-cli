@@ -34,7 +34,8 @@ class Base:
 
     def print_success(self):
         """Notify for successful installation."""
-        message.print_success(f"Successfully installed {self.name} integration!")
+        message.print_success(f"Successfully installed {self.name} "
+                              "integration!")
 
     def print_failure(self):
         """Notify for failed installation."""
