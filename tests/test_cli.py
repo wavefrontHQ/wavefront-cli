@@ -11,10 +11,10 @@ class TestHelp(TestCase):
     def test_returns_usage_information(self):
         """Test wavefront cli help command."""
         output = Popen(['wave', '-h'], stdout=PIPE).communicate()[0]
-        self.assertTrue('Usage:' in output)
+        self.assertTrue(b'Usage:' in output)
 
         output = Popen(['wave', '--help'], stdout=PIPE).communicate()[0]
-        self.assertTrue('Usage:' in output)
+        self.assertTrue(b'Usage:' in output)
 
 
 class TestVersion(TestCase):
@@ -23,4 +23,4 @@ class TestVersion(TestCase):
     def test_returns_version_information(self):
         """Test wavefront cli version command."""
         output = Popen(['wave', '--version'], stdout=PIPE).communicate()[0]
-        self.assertEqual(output.strip(), '0.0.124')
+        self.assertEqual(output.strip(), b'0.0.124')
