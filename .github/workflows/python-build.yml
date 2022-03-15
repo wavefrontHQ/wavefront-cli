@@ -33,6 +33,8 @@ jobs:
       run: python -m pydocstyle
     - name: Pylint
       run: python -m pylint wavefront_cli
+    - name: Validate version is updated
+      run: test -n "$(git diff -G __version__ origin/master HEAD wavefront_cli/__init__.py)"
     - name: Test
       run: |
         pip install .
