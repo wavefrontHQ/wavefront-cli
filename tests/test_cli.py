@@ -23,4 +23,4 @@ class TestVersion(TestCase):
     def test_returns_version_information(self):
         """Test wavefront cli version command."""
         output = Popen(['wave', '--version'], stdout=PIPE).communicate()[0]
-        self.assertEqual(output.strip(), '0.0.123')
+        self.assertEqual(output.strip(), '0.0.124')
