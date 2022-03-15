@@ -28,15 +28,15 @@ def run_command(cmd):
         ret_code = subprocess.call(cmd, shell=True)
         return ret_code
     except (OSError, ValueError):
-        message.print_warn('Error running command: "%s"' % (cmd))
+        message.print_warn(f'Error running command: "{cmd}"')
         return 1
 
 
 def restart_service(service_name):
     """Restart a service."""
-    print("Restarting %s" % (service_name))
+    print(f"Restarting {service_name}")
     time.sleep(3)
-    cmd = "service %s restart" % (service_name)
+    cmd = f"service {service_name} restart"
     return run_command(cmd)
     # sys.exc_info()
 
@@ -44,9 +44,8 @@ def restart_service(service_name):
 def write_file(path, text):
     """Write text to file."""
     try:
-        file_ref = open(path, "w")
-        file_ref.write(text)
-        file_ref.close()
+        with open(path, "w", encoding="utf-8") as file_ref:
+            file_ref.write(text)
         return True
     except IOError:
         message.print_warn("Unable to write file at " + path + ": "
@@ -64,12 +63,12 @@ def remove_service(service_name):
     elif dist == "Ubuntu":
         cmd = "apt-get -y remove " + service_name
     else:
-        print("Error: Unsupported OS version: %s." % (dist))
+        print(f"Error: Unsupported OS version: {dist}.")
 
     print("Running ", cmd)
     ret_code = subprocess.call(cmd, shell=True)
     if ret_code > 0:
-        print("Error removing service %s. Please check the output"
-              " above this message." % service_name)
+        print(f"Error removing service {service_name}. Please check the output"
+              " above this message.")
 
     return ret_code

@@ -22,7 +22,7 @@ def validate_token(url, token):
     """Validate wavefront credential."""
     url = clean_url(url)
     # /daemon/test?token=$TOKEN
-    validate_url = "%s/api/daemon/test?token=%s" % (url, token)
+    validate_url = f"{url}/api/daemon/test?token={token}"
     is_valid = False
     try:
         response = requests.post(validate_url)
@@ -45,6 +45,5 @@ def validate_token(url, token):
 
 def deploy_dashboard(db_json_url, wf_url, api_token):
     """Deploy a dashboard in wavefront."""
-    print("Deploying Dashboard with %s, %s, %s"
-          % (db_json_url, wf_url, api_token))
+    print(f"Deploying Dashboard with {db_json_url}, {wf_url}, {api_token}")
     return True

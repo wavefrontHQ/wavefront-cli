@@ -40,9 +40,8 @@ def save_auth(user_url, user_token):
     # validate the user's info
     valid = api.validate_token(user_url, user_token)
     if valid:
-        creds = open(home + "credentials", "w")
-        creds.write("%s\n%s" % (user_url, user_token))
-        creds.close()
+        with open(home + "credentials", "w", encoding="utf-8") as creds:
+            creds.write(f"{user_url}\n{user_token}")
     return valid
 
 
@@ -68,8 +67,8 @@ def get_auth():
     """Retrieve and validate already saved wavefront credentials."""
     try:
         home = expanduser("~") + "/.wavefront/"
-        creds = open(home + "credentials", "r")
-        text = creds.read()
+        with open(home + "credentials", "r", encoding="utf-8") as creds:
+            text = creds.read()
         user_url = text.split("\n")[0]
         user_token = text.split("\n")[1]
         if api.validate_token(user_url, user_token):

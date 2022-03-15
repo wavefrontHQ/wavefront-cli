@@ -36,9 +36,8 @@ class Wavefront(Base):
             message.print_success("Wrote Wavefront configuration to " +
                                   self.conf_path)
         else:
-            message.print_warn("Failed writing config file to %s - do you have"
-                               " write permission on this location?"
-                               % self.conf_path)
+            message.print_warn(f"Failed writing config file to {self.conf_path} - do you have"
+                               " write permission on this location?")
             return False
 
         return True

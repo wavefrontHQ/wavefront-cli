@@ -40,14 +40,14 @@ def get_proxy_install_cmd(proxy_next):
         if proxy_next:
             pkg = proxy_next_pkg_rpm
 
-        cmd = "curl -s %s | bash" % (pkg)
+        cmd = f"curl -s {pkg} | bash"
         cmd += " && yum -y -q install wavefront-proxy"
     elif dist.strip().lower().startswith(("ubuntu", "debian")):
         pkg = proxy_pkg_deb
         if proxy_next:
             pkg = proxy_next_pkg_deb
 
-        cmd = "curl -s %s | bash" % pkg
+        cmd = f"curl -s {pkg} | bash"
         cmd += " && apt-get -y -q install wavefront-proxy"
     elif dist.strip().startswith(("openSUSE", "SUSE Linux Enterprise Server",
                                   "SLES")):
@@ -55,11 +55,11 @@ def get_proxy_install_cmd(proxy_next):
         if proxy_next:
             pkg = proxy_next_pkg_rpm
 
-        cmd = "curl -s %s | bash" % pkg
+        cmd = f"curl -s {pkg} | bash"
         cmd += " && zypper install wavefront-proxy"
     else:
-        print("Error: Unsupported OS version: %s. Please contact"
-              " support@wavefront.com." % dist)
+        print(f"Error: Unsupported OS version: {dist}. Please contact"
+              " support@wavefront.com.")
     return cmd
 
 
@@ -90,15 +90,15 @@ def configure_proxy(url, token):
     print(token)
 
     # replace token
-    cmd = "sed -i -e '/token=/c\ttoken=%s' /etc/wavefront/wavefront-proxy/" \
-          "wavefront.conf" % (token)
+    cmd = f"sed -i -e '/token=/c\ttoken={token}' /etc/wavefront/wavefront-proxy/" \
+          "wavefront.conf"
     ret_code = system.run_command(cmd)
     if ret_code > 0:
         message.print_warn("Error Configuring Wavefront Proxy")
 
     # replace server url
-    cmd = "sed -i -e '/server=/c\tserver=%s' /etc/wavefront/wavefront-proxy/" \
-          "wavefront.conf" % (url)
+    cmd = f"sed -i -e '/server=/c\tserver={url}' /etc/wavefront/wavefront-proxy/" \
+          "wavefront.conf"
 
     ret_code = system.run_command(cmd)
     if ret_code > 0:
