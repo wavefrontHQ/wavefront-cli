@@ -26,7 +26,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 flake8-colors flake8-import-order
         pip install pep8-naming pydocstyle pylint
-        pip install requests pip install docopt boto distro
+        pip install requests pip install docopt boto distro pytest
     - name: Flake8 
       run: python -m flake8 
     - name: Pydocstyle
@@ -37,4 +37,4 @@ jobs:
       run: |
         pip install .
         wave -h
-        test
+        pytest
