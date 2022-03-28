@@ -3,6 +3,7 @@
 
 from subprocess import PIPE, Popen
 from unittest import TestCase
+
 from .. import __version__ as version
 
 
