@@ -36,7 +36,7 @@ def get_install_agent_cmd():
                    'pkg::Options::="--force-confnew" -y install telegraf')
     elif dist.strip().startswith(("openSUSE", "SUSE Linux Enterprise Server",
                                   "SLES")):
-        cmd.format(agent_pkg_rpm) + "zypper install telegraf")
+        cmd.format(agent_pkg_rpm) + "zypper install telegraf"
     else:
         message.print_warn(f"Error: Unsupported OS version: {dist}.")
 
