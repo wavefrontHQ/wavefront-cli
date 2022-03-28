@@ -60,7 +60,7 @@ class StatsD(Base):
             message.print_success("Wrote StatsD service plugin configuration"
                                   f" to {self.conf_path}")
         else:
-            message.print_warn("Failed writing config file to "
+            message.print_warn("Failed writing StatsD config file to "
                                f"{self.conf_path} - do you have "
                                "write permission on this location?")
             return False
