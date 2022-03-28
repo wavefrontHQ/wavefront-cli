@@ -68,7 +68,7 @@ def remove_service(service_name):
     print("Running ", cmd)
     ret_code = subprocess.call(cmd, shell=True)
     if ret_code > 0:
-        print(f"Error removing service {service_name}. Please check the output"
-              " above this message.")
+        print(f"Error removing service {service_name}. "
+              "Please check the output above this message.")
 
     return ret_code

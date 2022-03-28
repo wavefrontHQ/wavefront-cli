@@ -33,6 +33,8 @@ def get_proxy_install_cmd(proxy_next):
                            " install the latest beta version proxy.")
 
     print("Detected ", dist)
+
+    cmd = "curl -s {pkg} | bash && "
     if dist.strip().startswith(("Oracle Linux Server", "Fedora",
                                 "Amazon Linux", "CentOS",
                                 "Red Hat Enterprise Linux")):
@@ -40,23 +42,20 @@ def get_proxy_install_cmd(proxy_next):
         if proxy_next:
             pkg = proxy_next_pkg_rpm
 
-        cmd = f"curl -s {pkg} | bash"
-        cmd += " && yum -y -q install wavefront-proxy"
+        cmd = cmd.format(pkg=pkg) + "yum -y -q install wavefront-proxy"
     elif dist.strip().lower().startswith(("ubuntu", "debian")):
         pkg = proxy_pkg_deb
         if proxy_next:
             pkg = proxy_next_pkg_deb
 
-        cmd = f"curl -s {pkg} | bash"
-        cmd += " && apt-get -y -q install wavefront-proxy"
+        cmd = cmd.format(pkg=pkg) + "apt-get -y -q install wavefront-proxy"
     elif dist.strip().startswith(("openSUSE", "SUSE Linux Enterprise Server",
                                   "SLES")):
         pkg = proxy_pkg_rpm
         if proxy_next:
             pkg = proxy_next_pkg_rpm
 
-        cmd = f"curl -s {pkg} | bash"
-        cmd += " && zypper install wavefront-proxy"
+        cmd = cmd.format(pkg=pkg) + "zypper install wavefront-proxy"
     else:
         print(f"Error: Unsupported OS version: {dist}. Please contact"
               " support@wavefront.com.")
@@ -90,15 +89,15 @@ def configure_proxy(url, token):
     print(token)
 
     # replace token
-    cmd = f"sed -i -e '/token=/c\ttoken={token}' " \
-          "/etc/wavefront/wavefront-proxy/wavefront.conf"
+    cmd = (f"sed -i -e '/token=/c\ttoken={token}' " 
+           "/etc/wavefront/wavefront-proxy/wavefront.conf")
     ret_code = system.run_command(cmd)
     if ret_code > 0:
         message.print_warn("Error Configuring Wavefront Proxy")
 
     # replace server url
-    cmd = f"sed -i -e '/server=/c\tserver={url}' " \
-          "/etc/wavefront/wavefront-proxy/wavefront.conf"
+    cmd = (f"sed -i -e '/server=/c\tserver={url}' "
+           "/etc/wavefront/wavefront-proxy/wavefront.conf")
 
     ret_code = system.run_command(cmd)
     if ret_code > 0:

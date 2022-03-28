@@ -23,23 +23,20 @@ def get_install_agent_cmd():
               " support@wavefront.com.")
         return cmd
 
+    cmd = "curl -s {} | bash && "
     if dist.strip().startswith(("Oracle Linux Server", "Fedora",
                                 "Amazon Linux", "CentOS",
                                 "Red Hat Enterprise Linux")):
-        cmd = f"curl -s {agent_pkg_rpm} | bash"
-        cmd += " && yum -y -q install telegraf"
+        cmd = cmd.format(agent_pkg_rpm) + "yum -y -q install telegraf"
     elif dist.strip().startswith("Ubuntu"):
-        cmd = f"curl -s {agent_pkg_deb} | bash"
-        cmd += ' && apt-get -y -qq -o Dpkg::Options::="--force-confold"' \
-               ' install telegraf'
+        cmd = (cmd.format(agent_pkg_deb) + "apt-get -y -qq -o D"
+                   'pkg::Options::="--force-confold" install telegraf')
     elif dist.strip().lower().startswith("debian"):
-        cmd = f"curl -s {agent_pkg_deb} | bash"
-        cmd += ' && apt-get -o Dpkg::Options::="--force-confnew"' \
-               ' -y install telegraf'
+        cmd = (cmd.format(agent_pkg_deb) + "apt-get -o D"
+                   'pkg::Options::="--force-confnew" -y install telegraf')
     elif dist.strip().startswith(("openSUSE", "SUSE Linux Enterprise Server",
                                   "SLES")):
-        cmd = f"curl -s {agent_pkg_rpm} | bash"
-        cmd += ' && zypper install telegraf'
+        cmd.format(agent_pkg_rpm) + "zypper install telegraf")
     else:
         message.print_warn(f"Error: Unsupported OS version: {dist}.")
 
@@ -52,13 +49,13 @@ def tag_telegraf_config(comment, tags):
 
     tags_pre = f"- {comment} -"
     tags_post = f"- end {comment} tags - "
-    tag_str = f"  # {tags_pre}\n"
-    for key, value in list(tags.items()):
-        tag_str += f'  {key.lower()} = "{value}"\n'
-    tag_str += f"  # {tags_post}\n"
+    tag_strings = [f"  # {tags_pre}"]
+    for key, value in tags.items():
+        tag_strings.append(f'  {key.lower()} = "{value}"')
+    tag_strings.append(f"  # {tags_post}")
     try:
         with open("tags.txt", "w", encoding="utf-8") as tag_txt:
-            tag_txt.write(tag_str)
+            tag_txt.writelines(tag_strings)
     except IOError:
         message.print_warn("Error writing tags.txt: " + sys.exc_info())
         return False

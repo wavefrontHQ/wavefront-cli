@@ -3,6 +3,7 @@
 
 from subprocess import PIPE, Popen
 from unittest import TestCase
+from .. import __version__ as version
 
 
 class TestHelp(TestCase):
@@ -23,4 +24,4 @@ class TestVersion(TestCase):
     def test_returns_version_information(self):
         """Test wavefront cli version command."""
         output = Popen(['wave', '--version'], stdout=PIPE).communicate()[0]
-        self.assertEqual(output.strip(), b'0.0.124')
+        self.assertEqual(output.strip(), version)
