@@ -66,8 +66,18 @@ class StatsD(Base):
             return False
         return True
 
+    def validate_options(self):
+        """Validate required parameter for StatsD input plugin."""
+        if not self.options and not self.options['statsd_port']:
+            # default value
+            self.options['statsd_port'] = "8125"
+        return True
+
     def remove(self):
-        """Remove StatsD input plugin."""
+        """Remove StatsD input plugin.
+        
+        NB: consider combining this method with one in wavefront.py
+        """
         try:
             os.remove(self.conf_path)
             message.print_success("Removed StatsD configuration file "
@@ -78,11 +88,4 @@ class StatsD(Base):
             message.print_warn("Was StatsD integration already removed?")
             return False
 
-        return True
-
-    def validate_options(self):
-        """Validate required parameter for StatsD input plugin."""
-        if not self.options and not self.options['statsd_port']:
-            # default value
-            self.options['statsd_port'] = "8125"
         return True
