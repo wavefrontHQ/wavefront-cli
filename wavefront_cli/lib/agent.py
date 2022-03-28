@@ -30,10 +30,10 @@ def get_install_agent_cmd():
         cmd = cmd.format(agent_pkg_rpm) + "yum -y -q install telegraf"
     elif dist.strip().startswith("Ubuntu"):
         cmd = (cmd.format(agent_pkg_deb) + "apt-get -y -qq -o D"
-                   'pkg::Options::="--force-confold" install telegraf')
+               'pkg::Options::="--force-confold" install telegraf')
     elif dist.strip().lower().startswith("debian"):
         cmd = (cmd.format(agent_pkg_deb) + "apt-get -o D"
-                   'pkg::Options::="--force-confnew" -y install telegraf')
+               'pkg::Options::="--force-confnew" -y install telegraf')
     elif dist.strip().startswith(("openSUSE", "SUSE Linux Enterprise Server",
                                   "SLES")):
         cmd.format(agent_pkg_rpm) + "zypper install telegraf"
