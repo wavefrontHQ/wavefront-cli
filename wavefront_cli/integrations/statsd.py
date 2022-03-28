@@ -75,7 +75,7 @@ class StatsD(Base):
 
     def remove(self):
         """Remove StatsD input plugin.
-        
+
         NB: consider combining this method with one in wavefront.py
         """
         try:
