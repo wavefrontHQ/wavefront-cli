@@ -35,6 +35,10 @@ class Install(Base):  # pylint: disable=too-few-public-methods
             [--proxy]
                 [--wavefront-url=<wavefront_url>]
                 [--api-token=<api_token>]
+                [--csp-api-token=<csp_api_token>]
+                [--csp-app-id=<csp_app_id>]
+                [--csp-app-secret=<csp_app_secret>]
+                [--csp-org-id=<csp_org_id>]
                 [--proxy-next]
             [--agent]
                 [--proxy-address=<address>]
@@ -51,7 +55,11 @@ class Install(Base):  # pylint: disable=too-few-public-methods
         # proxy options
         proxy = self.options.get('--proxy')
         wavefront_url = self.options.get('--wavefront-url')
-        api_token = self.options.get('--api-token')
+        wavefront_api_token = self.options.get('--api-token')
+        csp_api_token = self.options.get('--csp-api-token')
+        csp_app_id = self.options.get('--csp-app-id')
+        csp_app_secret = self.options.get('--csp-app-secret')
+        csp_org_id = self.options.get('--csp-org-id')
         proxy_next = self.options.get('--proxy-next')
 
         # agent options
@@ -115,23 +123,32 @@ class Install(Base):  # pylint: disable=too-few-public-methods
                                       " instance (default = "
                                       "https://try.wavefront.com): \n")\
                                 or "https://try.wavefront.com"
-            if not api_token:
-                api_token = input("Please enter a valid Wavefront"
+
+            authType = False
+            if csp_org_id and csp_app_id and csp_app_secret:
+                authType = True
+            elif csp_api_token:
+                authType = True
+            elif not wavefront_api_token:
+                authType = True
+                wavefront_api_token = input("Please enter a valid Wavefront"
                                   " API Token: \n")
+                print("Validating API Token using Wavefront URL: ", wavefront_url)
+                if not lib.api.validate_token(wavefront_url, wavefront_api_token):
+                    sys.exit(1)
+                lib.auth.save_auth(wavefront_url, wavefront_api_token)
 
-            # Validate token first
-            print("Validating API Token using Wavefront URL: ", wavefront_url)
+            if not authType:
+                print("Error: Invalid combination of parameters.")
+                exit(1)
 
-            if not lib.api.validate_token(wavefront_url, api_token):
-                sys.exit(1)
-
-            lib.auth.save_auth(wavefront_url, api_token)
             # Install Proxy
             if not lib.proxy.install_proxy(proxy_next):
                 sys.exit(1)
 
             # Configure Proxy
-            if not lib.proxy.configure_proxy(wavefront_url, api_token):
+            if not lib.proxy.configure_proxy(wavefront_url, wavefront_api_token, csp_api_token, csp_app_id,
+                                             csp_app_secret, csp_org_id):
                 sys.exit(1)
 
         if agent:
