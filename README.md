@@ -83,6 +83,27 @@ $ sudo wave install \
         --proxy-port=2878
 ```
 
+```shell
+$ sudo wave install \
+    --proxy \
+        --wavefront-url=https://YOUR_INSTANCE.wavefront.com \
+        --csp-api-token=YOUR_CSP_API_TOKEN \
+    --agent \
+        --proxy-address=localhost \
+        --proxy-port=2878
+```
+```shell
+$ sudo wave install \
+    --proxy \
+        --wavefront-url=https://YOUR_INSTANCE.wavefront.com \
+        --csp-org-id=YOUR_CSP_ORG_ID \
+        --csp-app-id=YOUR_CSP_APP_ID \
+        --csp-app-secret=YOUR_CSP_APP_SECRET \
+    --agent \
+        --proxy-address=localhost \
+        --proxy-port=2878
+```
+
 Install the Wavefront proxy and Telegraf agent and configure AWS metadata and StatsD in Telegraf:
 
 ```shell
