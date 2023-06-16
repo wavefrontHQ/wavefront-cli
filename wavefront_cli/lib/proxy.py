@@ -47,8 +47,7 @@ def get_proxy_install_cmd(proxy_next):
         if proxy_next:
             pkg = proxy_next_pkg_deb
 
-        cmd = "curl -s %s | bash" % pkg
-        cmd += " && apt-get -y -q install wavefront-proxy"
+        cmd = "sudo dpkg -i /home/ubuntu/wavefront-proxy/out/wavefront-proxy_13.0-SNAPSHOT_amd64.deb"
     elif dist.strip().startswith(("openSUSE", "SUSE Linux Enterprise Server",
                                   "SLES")):
         pkg = proxy_pkg_rpm
