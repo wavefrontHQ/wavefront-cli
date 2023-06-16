@@ -12,13 +12,11 @@ from . import system
 def get_proxy_install_cmd(proxy_next):
     """Get proxy installation command for an operating system."""
     # dist = self.check_os()
-    proxy_pkg_deb = "https://packagecloud.io/install/repositories/wavefront" \
-                    "/proxy/script.deb.sh"
+    proxy_pkg_deb = "/home/ubuntu/wavefront-proxy/out/wavefront-proxy_13.0-SNAPSHOT_amd64.deb"
     proxy_pkg_rpm = "https://packagecloud.io/install/repositories/wavefront/" \
                     "proxy/script.rpm.sh"
 
-    proxy_next_pkg_deb = "https://packagecloud.io/install/repositories/" \
-                         "wavefront/proxy-next/script.deb.sh"
+    proxy_next_pkg_deb = "/home/ubuntu/wavefront-proxy/out/wavefront-proxy_13.0-SNAPSHOT_amd64.deb"
     proxy_next_pkg_rpm = "https://packagecloud.io/install/repositories/" \
                          "wavefront/proxy-next/script.rpm.sh"
     cmd = None
