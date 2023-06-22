@@ -155,6 +155,7 @@ function install_pip() {
 function install_wavecli() {
     PIP_PATH=$1
     $PIP_PATH uninstall wavefront-cli -y >> ${INSTALL_LOG} 2>&1
+    $PIP_PATH install "urllib3<2" >> ${INSTALL_LOG} 2>&1
     $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
     if [ $? -ne 0 ]; then
             exit_with_failure "Failed to install Wavefront CLI"
