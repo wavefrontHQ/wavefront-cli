@@ -129,10 +129,8 @@ class Install(Base):  # pylint: disable=too-few-public-methods
                 authType = True
             elif csp_api_token:
                 authType = True
-            elif not wavefront_api_token:
+            elif wavefront_api_token:
                 authType = True
-                wavefront_api_token = input("Please enter a valid Wavefront"
-                                  " API Token: \n")
                 print("Validating API Token using Wavefront URL: ", wavefront_url)
                 if not lib.api.validate_token(wavefront_url, wavefront_api_token):
                     sys.exit(1)
