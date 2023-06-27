@@ -1,0 +1,20 @@
+name: Linters & Tests
+
+on:
+  push:
+    # branches: [ master ]
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  setenv:
+    uses:
+      wavefrontHQ/wavefront-cli/.github/workflows/env.yml@master
+  lint_n_test:
+    needs: setenv
+    uses:
+      wavefrontHQ/wavefront-sdk-python/.github/workflows/main.yml@master
+    with:
+      package_name: ${{ needs.setenv.outputs.package_name }}
+      requirements: ${{ needs.setenv.outputs.requirements }}
