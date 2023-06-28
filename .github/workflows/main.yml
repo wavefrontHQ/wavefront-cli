@@ -10,7 +10,7 @@ on:
 jobs:
   setenv:
     uses:
-      wavefrontHQ/wavefront-cli/.github/workflows/env.yml@0158a5b16cb387e807888018cda39b3ad91fec48
+      wavefrontHQ/wavefront-cli/.github/workflows/env.yml@master
   lint_n_test:
     needs: setenv
     uses:
