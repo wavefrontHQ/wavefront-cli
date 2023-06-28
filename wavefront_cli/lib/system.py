@@ -22,6 +22,16 @@ def check_os():
     return distribution
 
 
+def run_cmd(cmd):
+    """Run OS commands."""
+    try:
+        subprocess.check_call(cmd)
+        return 0
+    except subprocess.CalledProcessError:
+        message.print_warn(f'Error running command: "{cmd}"')
+        return 1
+
+
 def run_command(cmd):
     """Run OS commands."""
     try:

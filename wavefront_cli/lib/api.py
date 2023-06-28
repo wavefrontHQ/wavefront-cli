@@ -7,6 +7,9 @@ import sys
 import requests
 
 
+REQUEST_TIMEOUT = 10
+
+
 def clean_url(url):
     """Convert user input URL to clean URL."""
     if url.endswith("/api/"):
@@ -25,7 +28,7 @@ def validate_token(url, token):
     validate_url = f"{url}/api/daemon/test?token={token}"
     is_valid = False
     try:
-        response = requests.post(validate_url)
+        response = requests.post(validate_url, timeout=REQUEST_TIMEOUT)
         status_code = response.status_code
         if status_code == 401:
             print("Error validating token: Unauthorized. Make sure your"

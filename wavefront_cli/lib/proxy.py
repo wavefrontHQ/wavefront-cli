@@ -12,15 +12,15 @@ from . import system
 def get_proxy_install_cmd(proxy_next):
     """Get proxy installation command for an operating system."""
     # dist = self.check_os()
-    proxy_pkg_deb = "https://packagecloud.io/install/repositories/wavefront" \
-                    "/proxy/script.deb.sh"
-    proxy_pkg_rpm = "https://packagecloud.io/install/repositories/wavefront/" \
-                    "proxy/script.rpm.sh"
+    proxy_pkg_deb = ("https://packagecloud.io/install/repositories/"
+                     "wavefront/proxy/script.deb.sh")
+    proxy_pkg_rpm = ("https://packagecloud.io/install/repositories/"
+                     "wavefront/proxy/script.rpm.sh")
 
-    proxy_next_pkg_deb = "https://packagecloud.io/install/repositories/" \
-                         "wavefront/proxy-next/script.deb.sh"
-    proxy_next_pkg_rpm = "https://packagecloud.io/install/repositories/" \
-                         "wavefront/proxy-next/script.rpm.sh"
+    proxy_next_pkg_deb = ("https://packagecloud.io/install/repositories/"
+                          "wavefront/proxy-next/script.deb.sh")
+    proxy_next_pkg_rpm = ("https://packagecloud.io/install/repositories/"
+                          "wavefront/proxy-next/script.rpm.sh")
     cmd = None
     dist = system.check_os()
     if not dist:
@@ -68,65 +68,73 @@ def install_proxy(proxy_next):
     cmd = get_proxy_install_cmd(proxy_next)
     install_status = False
     try:
-        ret_code = subprocess.call(cmd, shell=True)
-        if ret_code > 0:
-            message.print_warn("Error installing proxy.")
-        else:
-            message.print_success("Finished Wavefront Proxy Installation!")
-            install_status = True
-    # TODO(austinov): More specific exception here.  # pylint: disable=fixme
-    except Exception:  # pylint: disable=broad-except
+        subprocess.check_call(cmd, shell=True)
+    except subprocess.CalledProcessError:
         message.print_warn("Unable to install Wavefront Proxy")
-
+    else:
+        message.print_success("Finished Wavefront Proxy Installation!")
+        install_status = True
     return install_status
 
 
-def configure_proxy(url, wavefront_api_token, csp_api_token, csp_app_id, csp_app_secret, csp_org_id):
+# pylint: disable=too-many-arguments
+def configure_proxy(url, wavefront_api_token, csp_api_token=None,
+                    csp_app_id=None, csp_app_secret=None, csp_org_id=None):
     """Configure wavefront proxy."""
     message.print_bold("Starting Wavefront Proxy Configuration!")
     url = api.clean_url(url) + "/api/"
     print(url)
     if csp_app_id and csp_app_secret and csp_org_id:
         # replace csp oauth app id
-        cmd = "sed -i -e '/#cspAppId=/c\tcspAppId=%s' /etc/wavefront/wavefront-proxy/" \
-            "wavefront.conf" % (csp_app_id)
-        ret_code = system.run_command(cmd)
+        cmd = ('sed', '-i', '-e',
+               f'/#cspAppId=/c\tcspAppId={csp_app_id}',
+               '/etc/wavefront/wavefront-proxy/wavefront.conf')
+        ret_code = system.run_cmd(cmd)
         if ret_code > 0:
-            message.print_warn("Error Configuring Wavefront Proxy with csp app id " + csp_app_id)
+            message.print_warn("Error Configuring Wavefront Proxy with"
+                               f" CSP app ID {csp_app_id}")
 
-        # replace csp oauth app secret
-        cmd = "sed -i -e '/#cspAppSecret=/c\tcspAppSecret=%s' /etc/wavefront/wavefront-proxy/" \
-            "wavefront.conf" % (csp_app_secret)
-        ret_code = system.run_command(cmd)
+        # replace CSP OAuth app secret
+        cmd = ('sed', '-i', '-e',
+               f'/#cspAppSecret=/c\tcspAppSecret={csp_app_secret}',
+               '/etc/wavefront/wavefront-proxy/wavefront.conf')
+        ret_code = system.run_cmd(cmd)
         if ret_code > 0:
-            message.print_warn("Error Configuring Wavefront Proxy with csp app secret " + csp_app_secret)
+            message.print_warn("Error Configuring Wavefront Proxy with"
+                               f" CSP app secret {csp_app_secret}")
 
         # replace csp org id
-        cmd = "sed -i -e '/#cspOrgId=/c\tcspOrgId=%s' /etc/wavefront/wavefront-proxy/" \
-            "wavefront.conf" % (csp_org_id)
-        ret_code = system.run_command(cmd)
+        cmd = ('sed', '-i', '-e',
+               f'/#cspOrgId=/c\tcspOrgId={csp_org_id}',
+               '/etc/wavefront/wavefront-proxy/wavefront.conf')
+        ret_code = system.run_cmd(cmd)
         if ret_code > 0:
-            message.print_warn("Error Configuring Wavefront Proxy with cso org id " + csp_org_id)
+            message.print_warn("Error Configuring Wavefront Proxy with"
+                               f" CSO org ID {csp_org_id}")
     if csp_api_token:
         # replace csp api token
-        cmd = "sed -i -e '/#cspAPIToken=/c\tcspAPIToken=%s' /etc/wavefront/wavefront-proxy/" \
-            "wavefront.conf" % (csp_api_token)
-        ret_code = system.run_command(cmd)
+        cmd = ('sed', '-i', '-e',
+               f'/#cspAPIToken=/c\tcspAPIToken={csp_api_token})',
+               '/etc/wavefront/wavefront-proxy/wavefront.conf')
+        ret_code = system.run_cmd(cmd)
         if ret_code > 0:
-            message.print_warn("Error Configuring Wavefront Proxy with csp api token " + csp_api_token)
+            message.print_warn("Error Configuring Wavefront Proxy with"
+                               f" csp API token {csp_api_token}")
     if wavefront_api_token:
         # replace token
-        cmd = "sed -i -e '/token=/c\ttoken=%s' /etc/wavefront/wavefront-proxy/" \
-            "wavefront.conf" % (wavefront_api_token)
-        ret_code = system.run_command(cmd)
+        cmd = ('sed', '-i', '-e',
+               f'/token=/c\ttoken={wavefront_api_token}',
+               '/etc/wavefront/wavefront-proxy/wavefront.conf')
+        ret_code = system.run_cmd(cmd)
         if ret_code > 0:
-            message.print_warn("Error Configuring Wavefront Proxy with Wavefront api token " + wavefront_api_token)
+            message.print_warn("Error Configuring Wavefront Proxy with"
+                               f" Wavefront API token {wavefront_api_token}")
 
     # replace server url
-    cmd = (f"sed -i -e '/server=/c\tserver={url}' "
-           "/etc/wavefront/wavefront-proxy/wavefront.conf")
+    cmd = ('sed', '-i', '-e', f'/server=/c\tserver={url}',
+           '/etc/wavefront/wavefront-proxy/wavefront.conf')
 
-    ret_code = system.run_command(cmd)
+    ret_code = system.run_cmd(cmd)
     if ret_code > 0:
         message.print_warn("Error Configuring Wavefront Proxy")
 
