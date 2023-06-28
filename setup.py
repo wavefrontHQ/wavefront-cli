@@ -1,21 +1,18 @@
 """Packaging settings."""
 
+import os
+import subprocess
 
-from codecs import open
-from os.path import abspath, dirname, join
-from subprocess import call
+import setuptools
 
-from setuptools import Command, find_packages, setup
 
-from wavefront_cli import __version__
+this_dir = os.path.abspath(os.path.dirname(__file__))
 
-this_dir = abspath(dirname(__file__))
-
-with open(join(this_dir, 'README.rst'), encoding='utf-8') as file:
+with open(os.path.join(this_dir, 'README.rst'), encoding='utf-8') as file:
     long_description = file.read()
 
 
-class RunTests(Command):
+class RunTests(setuptools.Command):
     """Run all tests."""
 
     description = 'run tests'
@@ -23,49 +20,49 @@ class RunTests(Command):
 
     def initialize_options(self):
         """Skip this test case."""
-        pass
 
     def finalize_options(self):
         """Skip this test case."""
-        pass
 
     def run(self):
         """Run all tests."""
-        errno = call(['py.test', '--cov=wave', '--cov-report=term-missing'])
+        errno = subprocess.call(['py.test', '--cov=wave',
+                                 '--cov-report=term-missing'])
         raise SystemExit(errno)
 
 
-setup(
+setuptools.setup(
     name='wavefront-cli',
-    version=__version__,
-    description='Wavefront client CLI utility.',
+    version='0.5.0',
+    description='VMware Aria Operations for Applications CLI Utility.',
     long_description=long_description,
     url='https://github.com/wavefrontHQ/wavefront-cli',
-    author='Evan Pease',
-    author_email='evan@wavefront.com',
-    license='UNLICENSE',
+    author='VMware Aria Operations for Applications Team',
+    author_email='chitimba@wavefront.com',
+    license='APACHE-V2',
     classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Console',
         'Intended Audience :: Developers',
-        'Topic :: Utilities',
+        'Intended Audience :: System Administrators',
+        'License :: OSI Approved :: Apache Software License',
         'License :: Public Domain',
         'Natural Language :: English',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: System :: Monitoring',
+        'Topic :: System :: Networking :: Monitoring',
+        'Topic :: Utilities',
     ],
-    keywords=['lib', 'cli'],
-    packages=find_packages(exclude=['docs', 'tests*']),
+    keywords=['apps', 'cli', 'lib', 'observability', 'ops', 'wavefront'],
+    packages=setuptools.find_packages(exclude=['docs', 'tests*']),
     # packages=['wave'],
-    install_requires=['docopt', 'requests', 'boto', 'distro'],
+    install_requires=('boto3', 'distro', 'docopt', 'requests'),
     extras_require={
         'test': ['coverage', 'pytest', 'pytest-cov'],
     },

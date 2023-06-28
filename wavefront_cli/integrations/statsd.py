@@ -58,16 +58,26 @@ class StatsD(Base):
         out = self.conf % (statsd_port)
         if system.write_file(self.conf_path, out):
             message.print_success("Wrote StatsD service plugin configuration"
-                                  " to %s" % (self.conf_path))
+                                  f" to {self.conf_path}")
         else:
-            message.print_warn("Failed writing config file to %s - do you"
-                               " have write permission on this location?"
-                               % self.conf_path)
+            message.print_warn("Failed writing StatsD config file to "
+                               f"{self.conf_path} - do you have "
+                               "write permission on this location?")
             return False
         return True
 
+    def validate_options(self):
+        """Validate required parameter for StatsD input plugin."""
+        if not self.options and not self.options['statsd_port']:
+            # default value
+            self.options['statsd_port'] = "8125"
+        return True
+
     def remove(self):
-        """Remove StatsD input plugin."""
+        """Remove StatsD input plugin.
+
+        NB: consider combining this method with one in wavefront.py
+        """
         try:
             os.remove(self.conf_path)
             message.print_success("Removed StatsD configuration file "
@@ -78,11 +88,4 @@ class StatsD(Base):
             message.print_warn("Was StatsD integration already removed?")
             return False
 
-        return True
-
-    def validate_options(self):
-        """Validate required parameter for StatsD input plugin."""
-        if not self.options and not self.options['statsd_port']:
-            # default value
-            self.options['statsd_port'] = "8125"
         return True

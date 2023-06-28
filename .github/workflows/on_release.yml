@@ -1,0 +1,19 @@
+name: Publish the Package onto PyPI on Release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  setenv:  # set the parameters to pass into the reused workflow below.
+    uses: 
+      wavefrontHQ/wavefront-cli/.github/workflows/env.yml@master
+  publish_on_release:
+    needs: setenv
+    secrets: inherit
+    uses:
+      wavefrontHQ/wavefront-sdk-python/.github/workflows/on_release.yml@master
+    with:
+      package_name: ${{ needs.setenv.outputs.package_name }}
+      requirements: ${{ needs.setenv.outputs.requirements }}

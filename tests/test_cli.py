@@ -1,27 +1,28 @@
 """Tests for our main wave CLI module."""
 
 
-from subprocess import PIPE, Popen
-from unittest import TestCase
-from wave import __version__ as version
+import subprocess
+import unittest
+
+import wavefront_cli
 
 
-class TestHelp(TestCase):
+class TestHelp(unittest.TestCase):
     """Test cases for wavefront cli."""
 
     def test_returns_usage_information(self):
         """Test wavefront cli help command."""
-        output = Popen(['wave', '-h'], stdout=PIPE).communicate()[0]
-        self.assertTrue('Usage:' in output)
+        output = subprocess.check_output(['wave', '-h']).decode()
+        self.assertIn('Usage:', output)
 
-        output = Popen(['wave', '--help'], stdout=PIPE).communicate()[0]
-        self.assertTrue('Usage:' in output)
+        output = subprocess.check_output(['wave', '--help']).decode()
+        self.assertIn('Usage:', output)
 
 
-class TestVersion(TestCase):
+class TestVersion(unittest.TestCase):
     """Test cases for wavefront cli."""
 
     def test_returns_version_information(self):
         """Test wavefront cli version command."""
-        output = Popen(['wave', '--version'], stdout=PIPE).communicate()[0]
-        self.assertEqual(output.strip(), version)
+        output = subprocess.check_output(['wave', '--version']).decode()
+        self.assertEqual(output.strip(), wavefront_cli.__version__)

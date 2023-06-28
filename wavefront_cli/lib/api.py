@@ -7,6 +7,9 @@ import sys
 import requests
 
 
+REQUEST_TIMEOUT = 10
+
+
 def clean_url(url):
     """Convert user input URL to clean URL."""
     if url.endswith("/api/"):
@@ -22,10 +25,10 @@ def validate_token(url, token):
     """Validate wavefront credential."""
     url = clean_url(url)
     # /daemon/test?token=$TOKEN
-    validate_url = "%s/api/daemon/test?token=%s" % (url, token)
+    validate_url = f"{url}/api/daemon/test?token={token}"
     is_valid = False
     try:
-        response = requests.post(validate_url)
+        response = requests.post(validate_url, timeout=REQUEST_TIMEOUT)
         status_code = response.status_code
         if status_code == 401:
             print("Error validating token: Unauthorized. Make sure your"
@@ -45,6 +48,5 @@ def validate_token(url, token):
 
 def deploy_dashboard(db_json_url, wf_url, api_token):
     """Deploy a dashboard in wavefront."""
-    print("Deploying Dashboard with %s, %s, %s"
-          % (db_json_url, wf_url, api_token))
+    print(f"Deploying Dashboard with {db_json_url}, {wf_url}, {api_token}")
     return True

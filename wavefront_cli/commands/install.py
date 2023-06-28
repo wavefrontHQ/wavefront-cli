@@ -124,29 +124,35 @@ class Install(Base):  # pylint: disable=too-few-public-methods
                                       "https://try.wavefront.com): \n")\
                                 or "https://try.wavefront.com"
 
-            authType = False
+            auth_type = False
             if csp_org_id and csp_app_id and csp_app_secret:
-                authType = True
+                auth_type = True
             elif csp_api_token:
-                authType = True
+                auth_type = True
             elif wavefront_api_token:
-                authType = True
-                print("Validating API Token using Wavefront URL: ", wavefront_url)
-                if not lib.api.validate_token(wavefront_url, wavefront_api_token):
+                auth_type = True
+                print("Validating API Token using Wavefront URL: ",
+                      wavefront_url)
+                if not lib.api.validate_token(wavefront_url,
+                                              wavefront_api_token):
                     sys.exit(1)
                 lib.auth.save_auth(wavefront_url, wavefront_api_token)
 
-            if not authType:
+            if not auth_type:
                 print("Error: Invalid combination of parameters.")
-                exit(1)
+                sys.exit(1)
 
             # Install Proxy
             if not lib.proxy.install_proxy(proxy_next):
                 sys.exit(1)
 
             # Configure Proxy
-            if not lib.proxy.configure_proxy(wavefront_url, wavefront_api_token, csp_api_token, csp_app_id,
-                                             csp_app_secret, csp_org_id):
+            if not lib.proxy.configure_proxy(wavefront_url,
+                                             wavefront_api_token,
+                                             csp_api_token,
+                                             csp_app_id,
+                                             csp_app_secret,
+                                             csp_org_id):
                 sys.exit(1)
 
         if agent:

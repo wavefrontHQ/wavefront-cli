@@ -23,25 +23,22 @@ def get_install_agent_cmd():
               " support@wavefront.com.")
         return cmd
 
+    cmd = "curl -s {} | bash && "
     if dist.strip().startswith(("Oracle Linux Server", "Fedora",
                                 "Amazon Linux", "CentOS",
                                 "Red Hat Enterprise Linux")):
-        cmd = "curl -s %s | bash" % (agent_pkg_rpm)
-        cmd += " && yum -y -q install telegraf"
+        cmd = cmd.format(agent_pkg_rpm) + "yum -y -q install telegraf"
     elif dist.strip().startswith("Ubuntu"):
-        cmd = "curl -s %s | bash" % (agent_pkg_deb)
-        cmd += ' && apt-get -y -qq -o Dpkg::Options::="--force-confold"' \
-               ' install telegraf'
+        cmd = (cmd.format(agent_pkg_deb) + "apt-get -y -qq -o D"
+               'pkg::Options::="--force-confold" install telegraf')
     elif dist.strip().lower().startswith("debian"):
-        cmd = "curl -s %s | bash" % (agent_pkg_deb)
-        cmd += ' && apt-get -o Dpkg::Options::="--force-confnew"' \
-               ' -y install telegraf'
+        cmd = (cmd.format(agent_pkg_deb) + "apt-get -o D"
+               'pkg::Options::="--force-confnew" -y install telegraf')
     elif dist.strip().startswith(("openSUSE", "SUSE Linux Enterprise Server",
                                   "SLES")):
-        cmd = "curl -s %s | bash" % (agent_pkg_rpm)
-        cmd += ' && zypper install telegraf'
+        cmd = cmd.format(agent_pkg_rpm) + "zypper install telegraf"
     else:
-        message.print_warn("Error: Unsupported OS version: %s." % (dist))
+        message.print_warn(f"Error: Unsupported OS version: {dist}.")
 
     return cmd
 
@@ -50,30 +47,29 @@ def tag_telegraf_config(comment, tags):
     """Add custom tags into Telegraf."""
     message.print_bold("Adding custom tags to Telegraf configuration")
 
-    tags_pre = "- %s -" % (comment)
-    tags_post = "- end %s tags - " % (comment)
-    tag_str = "  # %s\n" % (tags_pre)
-    for key, value in list(tags.items()):
-        tag_str += '  %s = "%s"\n' % (key.lower(), value)
-    tag_str += "  # %s\n" % (tags_post)
+    tags_pre = f"- {comment} -"
+    tags_post = f"- end {comment} tags - "
+    tag_strings = [f"  # {tags_pre}"]
+    for key, value in tags.items():
+        tag_strings.append(f'  {key.lower()} = "{value}"')
+    tag_strings.append(f"  # {tags_post}")
     try:
-        tag_txt = open("tags.txt", "w")
-        tag_txt.write(tag_str)
-        tag_txt.close()
+        with open("tags.txt", "w", encoding="utf-8") as tag_txt:
+            tag_txt.writelines(tag_strings)
     except IOError:
         message.print_warn("Error writing tags.txt: " + sys.exc_info())
         return False
 
     # remove existing ec2 tags
     conf = CONF_PATH
-    cmd = "sed -i '/%s/,/%s/d' %s" % (tags_pre, tags_post, conf)
+    cmd = f"sed -i '/{tags_pre}/,/{tags_post}/d' {conf}"
 
     ret_code = system.run_command(cmd)
     if ret_code > 0:
         message.print_warn("Error adding tags to Telegraf configuration")
         return False
 
-    cmd = r"sed -i '/\[global_tags\]/r tags.txt' %s" % (conf)
+    cmd = rf"sed -i '/\[global_tags\]/r tags.txt' {conf}"
 
     ret_code = system.run_command(cmd)
     if ret_code > 0:
@@ -91,8 +87,8 @@ def install_agent():
     message.print_bold("Starting Telegraf Installation!")
     print("Downloading configuration to ", CONF_PATH)
 
-    cmd = "mkdir -p /etc/telegraf && sudo curl -o %s %s"\
-          % (CONF_PATH, telegraf_conf)
+    cmd = f"mkdir -p /etc/telegraf && sudo curl -o {CONF_PATH} {telegraf_conf}"
+
     ret_code = system.run_command(cmd)
     if ret_code > 0:
         message.print_warn("Error downloading Telegraf config file.")

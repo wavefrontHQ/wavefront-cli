@@ -1,17 +1,20 @@
 """Manage AWS instance tags for telegraf."""
 
-import boto.ec2
-
+import boto3
 import requests
 
 from . import agent
 from . import message
 
 
+REQUEST_TIMEOUT = 10
+
+
 def get_instance_id():
     """Retrieve instance ID."""
     response = requests.get(
-        "http://instance-data/latest/meta-data/instance-id")
+        "http://instance-data/latest/meta-data/instance-id",
+        timeout=REQUEST_TIMEOUT)
     return response.content
 
 
@@ -19,11 +22,11 @@ def is_ec2_instance():
     """Validate EC2 instance."""
     try:
         response = requests.get(
-            "http://instance-data/latest/meta-data/instance-id")
+            "http://instance-data/latest/meta-data/instance-id",
+            timeout=REQUEST_TIMEOUT)
     except requests.exceptions.RequestException:
         return False
-    else:
-        return bool(response.status_code == 200)
+    return bool(response.status_code == 200)
 
 
 def tag_telegraf_config(aws_region, aws_key_id, aws_secret_key):
@@ -36,29 +39,25 @@ def tag_telegraf_config(aws_region, aws_key_id, aws_secret_key):
 
 def get_instance_tags(aws_access_key_id, aws_secret_key, aws_region):
     """Retrieve Ec2 tags from AWS."""
-    conn = boto.ec2.connect_to_region(aws_region,
-                                      aws_access_key_id=aws_access_key_id,
-                                      aws_secret_access_key=aws_secret_key)
+    conn = boto3.session.Session().client('ec2', region_name=aws_region,
+                                          aws_access_key_id=aws_access_key_id,
+                                          aws_secret_access_key=aws_secret_key)
 
     if not is_ec2_instance():
         message.print_warn("This is not an EC2 instance.")
         return None
 
     try:
-        reservations = conn.get_all_instances(instance_ids=[get_instance_id()])
-    # TODO(austinov): Need specific exception here.  # pylint: disable=fixme
-    except Exception:  # pylint: disable=broad-except
+        reservations = conn.describe_instances(InstanceIds=[get_instance_id()])
+    except boto3.exceptions.botocore.exceptions.ClientError:
         message.print_warn("Unable to authenticate with Amazon EC2 metadata"
                            " API for instance:" + get_instance_id())
         return None
     # Find the Instance object inside the reservation
-    instance = reservations[0].instances[0]
-    region = str(instance.region).replace('RegionInfo:', '')
-    vpc_id = instance.vpc_id
-    image_id = instance.image_id
+    instance = reservations['Reservations'][0]['Instances'][0]
 
-    tags = instance.tags
-    tags['aws-region'] = region
-    tags['vpc-id'] = vpc_id
-    tags['image-id'] = image_id
+    tags = {t['Key']: t['Value'] for t in instance['Tags']}
+    tags['aws-region'] = aws_region
+    tags['vpc-id'] = instance['VpcId']
+    tags['image-id'] = instance['ImageId']
     return tags

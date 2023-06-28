@@ -1,0 +1,19 @@
+name: Upload Python Package Onto TestPyPI on Merge
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  setenv:  # set the parameters to be used by the reused workflow below.
+    uses: 
+      wavefrontHQ/wavefront-cli/.github/workflows/env.yml@master
+  publish_on_merge:
+    needs: setenv
+    secrets: inherit
+    uses:
+      wavefrontHQ/wavefront-sdk-python/.github/workflows/on_merge.yml@master
+    with:
+      package_name: ${{ needs.setenv.outputs.package_name }}
+      requirements: ${{ needs.setenv.outputs.requirements }}
