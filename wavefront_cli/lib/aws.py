@@ -1,6 +1,7 @@
 """Manage AWS instance tags for telegraf."""
 
 import boto3
+
 import requests
 
 from . import agent
