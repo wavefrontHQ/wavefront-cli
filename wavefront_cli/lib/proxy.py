@@ -114,7 +114,7 @@ def configure_proxy(url, wavefront_api_token, csp_api_token=None,
     if csp_api_token:
         # replace csp api token
         cmd = ('sed', '-i', '-e',
-               f'/#cspAPIToken=/c\tcspAPIToken={csp_api_token})',
+               f'/#cspAPIToken=/c\tcspAPIToken={csp_api_token}',
                '/etc/wavefront/wavefront-proxy/wavefront.conf')
         ret_code = system.run_cmd(cmd)
         if ret_code > 0:
