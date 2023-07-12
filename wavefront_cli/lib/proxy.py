@@ -149,3 +149,100 @@ def configure_proxy(url, wavefront_api_token, csp_api_token=None,
                           " /etc/wavefront/wavefront-proxy/wavefront.conf")
 
     return True
+
+
+def configure_csp_oauth_options():
+    lines_to_append = [
+        "\n# To add a proxy, you need to use an existing App ID, App Secret for server to serve type of app with AOA service proxy role.",
+        "# If you have no App ID and App Secret yet, you can create one for server to serve type of app under Organization/OAuth",
+        "# Apps menu item in VMWare Cloud Service. Note: Proxy, based on OAuth apps, has no expiration time.",
+        "#cspAppId=CSP_APP_SECRET_HERE"
+    ]
+    add_option("cspAppId=", lines_to_append)
+
+    lines_to_append = [
+        "\n# To add a proxy, you need to use an existing App ID, App Secret for server to serve type of app with AOA service proxy role.",
+        "# If you have no App ID and App Secret yet, you can create one for server to serve type of app under Organization/OAuth",
+        "# Apps menu item in VMWare Cloud Service. Note: Proxy, based on OAuth apps, has no expiration time.",
+        "#cspAppSecret=CSP_APP_SECRET_HERE"
+    ]
+    add_option("cspAppSecret=", lines_to_append)
+
+    lines_to_append = [
+        "\n# The CSP organisation ID.",
+        "#cspOrgId=CSP_ORG_ID_HERE"
+    ]
+    add_option("cspOrgId=", lines_to_append)
+
+    lines_to_append = [
+        "\n# CSP console URL. This will be used in many places like getting token.",
+        "#cspBaseUrl=https://console.cloud.vmware.com"
+    ]
+    add_option("cspBaseUrl=", lines_to_append)
+
+
+def configure_csp_api_token_options():
+    lines_to_append = [
+        "\n# To add a proxy, you need to use an existing API token with AOA service proxy role. If you have no API token yet, you",
+        "# can create one under your account page in VMWare Cloud Service.",
+        "#cspAPIToken=CSP_API_TOKEN_HERE"
+    ]
+    add_option("cspAPIToken=CSP_API_TOKEN_HERE", lines_to_append)
+
+    lines_to_append = [
+        "\n# CSP console URL. This will be used in many places like getting token.",
+        "#cspBaseUrl=https://console.cloud.vmware.com"
+    ]
+    add_option("cspBaseUrl=", lines_to_append)
+
+
+def configure_wavefront_api_token_options():
+    lines_to_append = [
+        "\n# The Token is any valid API token for an account that has *Proxy Management* permissions. To get to the token:",
+        "# 1. Click the gear icon at the top right in the Wavefront UI.",
+        "# 2. Click your account name (usually your email)",
+        "# 3. Click *API access*.",
+        "#token=WF_TOKEN_HERE"
+    ]
+    add_option("token=WF_TOKEN_HERE", lines_to_append)
+
+
+def comment_auth_methods(csp_api_token, csp_oauth_app, wavefront_api_token):
+    config_file = '/etc/wavefront/wavefront-proxy/wavefront.conf'
+
+    if wavefront_api_token:
+        cmd = ['grep', '-q', 'token=', config_file]
+        if system.run_cmd(cmd) == 0:
+            cmd = ['sed', '-i', '-e', f'/^[^#]/ s/\\(^.*token=.*$\\)/#\\1/', config_file]
+            system.run_cmd(cmd)
+
+    if csp_oauth_app:
+        cmd = ['grep', '-q', 'cspAppId=', config_file]
+        if system.run_cmd(cmd) == 0:
+            cmd = ['sed', '-i', '-e', f'/^[^#]/ s/\\(^.*cspAppId=.*$\\)/#\\1/', config_file]
+            system.run_cmd(cmd)
+
+        cmd = ['grep', '-q', 'cspAppSecret=', config_file]
+        if system.run_cmd(cmd) == 0:
+            cmd = ['sed', '-i', '-e', f'/^[^#]/ s/\\(^.*cspAppSecret=.*$\\)/#\\1/', config_file]
+            system.run_cmd(cmd)
+
+        cmd = ['grep', '-q', 'cspOrgId=', config_file]
+        if system.run_cmd(cmd) == 0:
+            cmd = ['sed', '-i', '-e', f'/^[^#]/ s/\\(^.*cspOrgId=.*$\\)/#\\1/', config_file]
+            system.run_cmd(cmd)
+
+    if csp_api_token:
+        cmd = ['grep', '-q', 'cspAPIToken=', config_file]
+        if system.run_cmd(cmd) == 0:
+            cmd = ['sed', '-i', '-e', f'/^[^#]/ s/\\(^.*cspAPIToken=.*$\\)/#\\1/', config_file]
+            system.run_cmd(cmd)
+
+
+def add_option(option, lines_to_append):
+    config_file = '/etc/wavefront/wavefront-proxy/wavefront.conf'
+    cmd = ['grep', '-q', option, config_file]
+    if system.run_cmd(cmd) != 0:
+        for line in lines_to_append:
+            cmd = ['echo', f'"{line}"', '>>', config_file]
+            subprocess.call(' '.join(cmd), shell=True)
