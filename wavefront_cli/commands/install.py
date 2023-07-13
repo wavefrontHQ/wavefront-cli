@@ -121,22 +121,28 @@ class Install(Base):  # pylint: disable=too-few-public-methods
             if not wavefront_url:
                 wavefront_url = input("Please enter the url to your Wavefront"
                                       " instance (default = "
-                                      "https://try.wavefront.com): \n")\
+                                      "https://try.wavefront.com): \n") \
                                 or "https://try.wavefront.com"
 
             auth_type = False
             if csp_org_id and csp_app_id and csp_app_secret:
                 lib.configure_csp_oauth_options()
-                lib.comment_auth_methods(csp_api_token=True, csp_oauth_app=False, wavefront_api_token=True)
+                lib.comment_auth_methods(csp_api_token=True,
+                                         csp_oauth_app=False,
+                                         wavefront_api_token=True)
                 auth_type = True
             elif csp_api_token:
                 lib.configure_csp_api_token_options()
-                lib.comment_auth_methods(csp_api_token=False, csp_oauth_app=True, wavefront_api_token=True)
+                lib.comment_auth_methods(csp_api_token=False,
+                                         csp_oauth_app=True,
+                                         wavefront_api_token=True)
                 auth_type = True
             elif wavefront_api_token:
                 auth_type = True
                 lib.configure_wavefront_api_token_options()
-                lib.comment_auth_methods(csp_api_token=True, csp_oauth_app=True, wavefront_api_token=False)
+                lib.comment_auth_methods(csp_api_token=True,
+                                         csp_oauth_app=True,
+                                         wavefront_api_token=False)
                 print("Validating API Token using Wavefront URL: ",
                       wavefront_url)
                 if not lib.api.validate_token(wavefront_url,
@@ -169,7 +175,7 @@ class Install(Base):  # pylint: disable=too-few-public-methods
                                       "localhost): \n") or "localhost"
             if not proxy_port:
                 proxy_port = input("Please enter the port of your"
-                                   " Wavefront proxy (default = 2878): \n")\
+                                   " Wavefront proxy (default = 2878): \n") \
                              or "2878"
 
             # Install the Wf integration first (Telegraf won't start

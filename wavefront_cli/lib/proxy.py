@@ -152,18 +152,36 @@ def configure_proxy(url, wavefront_api_token, csp_api_token=None,
 
 
 def configure_csp_oauth_options():
+    """
+    Configures the CSP OAuth app options.
+
+    Returns:
+        None
+    """
     lines_to_append = [
-        "\n# To add a proxy, you need to use an existing App ID, App Secret for server to serve type of app with AOA service proxy role.",
-        "# If you have no App ID and App Secret yet, you can create one for server to serve type of app under Organization/OAuth",
-        "# Apps menu item in VMWare Cloud Service. Note: Proxy, based on OAuth apps, has no expiration time.",
+        "\n# To add a proxy, you need to use an existing App ID, "
+        "App Secret for server to serve type of app with AOA "
+        "service proxy role.",
+        "# If you have no App ID and App Secret yet, "
+        "you can create one for server to serve type "
+        "of app under Organization/OAuth",
+        "# Apps menu item in VMWare Cloud Service."
+        " Note: Proxy, based on OAuth apps, "
+        "has no expiration time.",
         "#cspAppId=CSP_APP_SECRET_HERE"
     ]
     add_option("cspAppId=", lines_to_append)
 
     lines_to_append = [
-        "\n# To add a proxy, you need to use an existing App ID, App Secret for server to serve type of app with AOA service proxy role.",
-        "# If you have no App ID and App Secret yet, you can create one for server to serve type of app under Organization/OAuth",
-        "# Apps menu item in VMWare Cloud Service. Note: Proxy, based on OAuth apps, has no expiration time.",
+        "\n# To add a proxy, you need to use an existing App ID, "
+        "App Secret for server to serve type of app with AOA "
+        "service proxy role.",
+        "# If you have no App ID and App Secret yet, "
+        "you can create one for server to serve type of app under "
+        "Organization/OAuth",
+        "# Apps menu item in VMWare Cloud Service. "
+        "Note: Proxy, based on OAuth apps, "
+        "has no expiration time.",
         "#cspAppSecret=CSP_APP_SECRET_HERE"
     ]
     add_option("cspAppSecret=", lines_to_append)
@@ -175,31 +193,51 @@ def configure_csp_oauth_options():
     add_option("cspOrgId=", lines_to_append)
 
     lines_to_append = [
-        "\n# CSP console URL. This will be used in many places like getting token.",
+        "\n# CSP console URL. This will be "
+        "used in many places like getting token.",
         "#cspBaseUrl=https://console.cloud.vmware.com"
     ]
     add_option("cspBaseUrl=", lines_to_append)
 
 
 def configure_csp_api_token_options():
+    """
+    Configures the CSP API token options.
+
+    Returns:
+        None
+    """
     lines_to_append = [
-        "\n# To add a proxy, you need to use an existing API token with AOA service proxy role. If you have no API token yet, you",
-        "# can create one under your account page in VMWare Cloud Service.",
+        "\n# To add a proxy, you need to use an "
+        "existing API token with AOA service proxy role. "
+        "If you have no API token yet, you",
+        "# can create one under your account "
+        "page in VMWare Cloud Service.",
         "#cspAPIToken=CSP_API_TOKEN_HERE"
     ]
-    add_option("cspAPIToken=CSP_API_TOKEN_HERE", lines_to_append)
+    add_option("cspAPIToken=", lines_to_append)
 
     lines_to_append = [
-        "\n# CSP console URL. This will be used in many places like getting token.",
+        "\n# CSP console URL. This will be used "
+        "in many places like getting token.",
         "#cspBaseUrl=https://console.cloud.vmware.com"
     ]
     add_option("cspBaseUrl=", lines_to_append)
 
 
 def configure_wavefront_api_token_options():
+    """
+    Configures the Wavefront API token options
+
+    Returns:
+        None
+    """
     lines_to_append = [
-        "\n# The Token is any valid API token for an account that has *Proxy Management* permissions. To get to the token:",
-        "# 1. Click the gear icon at the top right in the Wavefront UI.",
+        "\n# The Token is any valid API token for "
+        "an account that has *Proxy Management* permissions. "
+        "To get to the token:",
+        "# 1. Click the gear icon at the top right "
+        "in the Wavefront UI.",
         "# 2. Click your account name (usually your email)",
         "# 3. Click *API access*.",
         "#token=WF_TOKEN_HERE"
@@ -208,41 +246,76 @@ def configure_wavefront_api_token_options():
 
 
 def comment_auth_methods(csp_api_token, csp_oauth_app, wavefront_api_token):
+    """
+    Comments out specific authentication-related methods
+    in the wavefront.conf file.
+
+    Args:
+    csp_api_token (bool): Flag indicating whether
+    to comment out cspAPIToken line.
+    csp_oauth_app (bool): Flag indicating whether to
+    comment out cspAppId, cspAppSecret, cspOrgId,
+    and cspBaseUrl lines.
+    wavefront_api_token (bool): Flag indicating
+    whether to comment out token=WF_TOKEN_HERE line.
+
+    Returns:
+    None
+    """
     config_file = '/etc/wavefront/wavefront-proxy/wavefront.conf'
 
+    options_to_comment = []
+
     if wavefront_api_token:
-        cmd = ['grep', '-q', 'token=', config_file]
-        if system.run_cmd(cmd) == 0:
-            cmd = ['sed', '-i', '-e', f'/^[^#]/ s/\\(^.*token=.*$\\)/#\\1/', config_file]
-            system.run_cmd(cmd)
+        options_to_comment.append('token=WF_TOKEN_HERE')
 
     if csp_oauth_app:
-        cmd = ['grep', '-q', 'cspAppId=', config_file]
-        if system.run_cmd(cmd) == 0:
-            cmd = ['sed', '-i', '-e', f'/^[^#]/ s/\\(^.*cspAppId=.*$\\)/#\\1/', config_file]
-            system.run_cmd(cmd)
-
-        cmd = ['grep', '-q', 'cspAppSecret=', config_file]
-        if system.run_cmd(cmd) == 0:
-            cmd = ['sed', '-i', '-e', f'/^[^#]/ s/\\(^.*cspAppSecret=.*$\\)/#\\1/', config_file]
-            system.run_cmd(cmd)
-
-        cmd = ['grep', '-q', 'cspOrgId=', config_file]
-        if system.run_cmd(cmd) == 0:
-            cmd = ['sed', '-i', '-e', f'/^[^#]/ s/\\(^.*cspOrgId=.*$\\)/#\\1/', config_file]
-            system.run_cmd(cmd)
+        options_to_comment.extend(['cspAppId=',
+                                   'cspAppSecret=',
+                                   'cspOrgId=',
+                                   'cspBaseUrl='])
 
     if csp_api_token:
-        cmd = ['grep', '-q', 'cspAPIToken=', config_file]
-        if system.run_cmd(cmd) == 0:
-            cmd = ['sed', '-i', '-e', f'/^[^#]/ s/\\(^.*cspAPIToken=.*$\\)/#\\1/', config_file]
-            system.run_cmd(cmd)
+        options_to_comment.extend(['cspAPIToken=', 'cspBaseUrl='])
+
+    with open(config_file, 'r', encoding="utf-8") as file:
+        lines = file.readlines()
+
+    for i, line in enumerate(lines):
+        if any(line.strip().startswith(option) for option
+               in options_to_comment) and not line.startswith('#'):
+            lines[i] = '#' + line.lstrip()
+
+    with open(config_file, 'w', encoding="utf-8") as file:
+        file.writelines(lines)
 
 
 def add_option(option, lines_to_append):
+    """
+    Add the missing option(wf token,
+    csp api token or csp oauth app) option
+    to a configuration file if the option does not already exist.
+
+    Args:
+    option (str): The option to check for in the configuration file.
+    lines_to_append (list): A list of lines to append to
+    the configuration file.
+
+    Returns:
+        None
+    """
     config_file = '/etc/wavefront/wavefront-proxy/wavefront.conf'
-    cmd = ['grep', '-q', option, config_file]
-    if system.run_cmd(cmd) != 0:
-        for line in lines_to_append:
-            cmd = ['echo', f'"{line}"', '>>', config_file]
-            subprocess.call(' '.join(cmd), shell=True)
+    option_found = False
+
+    with open(config_file, 'r', encoding="utf-8") as file:
+        lines = file.readlines()
+        for line in lines:
+            if option in line:
+                option_found = True
+                break
+
+    if not option_found:
+        with open(config_file, 'a', encoding="utf-8") as file:
+            file.write('\n')
+            for line in lines_to_append:
+                file.write(line + '\n')
