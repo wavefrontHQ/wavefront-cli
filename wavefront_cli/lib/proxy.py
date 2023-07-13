@@ -152,8 +152,7 @@ def configure_proxy(url, wavefront_api_token, csp_api_token=None,
 
 
 def configure_csp_oauth_options():
-    """
-    Configures the CSP OAuth app options.
+    """Configure the CSP OAuth app options.
 
     Returns:
         None
@@ -201,8 +200,7 @@ def configure_csp_oauth_options():
 
 
 def configure_csp_api_token_options():
-    """
-    Configures the CSP API token options.
+    """Configure the CSP API token options.
 
     Returns:
         None
@@ -226,8 +224,7 @@ def configure_csp_api_token_options():
 
 
 def configure_wavefront_api_token_options():
-    """
-    Configures the Wavefront API token options
+    """Configure the Wavefront API token options.
 
     Returns:
         None
@@ -246,9 +243,7 @@ def configure_wavefront_api_token_options():
 
 
 def comment_auth_methods(csp_api_token, csp_oauth_app, wavefront_api_token):
-    """
-    Comments out specific authentication-related methods
-    in the wavefront.conf file.
+    """Comment out specific authentication-related methods.
 
     Args:
     csp_api_token (bool): Flag indicating whether
@@ -260,7 +255,7 @@ def comment_auth_methods(csp_api_token, csp_oauth_app, wavefront_api_token):
     whether to comment out token=WF_TOKEN_HERE line.
 
     Returns:
-    None
+        None
     """
     config_file = '/etc/wavefront/wavefront-proxy/wavefront.conf'
 
@@ -291,7 +286,8 @@ def comment_auth_methods(csp_api_token, csp_oauth_app, wavefront_api_token):
 
 
 def add_option(option, lines_to_append):
-    """
+    """Add the missing option.
+
     Add the missing option(wf token,
     csp api token or csp oauth app) option
     to a configuration file if the option does not already exist.
