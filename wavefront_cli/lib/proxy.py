@@ -78,8 +78,8 @@ def install_proxy(proxy_next):
 
 
 # pylint: disable=too-many-arguments
-def configure_proxy(url, wavefront_api_token, csp_api_token=None,
-                    csp_app_id=None, csp_app_secret=None, csp_org_id=None):
+def configure_proxy(url, wavefront_api_token, csp_api_token,
+                    csp_app_id, csp_app_secret, csp_org_id):
     """Configure wavefront proxy."""
     message.print_bold("Starting Wavefront Proxy Configuration!")
     url = api.clean_url(url) + "/api/"
@@ -87,7 +87,7 @@ def configure_proxy(url, wavefront_api_token, csp_api_token=None,
     if csp_app_id and csp_app_secret and csp_org_id:
         # replace csp oauth app id
         cmd = ('sed', '-i', '-e',
-               f'/#cspAppId=/c\tcspAppId={csp_app_id}',
+               f'/cspAppId=/c\tcspAppId={csp_app_id}',
                '/etc/wavefront/wavefront-proxy/wavefront.conf')
         ret_code = system.run_cmd(cmd)
         if ret_code > 0:
@@ -96,7 +96,7 @@ def configure_proxy(url, wavefront_api_token, csp_api_token=None,
 
         # replace CSP OAuth app secret
         cmd = ('sed', '-i', '-e',
-               f'/#cspAppSecret=/c\tcspAppSecret={csp_app_secret}',
+               f'/cspAppSecret=/c\tcspAppSecret={csp_app_secret}',
                '/etc/wavefront/wavefront-proxy/wavefront.conf')
         ret_code = system.run_cmd(cmd)
         if ret_code > 0:
@@ -105,7 +105,7 @@ def configure_proxy(url, wavefront_api_token, csp_api_token=None,
 
         # replace csp org id
         cmd = ('sed', '-i', '-e',
-               f'/#cspOrgId=/c\tcspOrgId={csp_org_id}',
+               f'/cspOrgId=/c\tcspOrgId={csp_org_id}',
                '/etc/wavefront/wavefront-proxy/wavefront.conf')
         ret_code = system.run_cmd(cmd)
         if ret_code > 0:
@@ -114,7 +114,7 @@ def configure_proxy(url, wavefront_api_token, csp_api_token=None,
     if csp_api_token:
         # replace csp api token
         cmd = ('sed', '-i', '-e',
-               f'/#cspAPIToken=/c\tcspAPIToken={csp_api_token}',
+               f'/cspAPIToken=/c\tcspAPIToken={csp_api_token}',
                '/etc/wavefront/wavefront-proxy/wavefront.conf')
         ret_code = system.run_cmd(cmd)
         if ret_code > 0:
@@ -239,7 +239,7 @@ def configure_wavefront_api_token_options():
         "# 3. Click *API access*.",
         "#token=WF_TOKEN_HERE"
     ]
-    add_option("token=WF_TOKEN_HERE", lines_to_append)
+    add_option("token=", lines_to_append)
 
 
 def comment_auth_methods(csp_api_token, csp_oauth_app, wavefront_api_token):
@@ -262,7 +262,7 @@ def comment_auth_methods(csp_api_token, csp_oauth_app, wavefront_api_token):
     options_to_comment = []
 
     if wavefront_api_token:
-        options_to_comment.append('token=WF_TOKEN_HERE')
+        options_to_comment.append('token=')
 
     if csp_oauth_app:
         options_to_comment.extend(['cspAppId=',
@@ -306,7 +306,7 @@ def add_option(option, lines_to_append):
     with open(config_file, 'r', encoding="utf-8") as file:
         lines = file.readlines()
         for line in lines:
-            if option in line:
+            if line.startswith(option) or line.startswith("#" + option):
                 option_found = True
                 break
 
