@@ -78,8 +78,8 @@ def install_proxy(proxy_next):
 
 
 # pylint: disable=too-many-arguments
-def configure_proxy(url, wavefront_api_token, csp_api_token,
-                    csp_app_id, csp_app_secret, csp_org_id):
+def configure_proxy(url, wavefront_api_token, csp_api_token=None,
+                    csp_app_id=None, csp_app_secret=None, csp_org_id=None):
     """Configure wavefront proxy."""
     message.print_bold("Starting Wavefront Proxy Configuration!")
     url = api.clean_url(url) + "/api/"
