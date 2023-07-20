@@ -33,7 +33,7 @@ class RunTests(setuptools.Command):
 
 setuptools.setup(
     name='wavefront-cli',
-    version='0.1.1',
+    version='0.1.2',
     description='VMware Aria Operations for Applications CLI Utility.',
     long_description=long_description,
     url='https://github.com/wavefrontHQ/wavefront-cli',
