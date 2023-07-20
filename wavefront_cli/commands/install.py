@@ -121,7 +121,7 @@ class Install(Base):  # pylint: disable=too-few-public-methods
             if not wavefront_url:
                 wavefront_url = input("Please enter the url to your Wavefront"
                                       " instance (default = "
-                                      "https://try.wavefront.com): \n")\
+                                      "https://try.wavefront.com): \n") \
                                 or "https://try.wavefront.com"
 
             auth_type = False
@@ -146,6 +146,22 @@ class Install(Base):  # pylint: disable=too-few-public-methods
             if not lib.proxy.install_proxy(proxy_next):
                 sys.exit(1)
 
+            if csp_org_id and csp_app_id and csp_app_secret:
+                lib.configure_csp_oauth_options()
+                lib.comment_auth_methods(csp_api_token=True,
+                                         csp_oauth_app=False,
+                                         wavefront_api_token=True)
+            elif csp_api_token:
+                lib.configure_csp_api_token_options()
+                lib.comment_auth_methods(csp_api_token=False,
+                                         csp_oauth_app=True,
+                                         wavefront_api_token=True)
+            elif wavefront_api_token:
+                lib.configure_wavefront_api_token_options()
+                lib.comment_auth_methods(csp_api_token=True,
+                                         csp_oauth_app=True,
+                                         wavefront_api_token=False)
+
             # Configure Proxy
             if not lib.proxy.configure_proxy(wavefront_url,
                                              wavefront_api_token,
@@ -163,7 +179,7 @@ class Install(Base):  # pylint: disable=too-few-public-methods
                                       "localhost): \n") or "localhost"
             if not proxy_port:
                 proxy_port = input("Please enter the port of your"
-                                   " Wavefront proxy (default = 2878): \n")\
+                                   " Wavefront proxy (default = 2878): \n") \
                              or "2878"
 
             # Install the Wf integration first (Telegraf won't start
