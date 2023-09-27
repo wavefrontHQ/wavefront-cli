@@ -176,8 +176,6 @@ function install_wavecli() {
 }
 
 function detect_python(){
-    PYTHON_PATH=$(which python)
-
     if [ -z "$PYTHON_PATH" ]; then
         PYTHON_PATH=$(which python3)
     fi
@@ -187,16 +185,13 @@ function detect_python(){
     fi
 
     if [ -z "$PYTHON_PATH" ]; then
-        echo ""
-    else
-        echo "$PYTHON_PATH"
+        PYTHON_PATH=$(which python)
     fi
 
+    echo "PYTHON_PATH: ${PYTHON_PATH}"
 }
 
 function detect_pip(){
-    PIP_PATH=$(which pip)
-
     if [ -z "$PIP_PATH" ]; then
         PIP_PATH=$(which pip3)
     fi
@@ -206,11 +201,10 @@ function detect_pip(){
     fi
 
     if [ -z "$PIP_PATH" ]; then
-        echo ""
-    else
-        echo "$PIP_PATH"
+        PIP_PATH=$(which pip)
     fi
 
+    echo "PIP_PATH: ${PIP_PATH}"
 }
 
 # main()
