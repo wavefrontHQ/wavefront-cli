@@ -188,7 +188,7 @@ function detect_python(){
         PYTHON_PATH=$(which python)
     fi
 
-    echo "PYTHON_PATH: ${PYTHON_PATH}"
+    echo "${PYTHON_PATH}"
 }
 
 function detect_pip(){
@@ -204,7 +204,7 @@ function detect_pip(){
         PIP_PATH=$(which pip)
     fi
 
-    echo "PIP_PATH: ${PIP_PATH}"
+    echo "${PIP_PATH}"
 }
 
 # main()
