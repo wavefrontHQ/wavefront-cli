@@ -180,28 +180,12 @@ function detect_python(){
         PYTHON_PATH=$(which python3)
     fi
 
-    if [ -z "$PYTHON_PATH" ]; then
-        PYTHON_PATH=$(which python2)
-    fi
-
-    if [ -z "$PYTHON_PATH" ]; then
-        PYTHON_PATH=$(which python)
-    fi
-
     echo "${PYTHON_PATH}"
 }
 
 function detect_pip(){
     if [ -z "$PIP_PATH" ]; then
         PIP_PATH=$(which pip3)
-    fi
-
-    if [ -z "$PIP_PATH" ]; then
-        PIP_PATH=$(which pip2)
-    fi
-
-    if [ -z "$PIP_PATH" ]; then
-        PIP_PATH=$(which pip)
     fi
 
     echo "${PIP_PATH}"
