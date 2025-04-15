@@ -31,13 +31,13 @@ def get_proxy_install_cmd(proxy_next):
     if proxy_next:
         message.print_bold("Using proxy-next option. This will"
                            " install the latest beta version proxy.")
-
     print("Detected ", dist)
 
     cmd = "curl -s {pkg} | bash && "
     if dist.strip().startswith(("Oracle Linux Server", "Fedora",
                                 "Amazon Linux", "CentOS",
-                                "Red Hat Enterprise Linux")):
+                                "Red Hat Enterprise Linux",
+                                "Rocky Linux")):
         pkg = proxy_pkg_rpm
         if proxy_next:
             pkg = proxy_next_pkg_rpm
