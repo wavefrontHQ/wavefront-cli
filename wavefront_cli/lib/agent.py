@@ -26,7 +26,7 @@ def get_install_agent_cmd():
     cmd = "curl -s {} | bash && "
     if dist.strip().startswith(("Oracle Linux Server", "Fedora",
                                 "Amazon Linux", "CentOS",
-                                "Red Hat Enterprise Linux")):
+                                "Red Hat Enterprise Linux", "Rocky")):
         cmd = cmd.format(agent_pkg_rpm) + "yum -y -q install telegraf"
     elif dist.strip().startswith("Ubuntu"):
         cmd = (cmd.format(agent_pkg_deb) + "apt-get -y -qq -o D"

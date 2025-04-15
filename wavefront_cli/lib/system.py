@@ -68,6 +68,7 @@ def remove_service(service_name):
     dist = check_os()
     print("Detected ", dist)
     if dist.startswith("Amazon Linux") or\
+            dist.startswith("Rocky") or\
             dist == "Red Hat Enterprise Linux Server":
         cmd = "yum -y remove " + service_name
     elif dist == "Ubuntu":

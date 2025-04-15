@@ -37,7 +37,7 @@ def get_proxy_install_cmd(proxy_next):
     cmd = "curl -s {pkg} | bash && "
     if dist.strip().startswith(("Oracle Linux Server", "Fedora",
                                 "Amazon Linux", "CentOS",
-                                "Red Hat Enterprise Linux")):
+                                "Red Hat Enterprise Linux", "Rocky")):
         pkg = proxy_pkg_rpm
         if proxy_next:
             pkg = proxy_next_pkg_rpm
