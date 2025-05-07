@@ -68,6 +68,10 @@ function detect_operating_system() {
         echo -e "\ntest -f /etc/debian_version" >> ${INSTALL_LOG}
         echo "Debian/Ubuntu"
         OPERATING_SYSTEM="DEBIAN"
+    elif [ -f /etc/rocky-release ]; then
+        echo -e "\ntest -f /etc/rocky-release" >> ${INSTALL_LOG}
+        echo "Rocky 9"
+        OPERATING_SYSTEM="ROCKY"
     elif [ -f /etc/redhat-release ] || [ -f /etc/system-release-cpe ]; then
         echo -e "\ntest -f /etc/redhat-release || test -f /etc/system-release-cpe" >> ${INSTALL_LOG}
         echo "RedHat/CentOS"
