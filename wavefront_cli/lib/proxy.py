@@ -36,8 +36,8 @@ def get_proxy_install_cmd(proxy_next):
 
     cmd = "curl -s {pkg} | bash && "
     if dist.strip().startswith(("Oracle Linux Server", "Fedora",
-                                "Amazon Linux", "CentOS",
-                                "Red Hat Enterprise Linux", "Rocky")):
+                                "Amazon Linux", "Rocky Linux", "CentOS",
+                                "Red Hat Enterprise Linux")):
         pkg = proxy_pkg_rpm
         if proxy_next:
             pkg = proxy_next_pkg_rpm
@@ -66,6 +66,7 @@ def install_proxy(proxy_next):
     """Install wavefront proxy."""
     message.print_bold("Starting Wavefront Proxy Installation!")
     cmd = get_proxy_install_cmd(proxy_next)
+    message.print_warn("joannak - cmd: " + cmd)
     install_status = False
     try:
         subprocess.check_call(cmd, shell=True)
