@@ -99,7 +99,7 @@ function install_python() {
         echo "Installing Python using apt-get"
         apt-get update >> ${INSTALL_LOG} 2>&1
         apt-get install python3 -y >> ${INSTALL_LOG} 2>&1
-    elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
+    elif [ $OPERATING_SYSTEM == "REDHAT" ] || [ $OPERATING_SYSTEM == "ROCKY" ]; then
         echo "Installing Python using yum"
         yum install python3 -y >> ${INSTALL_LOG} 2>&1
     elif [ $OPERATING_SYSTEM == "openSUSE" ] || [ $OPERATING_SYSTEM == "SLE" ]; then
@@ -126,7 +126,7 @@ function remove_python() {
         echo "Uninstalling Python using apt-get"
         apt-get remove python3 -y &> ${INSTALL_LOG}
         apt-get autoremove -y &> ${INSTALL_LOG}
-    elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
+    elif [ $OPERATING_SYSTEM == "REDHAT" ] || [ $OPERATING_SYSTEM == "ROCKY" ]; then
         echo "Uninstalling Python using yum"
         yum remove python3 -y &> ${INSTALL_LOG}
     elif [ $OPERATING_SYSTEM == "openSUSE" ] || [ $OPERATING_SYSTEM == "SLE" ]; then
