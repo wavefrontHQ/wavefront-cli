@@ -31,7 +31,7 @@ def get_proxy_install_cmd(proxy_next):
     if proxy_next:
         message.print_bold("Using proxy-next option. This will"
                            " install the latest beta version proxy.")
-
+    print("joannak - proxy Detected ", dist)
     print("Detected ", dist)
 
     cmd = "curl -s {pkg} | bash && "
@@ -66,7 +66,7 @@ def get_proxy_install_cmd(proxy_next):
 
 def install_proxy(proxy_next):
     """Install wavefront proxy."""
-    message.print_bold("Starting Wavefront Proxy Installation!")
+    message.print_bold("##Starting Wavefront Proxy Installation!")
     cmd = get_proxy_install_cmd(proxy_next)
     message.print_bold("joannak - cmd: " + cmd)
     install_status = False

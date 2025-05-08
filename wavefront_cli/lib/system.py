@@ -66,6 +66,7 @@ def write_file(path, text):
 def remove_service(service_name):
     """Delete a service."""
     dist = check_os()
+    print("joannak - system Detected ", dist)
     print("Detected ", dist)
     if dist.startswith("Amazon Linux") or\
             dist.startswith("Rocky Linux") or\
