@@ -67,6 +67,7 @@ def get_proxy_install_cmd(proxy_next):
 def install_proxy(proxy_next):
     """Install wavefront proxy."""
     message.print_bold("##Starting Wavefront Proxy Installation!")
+    message.print_bold("joannak - cmd1: ")
     cmd = get_proxy_install_cmd(proxy_next)
     message.print_bold("joannak - cmd: " + cmd)
     install_status = False
