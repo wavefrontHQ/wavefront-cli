@@ -31,14 +31,13 @@ def get_proxy_install_cmd(proxy_next):
     if proxy_next:
         message.print_bold("Using proxy-next option. This will"
                            " install the latest beta version proxy.")
-    print("joannak - proxy Detected ", dist)
     print("Detected ", dist)
 
     cmd = "curl -s {pkg} | bash && "
-    print("joannak dist.strip() - " + dist.strip() + " and startswith() check: " + dist.strip().startsWith("RockyLinux"))
     if dist.strip().startswith(("Oracle Linux Server", "Fedora",
-                                "Amazon Linux", "Rocky Linux", "CentOS",
-                                "Red Hat Enterprise Linux")):
+                                "Amazon Linux", "CentOS",
+                                "Red Hat Enterprise Linux",
+                                "Rocky Linux")):
         pkg = proxy_pkg_rpm
         if proxy_next:
             pkg = proxy_next_pkg_rpm
@@ -58,7 +57,6 @@ def get_proxy_install_cmd(proxy_next):
 
         cmd = cmd.format(pkg=pkg) + "zypper install wavefront-proxy"
     else:
-        print("joannak - here")
         print(f"Error: Unsupported OS version: {dist}. Please contact"
               " support@wavefront.com.")
     return cmd
@@ -67,9 +65,7 @@ def get_proxy_install_cmd(proxy_next):
 def install_proxy(proxy_next):
     """Install wavefront proxy."""
     message.print_bold("##Starting Wavefront Proxy Installation!")
-    message.print_bold("joannak - cmd1: ")
     cmd = get_proxy_install_cmd(proxy_next)
-    message.print_bold("joannak - cmd: " + cmd)
     install_status = False
     try:
         subprocess.check_call(cmd, shell=True)

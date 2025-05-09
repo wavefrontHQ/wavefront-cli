@@ -1,5 +1,5 @@
 #!/bin/bash
-set -u
+
 INSTALL_LOG=`mktemp /tmp/install_wavefront_XXXXXXXXXX.log`
 
 function check_if_root_or_die() {
@@ -44,18 +44,16 @@ function exit_with_failure() {
 }
 
 function install_pkg() {
-    dpkg -s $1 >> ${INSTALL_LOG} 2>&1
-
-    if [ $? -ne 0 ]; then
+    if ! dpkg -s $1 >> ${INSTALL_LOG} 2>&1
+    then
         echo "Installing $1 using apt-get"
         apt-get install $1 -y >> ${INSTALL_LOG} 2>&1
     fi
 }
 
 function remove_pkg() {
-    dpkg -s $1 >> ${INSTALL_LOG} 2>&1
-
-    if [ $? -eq 0 ]; then
+    if ! dpkg -s $1 >> ${INSTALL_LOG} 2>&1
+    then
         echo "Uninstalling $1 using apt-get"
         apt-get remove $1 -y >> ${INSTALL_LOG} 2>&1
     fi
