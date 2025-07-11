@@ -164,9 +164,9 @@ function install_wavecli() {
     #joannak - this line equiv to pip install wavefront-cli is installing from https://pypi.org/project/wavefront-cli/
 #    $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
 
-    if [ -d "../wavefront_cli" ]; then
+    if [ -d "../" ]; then
       echo "joannak - installing from local wavefront_cli"
-      $PIP_PATH install ../wavefront_cli >> ${INSTALL_LOG} 2>&1
+      $PIP_PATH install ../>> ${INSTALL_LOG} 2>&1
     else
       echo "joannak - installing from https://pypi.org/project/wavefront-cli/"
        $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
