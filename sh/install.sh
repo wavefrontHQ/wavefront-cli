@@ -163,7 +163,7 @@ function install_wavecli() {
     $PIP_PATH install "urllib3<2" >> ${INSTALL_LOG} 2>&1
     #joannak - this line equiv to pip install wavefront-cli is installing from https://pypi.org/project/wavefront-cli/
 #    $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
-    echo "joannak - Running script from: $(pwd)"
+#    echo "joannak - Running script from: $(pwd)"
 
     if [ -d "../" ]; then
       echo "joannak - installing from local wavefront_cli"
