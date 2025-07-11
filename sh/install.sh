@@ -53,6 +53,7 @@ function install_pkg() {
 }
 
 function remove_pkg() {
+      echo "joannak - install.shL#56 Remove pkg..."
     if ! dpkg -s $1 >> ${INSTALL_LOG} 2>&1
     then
         echo "Uninstalling $1 using apt-get"
@@ -93,7 +94,7 @@ function detect_operating_system() {
 }
 
 function install_python() {
-
+    echo "joannak - install.shL#97 Install proxy..."
     if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
         echo "Installing Python using apt-get"
         apt-get update >> ${INSTALL_LOG} 2>&1
@@ -113,6 +114,7 @@ function install_python() {
 }
 
 function remove_python() {
+    echo "joannak - install.shL#117 Remove python..."
     PIP_PATH=$1
     # wavefront cli
     $PIP_PATH uninstall wavefront-cli -y
