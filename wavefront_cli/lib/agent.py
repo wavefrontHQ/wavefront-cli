@@ -38,6 +38,7 @@ def get_install_agent_cmd():
                                   "SLES")):
         cmd = cmd.format(agent_pkg_rpm) + "zypper install telegraf"
     else:
+        message.print_warn("joannak - Error from agent.py")
         message.print_warn(f"Error: Unsupported OS version: {dist}.")
 
     return cmd

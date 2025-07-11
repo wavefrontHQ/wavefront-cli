@@ -66,7 +66,6 @@ def write_file(path, text):
 def remove_service(service_name):
     """Delete a service."""
     dist = check_os()
-    print("joannak - system Detected ", dist)
     print("Detected ", dist)
     if dist.startswith("Amazon Linux") or\
             dist.startswith("Rocky Linux") or\
@@ -75,6 +74,7 @@ def remove_service(service_name):
     elif dist == "Ubuntu":
         cmd = "apt-get -y remove " + service_name
     else:
+        print("joannak - Error from system.py")
         print(f"Error: Unsupported OS version: {dist}.")
 
     print("Running ", cmd)
