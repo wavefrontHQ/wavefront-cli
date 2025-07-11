@@ -161,7 +161,19 @@ function install_wavecli() {
     PIP_PATH=$1
     $PIP_PATH uninstall wavefront-cli -y >> ${INSTALL_LOG} 2>&1
     $PIP_PATH install "urllib3<2" >> ${INSTALL_LOG} 2>&1
-    $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
+    #joannak - this line equiv to pip install wavefront-cli is installing from https://pypi.org/project/wavefront-cli/
+#    $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
+
+    if [ -d "../wavefront_cli" ]; then
+      echo "joannak - installing from local wavefront_cli"
+      $PIP_PATH install ../wavefront_cli >> ${INSTALL_LOG} 2>&1
+    else
+      echo "joannak - installing from https://pypi.org/project/wavefront-cli/"
+       $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
+    fi
+
+
+
     if [ $? -ne 0 ]; then
             exit_with_failure "Failed to install Wavefront CLI"
     fi
