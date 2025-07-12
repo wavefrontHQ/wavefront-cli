@@ -165,9 +165,9 @@ function install_wavecli() {
 #    $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
 #    echo "joannak - Running script from: $(pwd)"
 
-    if [ -d "../" ]; then
+    if [ "$USE_GITHUB" = "true" ]; then
       echo "joannak - installing from local wavefront_cli"
-      $PIP_PATH install ../>> ${INSTALL_LOG} 2>&1
+      $PIP_PATH  install "git+https://github.com/wavefrontHQ/wavefront-cli.git@joannak/rocky9" >> ${INSTALL_LOG} 2>&1
     else
       echo "joannak - installing from https://pypi.org/project/wavefront-cli/"
        $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
