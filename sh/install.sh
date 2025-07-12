@@ -3,8 +3,7 @@
 INSTALL_LOG=`mktemp /tmp/install_wavefront_XXXXXXXXXX.log`
 
 function check_if_root_or_die() {
-  echo "!!!joannak/rocky9 debug!!! version 0.0"
-  USE_GITHUB=true
+    echo "!!!joannak/rocky9 debug!!! version 0.1"
     echo "Checking installation privileges"
     echo -e "\nid -u" >>${INSTALL_LOG}
     SCRIPT_UID=$(id -u)
@@ -162,18 +161,20 @@ function install_wavecli() {
     PIP_PATH=$1
     $PIP_PATH uninstall wavefront-cli -y >> ${INSTALL_LOG} 2>&1
     $PIP_PATH install "urllib3<2" >> ${INSTALL_LOG} 2>&1
+    echo "joannak - Running wavefront-cli installation from github..."
+    $PIP_PATH  install "git+https://github.com/wavefrontHQ/wavefront-cli.git@joannak/rocky9" >> ${INSTALL_LOG} 2>&1
+
     #joannak - this line equiv to pip install wavefront-cli is installing from https://pypi.org/project/wavefront-cli/
 #    $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
 #    echo "joannak - Running script from: $(pwd)"
 
-    if [ $USE_GITHUB = "true" ]; then
-      echo "joannak - installing from local wavefront_cli"
-      $PIP_PATH  install "git+https://github.com/wavefrontHQ/wavefront-cli.git@joannak/rocky9" >> ${INSTALL_LOG} 2>&1
-    else
-      echo "joannak - installing from https://pypi.org/project/wavefront-cli/"
-       $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
-    fi
-
+#    if [ $USE_GITHUB = "true" ]; then
+#      echo "joannak - installing from local wavefront_cli"
+#      $PIP_PATH  install "git+https://github.com/wavefrontHQ/wavefront-cli.git@joannak/rocky9" >> ${INSTALL_LOG} 2>&1
+#    else
+#      echo "joannak - installing from https://pypi.org/project/wavefront-cli/"
+#       $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
+#    fi
 
 
     if [ $? -ne 0 ]; then
