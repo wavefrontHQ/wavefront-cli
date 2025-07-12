@@ -3,7 +3,7 @@
 INSTALL_LOG=`mktemp /tmp/install_wavefront_XXXXXXXXXX.log`
 
 function check_if_root_or_die() {
-  echo "!!!joannak/rocky9 debug!!!"
+  echo "!!!joannak/rocky9 debug!!! version 0.0"
     echo "Checking installation privileges"
     echo -e "\nid -u" >>${INSTALL_LOG}
     SCRIPT_UID=$(id -u)
