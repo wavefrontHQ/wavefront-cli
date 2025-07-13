@@ -74,6 +74,7 @@ def remove_service(service_name):
     elif dist == "Ubuntu":
         cmd = "apt-get -y remove " + service_name
     else:
+        print("joannak - Error from system.py")
         print(f"Error: Unsupported OS version: {dist}.")
 
     print("Running ", cmd)

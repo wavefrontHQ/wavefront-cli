@@ -57,6 +57,7 @@ def get_proxy_install_cmd(proxy_next):
 
         cmd = cmd.format(pkg=pkg) + "zypper install wavefront-proxy"
     else:
+        print("joannak - Error from proxy.py")
         print(f"Error: Unsupported OS version: {dist}. Please contact"
               " support@wavefront.com.")
     return cmd
@@ -64,7 +65,7 @@ def get_proxy_install_cmd(proxy_next):
 
 def install_proxy(proxy_next):
     """Install wavefront proxy."""
-    message.print_bold("Starting Wavefront Proxy Installation!")
+    message.print_bold("##Starting Wavefront Proxy Installation!")
     cmd = get_proxy_install_cmd(proxy_next)
     install_status = False
     try:
