@@ -77,7 +77,7 @@ def install_proxy(proxy_next):
     return install_status
 
 
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-arguments, too-many-positional-arguments
 def configure_proxy(url, wavefront_api_token, csp_api_token=None,
                     csp_app_id=None, csp_app_secret=None, csp_org_id=None):
     """Configure wavefront proxy."""

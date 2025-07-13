@@ -65,6 +65,7 @@ def write_file(path, text):
 
 def remove_service(service_name):
     """Delete a service."""
+    cmd = None
     dist = check_os()
     print("Detected ", dist)
     if dist.startswith("Amazon Linux") or\
