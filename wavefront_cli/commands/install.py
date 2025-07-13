@@ -142,8 +142,6 @@ class Install(Base):  # pylint: disable=too-few-public-methods
                 print("Error: Invalid combination of parameters.")
                 sys.exit(1)
 
-            print("joannak - install.py starting proxy installation ")
-
             # Install Proxy
             if not lib.proxy.install_proxy(proxy_next):
                 sys.exit(1)
