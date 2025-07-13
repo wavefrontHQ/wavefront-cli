@@ -76,8 +76,9 @@ def install_proxy(proxy_next):
         install_status = True
     return install_status
 
+# For older pylint versions, adding E1121 to disable too-many-positional-arguments
 
-# pylint: disable=too-many-arguments, too-many-positional-arguments
+# pylint: disable=too-many-arguments, E1121
 def configure_proxy(url, wavefront_api_token, csp_api_token=None,
                     csp_app_id=None, csp_app_secret=None, csp_org_id=None):
     """Configure wavefront proxy."""
