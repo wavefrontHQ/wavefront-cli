@@ -161,21 +161,14 @@ function install_wavecli() {
     PIP_PATH=$1
     $PIP_PATH uninstall wavefront-cli -y >> ${INSTALL_LOG} 2>&1
     $PIP_PATH install "urllib3<2" >> ${INSTALL_LOG} 2>&1
-    echo "joannak - Running wavefront-cli installation from github..."
+    echo "joannak - Running wavefront-cli from directory after downloading zip from github on latest commit..."
+#    curl -L -o wavefront-cli.zip https://github.com/wavefrontHQ/wavefront-cli/archive/<latest-40-commitSHA>.zip
+#    unzip wavefront-cli.zip  && cd wavefront-cli-.../
+#    Command to call sudo bash -c "$(curl -sL https://raw.githubusercontent.com/wavefrontHQ/wavefront-cli/refs/heads/joannak/rocky9-backup/sh/install.sh)" -- install --proxy  --wavefront-url https://<cluster>.wavefront.com --api-token "<token>"
+
     $PIP_PATH  install ./wavefront-cli >> ${INSTALL_LOG} 2>&1
-
-    #joannak - this line equiv to pip install wavefront-cli is installing from https://pypi.org/project/wavefront-cli/
-#    $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
-#    echo "joannak - Running script from: $(pwd)"
-
-#    if [ $USE_GITHUB = "true" ]; then
-#      echo "joannak - installing from local wavefront_cli"
-#      $PIP_PATH  install "git+https://github.com/wavefrontHQ/wavefront-cli.git@joannak/rocky9" >> ${INSTALL_LOG} 2>&1
-#    else
-#      echo "joannak - installing from https://pypi.org/project/wavefront-cli/"
+#joannak - this line equiv to pip install wavefront-cli is installing from https://pypi.org/project/wavefront-cli/
 #       $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
-#    fi
-
 
     if [ $? -ne 0 ]; then
             exit_with_failure "Failed to install Wavefront CLI"
