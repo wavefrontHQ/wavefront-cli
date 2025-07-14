@@ -44,18 +44,16 @@ function exit_with_failure() {
 }
 
 function install_pkg() {
-    dpkg -s $1 >> ${INSTALL_LOG} 2>&1
-
-    if [ $? -ne 0 ]; then
+    if ! dpkg -s $1 >> ${INSTALL_LOG} 2>&1
+    then
         echo "Installing $1 using apt-get"
         apt-get install $1 -y >> ${INSTALL_LOG} 2>&1
     fi
 }
 
 function remove_pkg() {
-    dpkg -s $1 >> ${INSTALL_LOG} 2>&1
-
-    if [ $? -eq 0 ]; then
+    if ! dpkg -s $1 >> ${INSTALL_LOG} 2>&1
+    then
         echo "Uninstalling $1 using apt-get"
         apt-get remove $1 -y >> ${INSTALL_LOG} 2>&1
     fi
@@ -68,6 +66,10 @@ function detect_operating_system() {
         echo -e "\ntest -f /etc/debian_version" >> ${INSTALL_LOG}
         echo "Debian/Ubuntu"
         OPERATING_SYSTEM="DEBIAN"
+    elif [ -f /etc/rocky-release ]; then
+        echo -e "\ntest -f /etc/rocky-release" >> ${INSTALL_LOG}
+        echo "Rocky Linux"
+        OPERATING_SYSTEM="ROCKY"
     elif [ -f /etc/redhat-release ] || [ -f /etc/system-release-cpe ]; then
         echo -e "\ntest -f /etc/redhat-release || test -f /etc/system-release-cpe" >> ${INSTALL_LOG}
         echo "RedHat/CentOS"
@@ -90,12 +92,11 @@ function detect_operating_system() {
 }
 
 function install_python() {
-
     if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
         echo "Installing Python using apt-get"
         apt-get update >> ${INSTALL_LOG} 2>&1
         apt-get install python3 -y >> ${INSTALL_LOG} 2>&1
-    elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
+    elif [ $OPERATING_SYSTEM == "REDHAT" ] || [ $OPERATING_SYSTEM == "ROCKY" ]; then
         echo "Installing Python using yum"
         yum install python3 -y >> ${INSTALL_LOG} 2>&1
     elif [ $OPERATING_SYSTEM == "openSUSE" ] || [ $OPERATING_SYSTEM == "SLE" ]; then
@@ -122,7 +123,7 @@ function remove_python() {
         echo "Uninstalling Python using apt-get"
         apt-get remove python3 -y &> ${INSTALL_LOG}
         apt-get autoremove -y &> ${INSTALL_LOG}
-    elif [ $OPERATING_SYSTEM == "REDHAT" ]; then
+    elif [ $OPERATING_SYSTEM == "REDHAT" ] || [ $OPERATING_SYSTEM == "ROCKY" ]; then
         echo "Uninstalling Python using yum"
         yum remove python3 -y &> ${INSTALL_LOG}
     elif [ $OPERATING_SYSTEM == "openSUSE" ] || [ $OPERATING_SYSTEM == "SLE" ]; then

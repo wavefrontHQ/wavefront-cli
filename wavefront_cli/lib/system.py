@@ -65,9 +65,10 @@ def write_file(path, text):
 
 def remove_service(service_name):
     """Delete a service."""
+    cmd = None
     dist = check_os()
     print("Detected ", dist)
-    if dist.startswith("Amazon Linux") or\
+    if dist.startswith(("Amazon Linux", "Rocky Linux")) or\
             dist == "Red Hat Enterprise Linux Server":
         cmd = "yum -y remove " + service_name
     elif dist == "Ubuntu":
