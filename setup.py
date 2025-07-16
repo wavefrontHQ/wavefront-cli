@@ -33,7 +33,7 @@ class RunTests(setuptools.Command):
 
 setuptools.setup(
     name='wavefront-cli',
-    version='0.1.5',
+    version='0.1.6',
     description='VMware Aria Operations for Applications CLI Utility.',
     long_description=long_description,
     url='https://github.com/wavefrontHQ/wavefront-cli',
@@ -49,11 +49,10 @@ setuptools.setup(
         'License :: Public Domain',
         'Natural Language :: English',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: System :: Monitoring',
         'Topic :: System :: Networking :: Monitoring',
