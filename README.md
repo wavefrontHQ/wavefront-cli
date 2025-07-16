@@ -1,7 +1,10 @@
 # wavefront-cli
 
-[![travis build status](https://travis-ci.com/wavefrontHQ/wavefront-cli.svg?branch=master)](https://travis-ci.com/wavefrontHQ/wavefront-cli)
-
+[![Build Status](https://github.com/wavefrontHQ/wavefront-cli/actions/workflows/main.yml/badge.svg)](https://github.com/wavefrontHQ/cli/actions)
+[![image](https://img.shields.io/pypi/v/wavefront-cli.svg)](https://pypi.org/project/wavefront-cli)
+[![image](https://img.shields.io/pypi/l/wavefront-cli.svg)](https://pypi.org/project/wavefront-cli)
+[![image](https://img.shields.io/pypi/pyversions/wavefront-cli.svg)](https://pypi.org/project/wavefront-cli)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/wavefront-cli)
 
 The Wavefront Integration Command Line Interface (CLI) is a utility for installing and configuring the Wavefront proxy, Telegraf
 collector agent, and integrations. The CLI uses native package managers to install packages (i.e. yum, apt-get) and therefore should be run as sudo.
