@@ -3,6 +3,7 @@
 INSTALL_LOG=`mktemp /tmp/install_wavefront_XXXXXXXXXX.log`
 
 function check_if_root_or_die() {
+    echo "!!!joannak/rocky9-backup-2 debug!!! version 0.0"
     echo "Checking installation privileges"
     echo -e "\nid -u" >>${INSTALL_LOG}
     SCRIPT_UID=$(id -u)
@@ -52,6 +53,7 @@ function install_pkg() {
 }
 
 function remove_pkg() {
+    echo "joannak - install.shL#56 Remove pkg..."
     if ! dpkg -s $1 >> ${INSTALL_LOG} 2>&1
     then
         echo "Uninstalling $1 using apt-get"
@@ -92,6 +94,7 @@ function detect_operating_system() {
 }
 
 function install_python() {
+    echo "joannak - install.shL#97 Install proxy..."
     if [ $OPERATING_SYSTEM == "DEBIAN" ]; then
         echo "Installing Python using apt-get"
         apt-get update >> ${INSTALL_LOG} 2>&1
@@ -124,6 +127,7 @@ function remove_python() {
         apt-get remove python3 -y &> ${INSTALL_LOG}
         apt-get autoremove -y &> ${INSTALL_LOG}
     elif [ $OPERATING_SYSTEM == "REDHAT" ] || [ $OPERATING_SYSTEM == "ROCKY" ]; then
+        echo "joannak - install.shL#130 Remove python..."
         echo "Uninstalling Python using yum"
         yum remove python3 -y &> ${INSTALL_LOG}
     elif [ $OPERATING_SYSTEM == "openSUSE" ] || [ $OPERATING_SYSTEM == "SLE" ]; then
@@ -157,7 +161,17 @@ function install_wavecli() {
     PIP_PATH=$1
     $PIP_PATH uninstall wavefront-cli -y >> ${INSTALL_LOG} 2>&1
     $PIP_PATH install "urllib3<2" >> ${INSTALL_LOG} 2>&1
-    $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
+    echo "joannak - Running wavefront-cli from test.pypi.org/simple/ wavefront-cli..."
+#    curl -L -o wavefront-cli.zip https://github.com/wavefrontHQ/wavefront-cli/archive/<latest-40-commitSHA>.zip
+#    unzip wavefront-cli.zip  && cd wavefront-cli-.../
+#    Command to call sudo bash -c "$(curl -sL https://raw.githubusercontent.com/wavefrontHQ/wavefront-cli/refs/heads/joannak/rocky9-backup/sh/install.sh)" -- install --proxy  --wavefront-url https://<cluster>.wavefront.com --api-token "<token>"
+
+    $PIP_PATH install --index-url https://test.pypi.org/simple/ wavefront-cli
+
+#    $PIP_PATH  install ./wavefront-cli >> ${INSTALL_LOG} 2>&1
+#joannak - this line equiv to pip install wavefront-cli is installing from https://pypi.org/project/wavefront-cli/
+#       $PIP_PATH install wavefront-cli >> ${INSTALL_LOG} 2>&1
+
     if [ $? -ne 0 ]; then
             exit_with_failure "Failed to install Wavefront CLI"
     fi
